@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{first}
+\author{BO LI }
+\date{January 2018}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+
+\section{MMDS}
+
+\subsection{Sampling data}
+When the data is huge and we cannot save it into working storage, so we would to sampling data from the whole data stream, then estimating the result base on fraction of the sample and whole data.
+
+But there are some trick in it. e.g. when we would like to query "What fraction of the typical user;s queries were repeated over the past month?", the common idea to sampling is extract the for example 1/10 data from the whole stream. but it's not correct for this situation.
+
+If there is a repeat data in the data stream, and we extract the sample with the method mention above, then the probability of repeat for this data in sample is 1/10 * 1/10 (first time appear is 1/10, the second appear also need 1/10). so the result of above way is wrong.
+
+another idea is to select 1/10 users from whole data(the problem is user query on the website), and make 10 bucket, using hash function(result 0-9) if the h(user) = 0 then save the data which sent by this user, note that we don't need to save the content of the user, if a user can be hash into 0 bucket then it will get same result forever
+
+after that we create a hash function that hash the key into 0 -- B-1 and make a parameter t as threshold which initial is B-1, and if the data we saved is bigger than space, we reduce t into t-1(or smaller) and  delete the date whose hash(key) bigger than t-1 
+
+\subsection{filtering Stream}
+in this situation, we have some things that we want in the stream, but the others we would not like to save it, e.g. we have a list of email address we would like to receive from, but there are 80\% spam, so we need to filter the data.
+
+the idea is we hash each email address which in the list, and put them into a bit array, when we get the result of hash function we change the bit into 1 in bit array for corresponding location, after hashing we get the bit array. when a new email come, we hash the email address and check if the bit is 1 in that corresponding location. If it's than can access, otherwise it's filtered.
+
+\subsubsection{Bloom filter}
+1. A bit array, let's say n bits
+2. k hash functions h1,h2....hk
+3. A set S of m key values
+
+for each key in set S hash them to bit array, hash a key in to a given bit, the probability is 1/x, the probability do not hit the bit is 1-1/x = (x-1)/x.
+if all m key do not hit the given, the probability is $(\frac{x-1}{x})^y$, change it into $(1-\frac{1}{x})^{x(\frac{y}{x})}$, it's approximation 1/e.
+So a given bit is not hit, the probability is $e^{-\frac{y}{x}}$, and when we use many hash function to hash the key in set S, it's $e^{-k\frac{y}{x}}$.
+
+After that we get the big array, and when a data come, we hash it using k hash functions and check if all result of the functions is corresponding 1.
+
+If there is a 0 result, the data will be filtered. the probability of a spam data will pass our filtering(all functions return 1) is $(1-e^{-k\frac{y}{x}})^k$
+
+
+\section{frequency moments}
+ N. Alon, Y. Matias, and M. Szegedy, “The space complexity of approximating frequency moments,” 28th ACM Symposium on Theory of Computing, pp. 20–29, 1996
+ 
+ In this paper the mainly idea is how to estimate the frequency moments in data stream and consider the space complexity.
+ 
+ Let A = $(a_1,a_2,...,a_m)$ be a sequence of elements, and the $a_i$ is a numbers of N = {1,2...,n}. Let $m_i = |{j:a_j = i}|$, the frequency moments k$\geq$0, $F_k = \sum_{i=1}^{n}  m_i^k$.
+ 
+ Define that the sequence have m dates and $a_m$ = {1...n}, the relative error is $\lambda$ and the error-probability is $\epsilon$
+
+For estimate $F_k$ we define $s_1 = \frac{8kn^{1-\frac{1}{k}}}{\lambda^2}$, $s_2 = 2log(\frac{1}{\epsilon})$
+the algorithm computes $s_2$ random variables $Y_1,...Y_{s_2}$ and output their median Y. For each $Y_i$ is the average of $s_1$ random variables $X_{ij} : 1\leq j \leq s_1$ (which means $m(r^k-(r-1)^k)$). So for each $Y_i$ we need $s_1$ X, we total need $s_2$ Y, so we need $s_1 \times s_2 (\log n + \log m)$ (save the value and count). And they make sure $prob[|Y_i - F_k > \lambda F_k|] \leq \epsilon$.
+
+\subsection{ AMS algoritm for $F_2$}
+For estimating F2(surprise index) the method is almost same with above but the sapce complexity is $O(\sqrt{n}(\log n + \log m))$
+
+Note: what's four-wise independent, what's $GF()$
+
+For $F_0$(count distinct element) is using Flajolet and Martin algorithm whoch using $O(\log n)$ space. base on they mentioned, consider the members of N as elements of the finite field $F = GF(2^d)$ (what's GF())
+
+for every $c > 2$ the ratio between the estimation Y and $F_0$ is not between $\frac{1}{c}$ and c, is smaller than $\frac{2}{c}$
+
+\end{document}
