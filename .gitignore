@@ -4,3 +4,7 @@ thesis.bbl
 thesis.blg
 thesis.pdf
 thesis.synctex.gz
+ltc.pdf
+*.pdf
+*.out
+env

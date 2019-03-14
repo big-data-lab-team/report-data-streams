@@ -915,6 +915,47 @@ In previous experiments, we knows that LTC has good performance on dealing with 
 
 We use Polynomial Regression method on previous walking and running data set. Figure \todo{graph} shows the result.
 
+\begin{figure*}
+\centering
+\begin{subfigure}{1.4\columnwidth}
+\centering
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-x.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-y.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-z.pdf}
+\caption{Regression degree=3 with Infinity norm}
+\end{subfigure}
+{\footnotesize}
+
+\centering
+\begin{subfigure}{1.4\columnwidth}
+\centering
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-x.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-y.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-z.pdf}
+\caption{Regression degree=3 with Euclidean norm}
+\end{subfigure}
+
+\centering
+\begin{subfigure}{1.4\columnwidth}
+\centering
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-x.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-y.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-z.pdf}
+\caption{Regression degree=5 with Infinity norm}
+\end{subfigure}
+{\footnotesize}
+
+\centering
+\begin{subfigure}{1.4\columnwidth}
+\centering
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-x.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-y.pdf}
+\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-z.pdf}
+\caption{Regression degree=5 with Euclidean norm}
+\end{subfigure}
+
+\end{figure*}
+
 In our implementation, for a regression model which has N-degree and M-parameters we need M*(N+1) coefficients and extra Timestamp used to record where should the model stop.
 
 (LTC Manhattan)                     polynomial(order = 5)
