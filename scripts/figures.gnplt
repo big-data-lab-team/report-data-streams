@@ -1,0 +1,102 @@
+#!/usr/bin/env gnuplot
+
+set terminal pdf
+
+set datafile separator ","
+set yrange [-7:7]
+set xlabel 'Time (s)'
+set ylabel 'Acceleration (mg)'
+
+set output "./figures/5-time-bicep-curl-plot-x.pdf"
+plot './data/5_times_bicep_curl.csv' u ($1-1)/50:($2/16384) w l lt 1 title 'ax'
+
+set output "./figures/5-time-bicep-curl-plot-y.pdf"
+plot './data/5_times_bicep_curl.csv' u ($1-1)/50:($3/16384) w l lt 2 title 'ay'
+
+set output "./figures/5-time-bicep-curl-plot-z.pdf"
+plot './data/5_times_bicep_curl.csv' u ($1-1)/50:(($4+16000)/16384) w l lt 3 title 'az'
+
+### Mohammad
+
+set output "./figures/Mohammad-bicep-curl-plot-x.pdf"
+plot './data/Mohammad_Lateral_bicep.csv' u ($1-1)/50:($2/16384) w l lt 1 title 'ax'
+
+set output "./figures/Mohammad-bicep-curl-plot-y.pdf"
+plot './data/Mohammad_Lateral_bicep.csv' u ($1-1)/50:($3/16384) w l lt 2 title 'ay'
+
+set output "./figures/Mohammad-bicep-curl-plot-z.pdf"
+plot './data/Mohammad_Lateral_bicep.csv' u ($1-1)/50:($4/16384) w l lt 3 title 'az'
+
+### Walking
+
+set output "./figures/walking-1000-x.pdf"
+plot './data/walking-1000.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/walking-1000-y.pdf"
+plot './data/walking-1000.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/walking-1000-z.pdf"
+plot './data/walking-1000.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'az'
+
+### Running
+
+set output "./figures/running-1000-x.pdf"
+plot './data/running-1000.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/running-1000-y.pdf"
+plot './data/running-1000.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/running-1000-z.pdf"
+plot './data/running-1000.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'az'
+
+### Memory
+
+unset yrange
+set xlabel "Instructions"
+set ylabel "Memory used (KB)"
+set output "./figures/memory-mohammad.pdf"
+plot './data/memoryMeasure-mohammad.csv' u 5:($6)/1000 w l lt 4 lw 2 notitle
+
+### Regression infinity
+
+## degree = 5
+set output "./figures/regression-p5-in-x.pdf"
+plot './data/Regression_p5_in.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/regression-p5-in-y.pdf"
+plot './data/Regression_p5_in.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/regression-p5-in-z.pdf"
+plot './data/Regression_p5_in.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'ax'
+
+## degree = 3
+set output "./figures/regression-p3-in-x.pdf"
+plot './data/Regression_p3_in.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/regression-p3-in-y.pdf"
+plot './data/Regression_p3_in.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/regression-p3-in-z.pdf"
+plot './data/Regression_p3_in.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'ax'
+
+### Regression Euclidean
+
+## degree = 5
+set output "./figures/regression-p5-Eu-x.pdf"
+plot './data/Regression_p5_Eu.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/regression-p5-Eu-y.pdf"
+plot './data/Regression_p5_Eu.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/regression-p5-Eu-z.pdf"
+plot './data/Regression_p5_Eu.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'ax'
+
+## degree = 3
+set output "./figures/regression-p3-Eu-x.pdf"
+plot './data/Regression_p3_Eu.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
+
+set output "./figures/regression-p3-Eu-y.pdf"
+plot './data/Regression_p3_Eu.csv' u ($1-1)/200:($3/2048) w l lt 2 lw 2 title 'ay'
+
+set output "./figures/regression-p3-Eu-z.pdf"
+plot './data/Regression_p3_Eu.csv' u ($1-1)/200:($4/2048) w l lt 3 lw 2 title 'ax'
