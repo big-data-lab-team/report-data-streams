@@ -1,0 +1,55 @@
+\usepackage{algorithm}
+%\usepackage{algorithmicx} % Doc is at http://tug.ctan.org/macros/latex/contrib/algorithmicx/algorithmicx.pdf
+\usepackage{algpseudocode}
+
+
+\usepackage{amsfonts} % for R symbol (the set of real numbers)
+\usepackage{color}
+\usepackage{colortbl} % for \rowcolor
+\usepackage[pdftex]{graphicx}
+\usepackage{graphicx}
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,filecolor=black,urlcolor=blue}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{stmaryrd} % for llbracket and rrbracket
+\usepackage{subcaption}
+\usepackage{nicefrac}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\usepackage{amsthm}
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{flushend}
+
+\usepackage{comment}
+
+% \newlength{\bibitemsep}\setlength{\bibitemsep}{.2\baselineskip plus .05\baselineskip minus .05\baselineskip}
+% \newlength{\bibparskip}\setlength{\bibparskip}{1pt}
+% \let\oldthebibliography\thebibliography
+% \renewcommand\thebibliography[1]{%
+%   \oldthebibliography{#1}%
+%   \setlength{\parskip}{\bibitemsep}%
+%   \setlength{\itemsep}{\bibparskip}%
+% }
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\algblock{Input}{EndInput}
+\algnotext{EndInput}
+\algblock{Output}{EndOutput}
+\algnotext{EndOutput}
+\newcommand{\Desc}[2]{\State \makebox[2em][l]{#1}#2}
+
+% new commands
+\newcommand{\todo}[1]{\marginpar{\parbox{18mm}{\flushleft\tiny\color{red}\textbf{TODO}:
+      #1}}}
+\newcommand{\note}[1]{
+  \color{blue}\emph{[Note: #1]}
+  \color{black}
+}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newtheorem*{theorem}{Theorem}
+\definecolor{headcolor}{gray}{0.9}

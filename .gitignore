@@ -1,10 +1,9 @@
-thesis.aux
-thesis.log
-thesis.bbl
-thesis.blg
-thesis.pdf
-thesis.synctex.gz
+*.aux
+*.log
+cuthesis.pdf
+*.gz
 ltc.pdf
 *.pdf
 *.out
-env
+*.bbl
+*.blg

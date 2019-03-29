@@ -59,6 +59,8 @@ plot './data/memoryMeasure-mohammad.csv' u 5:($6)/1000 w l lt 4 lw 2 notitle
 
 ### Regression infinity
 
+set xlabel "Times(s)"
+set ylabel "Acceleration (mg)"
 ## degree = 5
 set output "./figures/regression-p5-in-x.pdf"
 plot './data/Regression_p5_in.csv' u ($1-1)/200:($2/2048) w l lt 1 lw 2 title 'ax'
