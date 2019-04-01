@@ -27,15 +27,16 @@ thechniques following:
     coming, it ensures the analysis and statistics using fresh data. It also 
     often uses for recording data in given bounded memory.
 
-    \item \textbf{Estimating Cardinality}
-    \todo{Frequency moments ?  or new \\item}
+    \item \textbf{Frequency Moments} shows characteristics of the stream.
+    Moments involves the distribution of frequencies of different elements in
+    the stream. 
     
     
     \item \textbf{Clustering} separate all data points into different groups.
     Clustering is a techniques used in Mechine Learning. It could make the 
     similar points to cluster in one group. It makes sure that the points in one
     group as similar as possible, the points in different group as different as
-    possible.For instance, they can be applied to problems such as the k-median 
+    possible. For instance, they can be applied to problems such as the k-median 
     problem. 
     
     \item \textbf{Sketches}~\cite{alon1999space} summarizes data stream with 
@@ -43,17 +44,66 @@ thechniques following:
     data set.~\cite{kejariwal2015real}
 
 \begin{comment}
-    \item \textbf{Histograms} approximate the distribution of a set of values $v_1, ..., v_n$ by a piecewise constant function $\hat{v}(i),$ so as to minimize the sum of squared error. Equi-width histograms partition the domain into buckets such that the number of $v_i$ values falling into each bucket is uniform across all buckets. End-biased histograms maintain exact counts of items that occur with frequency above a threshold, and approximate the other counts by a uniform distribution~\cite{kejariwal2015real}.
+    \item \textbf{Histograms} approximate the distribution of a set of values
+    $v_1, ..., v_n$ by a piecewise constant function $\hat{v}(i),$ so as to
+    minimize the sum of squared error. Equi-width histograms partition the
+    domain into buckets such that the number of $v_i$ values falling into each
+    bucket is uniform across all buckets. End-biased histograms maintain exact
+    counts of items that occur with frequency above a threshold, and approximate
+    the other counts by a uniform distribution~\cite{kejariwal2015real}.
     
-    \item \textbf{Wavelet coefficients} are projections of the given signal (set of data values) onto an orthogonal set of basis vectors. The coefficients have the desirable property that the signal reconstructed from the top few wavelet coefficients best approximates the original signal in terms of the L2 norm~\cite{gilbert2002fast}. The choice of basis vectors determines the type of wavelets.
+    \item \textbf{Wavelet coefficients} are projections of the given signal (set
+    of data values) onto an orthogonal set of basis vectors. The coefficients
+    have the desirable property that the signal reconstructed from the top few
+    wavelet coefficients b est approximates the original signal in terms of the
+    L2 norm~\cite{gilbert2002fast}. The choice of basis vectors determines the
+    type of wavelets.
 \end{comment}
 
 \end{itemize}
 \end{quote}
 
+For each problem in streaming research, there are many algorithms to solve or
+estimate it. The remainder of this chapter presents certain algorithms used in
+specific streaming analysis problem.
+
 \subsection{Sampling Stream}
 
+When the data is huge and we cannot save it into working storage, so we would to
+sampling data from the whole data stream, then estimating the result base on
+fraction of the sample and whole data.But there are some trick in it. There is a
+instance from~\cite{leskovec2014mining}, we would like to query "What fraction
+of the typical user's queries were repeated over the past month?". The sampling
+would be used when data is huge. The common idea is to extract 1/10th data from
+the whole stream, each data has 10\% probability be selected. Assume a user
+issues N search queries in past month, only D search queries twice, other
+queries issue once. The queries appear twice after sampling is$\frac{D}{100}$,
+because the probability of a data appears twice in sample
+is$\frac{1}{10}*\frac{1}{10}$(first time appear is $\frac{1}{10}$, the second
+appear also need $\frac{1}{10})$. $\frac{18D}{100}$ repeat queries appear only
+once in samples($2*\frac{1}{10}*\frac{9}{10}$). The result of this idea is
+wrong. The correct answer is $\frac{D}{N}$. However, the answer we obtain after
+sampling is:
+\begin{equation*}
+    \frac{\frac{D}{100}}{\frac{N-D}{10}+\frac{18D}{100}+\frac{D}{100}} = \frac{D}{10N+9D}
+\end{equation*}
+
+Another idea is to extract the queries from 1/10th users. Using a hash
+function(result 0-9), the queries are accepted for the sample, if the the users
+hashes to 0. In this instance, we take $user$ as the key. 
+
+So, in general sample problem, to take a \frac{$a$}{$b$} size sample from whole
+stream, could hash the key value to $b$ buckets, and accept data for sample
+while the hash value less than $a$.~\cite{leskovec2014mining}
+
+In practice, sampling can help to save energy on connected objects. For
+instance, when we would to do some query on stream, we can estimate the result
+after sampling from whole stream. We need less communication with objects,
+because we only need just a part of whole stream to estimate result.  
+
 \subsection{Filtering Stream}
+
+
 
 \subsection{Sliding Window}
 
@@ -64,6 +114,16 @@ thechniques following:
 \subsection{Sketches}
 
 \section{Lossless Compression}
+\subsection{LZ77}
+\subsection{LZSS}
+\subsection{A-LZSS}
+
+\subsection{LEC}
+\subsection{S-LEC}
+
+\subsection{LZW}
+\subsection{S-LZW}
+
 
 
 \section{Lossy Compression}
