@@ -18,8 +18,9 @@ To build pdf, open `cuthesis.tex` in [TexMaker](http://www.xm1math.net/texmaker/
 
 ## How to generate the pdf from command line   
 0. Install ```pdflatex``` and ```bibtex```  
-1. Compile the document: ```pdflatex cuthesis; pdflatex cuthesis``` (yes, twice).  
-2. Generate the bibliography: ```bibtex cuthesis; pdflatex cuthesis``` (yes, once again).  
+1. Generate the figures: ./scripts/ltc-plot.py ; ./scripts/figures.gnplt.
+2. Compile the document: ```pdflatex cuthesis; pdflatex cuthesis``` (yes, twice).  
+3. Generate the bibliography: ```bibtex cuthesis; pdflatex cuthesis``` (yes, once again).  
  
 Modify `.gitignore` according to your requirements.  
 
