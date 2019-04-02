@@ -92,7 +92,7 @@ Another idea is to extract the queries from 1/10th users. Using a hash
 function(result 0-9), the queries are accepted for the sample, if the the users
 hashes to 0. In this instance, we take $user$ as the key. 
 
-So, in general sample problem, to take a \frac{$a$}{$b$} size sample from whole
+So, in general sample problem, to take a $\frac{a}{b}$ size sample from whole
 stream, could hash the key value to $b$ buckets, and accept data for sample
 while the hash value less than $a$.~\cite{leskovec2014mining}
 
@@ -102,6 +102,46 @@ after sampling from whole stream. We need less communication with objects,
 because we only need just a part of whole stream to estimate result.  
 
 \subsection{Filtering Stream}
+Some times, we are interested only in particular elements in the stream. For
+instance, some connected objects which have sensor producing longitude and
+latitude send the stream data to client side. In this case, if we only prefer
+the data from specific longitude and latitude, filtering stream is needed.
+Another instance，we are receiving a list of email addresses which include lots
+of spam. Therefore, we need to filter the steam and focus on the non-spam
+addresses. Assume we have too large size email list to store in device which has
+limited main memory. The technique knows as \textbf{Bloom
+filtering}~\cite{bloom1970space} could be used. 
+\paragraph{Bloom Filter}
+
+Suppose for main memory, we have $n$ bits for filtering, $m$ non-spam email
+addresses in list $S$, and $k$ hash functions. Each hash function maps the email
+address into $n$ buckets. Initializing an array of bits of $n$ size as follow: 
+
+\begin{enumerate}
+  \item Initialize an array of bits $N$ by setting 0's in $n$ bits.
+  
+  \item Updating array of bits, for each email address in $S$, hashing with all
+  hash functions and changing the corresponding bit to 1's based on hash result.
+\end{enumerate}
+
+After initialization, Each new coming stream data will be filtered by using the
+array of bits $N$ and $k$ hash functions. When a new stream data coming, we can
+get a bits result from those hash functions. Adding this data for sample if the
+result are all 1's, otherwise filtering it.  But, the email not in $S$, might
+pass the filter too, and be selected for sample. We would like to calculate the
+probability of a spam email be selected for sample. Obviously, the spam emails
+are harder to pass, if the fraction of 0 bits in bits array$n$. During the stage
+of initialize bits array, we have $m$ emails in $S$, and $k$ hash functions. For
+each emails belongs to $S$, suppose hash result corresponds target bit. The
+probability of each hash result hit given bit is $\frac{1}{n}$, not hit given
+bit is $\frac{n-1}{n}$. Because we have $k$ hash function, the probability that
+one emails not hit given bit is $(\frac{n-1}{n})^k$. After hashing $m$ emails,
+the probability that a bit in bits array still remains 0 is
+$(\frac{n-1}{n})^{km}$, which equals  $(1-\frac{1}{n})^{n(\frac{km}{n})}$. It
+approximate equals $e^{-\frac{km}{n}}$, using the approximation
+$(1-\epsilon)^\frac{1}{\epsilon} = \frac{1}{e}$. For a new coming spam stream
+data, the probability that it is selected for sample is
+$(1-e^{-\frac{km}{n}})^k$, which means all hash result mapping to bits are 1's.
 
 
 
