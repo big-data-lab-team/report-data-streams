@@ -143,11 +143,62 @@ $(1-\epsilon)^\frac{1}{\epsilon} = \frac{1}{e}$. For a new coming spam stream
 data, the probability that it is selected for sample is
 $(1-e^{-\frac{km}{n}})^k$, which means all hash result mapping to bits are 1's.
 
-
-
 \subsection{Sliding Window}
+\todo{ writing paragraph}
 
-\subsection{Estimating Cardinality}
+\subsection{Frequency Moments}
+Alon et al.~\cite{alon1999space} introduced the frequency moment in 1996. It are
+important statistic for large size data. $F_0$ is the number of distinct
+elements in data, $F_1$ is the number of elements in the data, $F_2$ presents
+the surprise index of data stream, In general, $F_k$ represents the degree of
+skew in the data. Assume A = $(a_1,a_2,...,a_m)$ is a sequence of elements, and
+each element $a_j \in \llbracket1, n\rrbracket$. $m_i$ denotes the number that
+the number $i$ appears in A, $i \in \llbracket1, n\rrbracket$. Generally,
+$k\geqslant0$, $k_{th}$Frequency moments of a set of frequencies \textbf{a} is
+defined as: 
+\begin{equation*}
+F_k(a) = \sum_{i=1}^n a_i^k     
+\end{equation*}
+In the rest of this section, we show some method that estimate frequency moments
+in different order. 
+
+\subsubsection{First Moment (Distinct Elements in Stream)}
+From the define of frequency moments, the first moments actually equivalent to
+the number of distinct elements in data stream, also known as Cardinality. In
+order to counting distinct elements in stream, the traditional point is to store
+the elements in a Another traditional method is using bitmap, this method hash
+every element into a bit array by hash function. If bit is 1, then the element
+is already presented, otherwise change the bit from 0 to 1. Bitmap is good at
+merging(just using OR operation), and only need N bit for element x $\in
+\{1...n\}$, but if the N is large or undefined bitmap is not good choice.set,
+and when a element coming, check whether this elements has presented already, if
+not add it into the set. One of the traditional method to store this elements is
+using B-Tree, because of its good efficient on search and insert.But using
+B-Tree structure need more space to save and worse efficient on merging when the
+datasets is large. Another traditional method is using bitmap, this method hash
+every element into a bits array by hash function. If bit is 1, then the element
+is already presented, otherwise change the bit from 0 to 1. Bitmap is good at
+merging(just using OR operation), and only need N bits for element x $\in
+\{1...n\}$. But if the N is large or undefined, bitmap is not good choice.
+
+\paragraph{Linear Counting Algorithm}
+The linear counting method is introducted in~\cite{whang1990linear} by Whang et
+al, estimating the number of distinct elements in stream. Assume a hash function
+can hash elements into $m$ buckets. A bits array of $m$ size is maintained,
+updated bit into 1, if the hash result hit the corresponding buckets. We suppose
+the number of bit of 0's in bits array is $u$. Therefore, the number of distinct
+elements is estimated by $\hat{n} = -mlog\frac{u}{m}$. Because the probability
+that the $j_th$ bit in bits array remains 0, referred to as $P(A_j)$, is
+$(1-\frac{1}{m})^n$(assume the result from hash function is independent uniform
+distribution). The expectation of $u$ 0's bits is $E(u)$ = $\sum_{j=1}^{m}
+P(A_j)$ = $m(1-\frac{1}{m})^n$ = $m((1+\frac{1}{-m})^{-m})^{-\frac{n}{m}}$.
+$E(u)$ = $me^{-\frac{n}{m}} $. It approximates to $me^{-\frac{n}{m}}$. According
+to above, $n$ = $-m\log{\frac{E(u)}{m}}$. This method need large enough memory
+to save bits array. In order to reduce collisions, the size of bits array must
+far greater than the number of distinct elements in stream.
+
+\paragraph{Flajolet-Martin Algorithm}
+
 
 \subsection{Clustering}
 
