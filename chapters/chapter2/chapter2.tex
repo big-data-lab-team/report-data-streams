@@ -232,8 +232,9 @@ of the buckets. The rest bits in bit-string are used for finding leftmost 1-bit
 position. Assume $M_i$ indicates the maximum leftmost 1-bit position among
 bit-strings in the $i$ bucket. Thus, we Estimate the number of distinct elements
 by $\hat{n}$ = $2^{-\frac{\sum M_i}{m}}$~\cite{durand2003loglog}. Loglog
-counting Algorithm needs $O(\log\log N)$ space complexity, where N is the number
-of hash-values (the number of distinct elements in stream). 
+counting Algorithm needs $O(m \log\log(\frac{N}{m}))$ space complexity, where N
+the number of distinct elements in stream(the number of the hash results), m is
+the number of the buckets. 
 
 \paragraph{HyperLoglog Counting Algorithm}
 
@@ -247,14 +248,33 @@ with $\alpha_m$=$(m \int_0^\infty(\log_2(\frac{2+u}{1+u}))^m\ du)^{-1}$ , where
 $M_i$ expresses the maximum leftmost 1-bit position among bit-strings in the $i$
 bucket~\cite{flajolet2007hyperloglog}.
 
-\paragraph{ $F_2$}
+\subsection{ $F_2$}
+\paragraph{AMS}
+
+\subsection{$F_{k>2}$}
 
 \subsection{Sliding Window}
-\todo{ writing paragraph}
-sliding window 放下面，写几个  带silding window 算 cardinality 的例子
+A Sliding window can contain most recent $n$ elements of stream, or can be all
+the elements within specific time period $t$, e.g., one hour, one
+day~\cite{leskovec2014mining}. Sliding window model has been used by many
+algorithms. We introduces two of them at bellow.
 
 \subsubsection{Sliding HyperLoglog Algorithm}
-
+Sliding HyperLoglog Algorithm is proposed by ~\cite{chabchoub2010sliding},
+adapting the HyperLoglog algorithm by maintaining some additional time
+information. The purpose of this algorithm is to estimate the number of distinct
+elements in last $w$ units of time, $w$ smaller than the window size $W$.
+Representing the $L_i$(the position of leftmost 1-bit) by a pair $<t_i, L_i>$,
+where $t_i$ is the arrival timestamp of element~\cite{chabchoub2010sliding}, to
+add time information. There is a list to store pairs in each bucket, which
+prefer to as LFPM(\roman{List of Future Possible Maxima}). Once a new pair
+$<t_k, L_k>$ received, at first we delete old data where $t_i < t_k - W$ where
+$W$ is the window size, and delete all data where $L_i \leq L_k$, finally add
+this new pair into LFPM of corresponding bucket~\cite{chabchoub2010sliding}. To
+answer a request "How many distinct elements during $w$ units of time." at time
+$t$, $M_i$, the biggest $L_i$ in each bucket is computed to compute estimation.
+Sliding HyperLoglog gives the same estimation with applying HyperLoglog on the
+steam during $[t-w, t]$ period. But It needs more memory usage.
 
 \subsubsection{LRU-LC Algorithm}
 
@@ -263,6 +283,7 @@ sliding window 放下面，写几个  带silding window 算 cardinality 的例�
 \subsubsection{CluStream Framework}
 
 \subsection{Sketches}
+\subsubsection{Min-Count sketch}
 
 \section{Lossless Compression}
 \subsection{LZ77}
