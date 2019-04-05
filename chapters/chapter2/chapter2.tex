@@ -143,9 +143,6 @@ $(1-\epsilon)^\frac{1}{\epsilon} = \frac{1}{e}$. For a new coming spam stream
 data, the probability that it is selected for sample is
 $(1-e^{-\frac{km}{n}})^k$, which means all hash result mapping to bits are 1's.
 
-\subsection{Sliding Window}
-\todo{ writing paragraph}
-
 \subsection{Frequency Moments}
 Alon et al.~\cite{alon1999space} introduced the frequency moment in 1996. It are
 important statistic for large size data. $F_0$ is the number of distinct
@@ -182,6 +179,7 @@ merging(just using OR operation), and only need N bits for element x $\in
 \{1...n\}$. But if the N is large or undefined, bitmap is not good choice.
 
 \paragraph{Linear Counting Algorithm}
+
 The linear counting method is introducted in~\cite{whang1990linear} by Whang et
 al, estimating the number of distinct elements in stream. Assume a hash function
 can hash elements into $m$ buckets. A bits array of $m$ size is maintained,
@@ -199,8 +197,70 @@ far greater than the number of distinct elements in stream.
 
 \paragraph{Flajolet-Martin Algorithm}
 
+Flajolet and Martin proposes an algorithm~\cite{flajolet1985probabilistic} which
+estimates Cardinality with $O(\log\log n)$ space complexity. Applying a hash
+function $h$ to hash each element in stream into a bit-string. For each
+bit-string(hash-values), denote $tail\ length$ as the number of 0's in the end
+of bit-string. Assume $R$ is the maximum number of the $tail\ length$ in the
+stream. Then we can estimate the number of distinct elements in stream with
+$2^R$~\cite{flajolet1985probabilistic}. Because the probability that a
+bit-string from $h(a)$ has at least $r$ 0's in then end is $2^{-r}$. The
+probability that no elements in stream has $tail\ length \geqslant r$ is
+$(1-2^{-r})^n$ = $((1-2^{-r})^{2^r})^{n2^{-r}}$ = $e^{-n2^{-r}}$, assuming there
+are $n$ distinct elements in the stream~\cite{leskovec2014mining}. Thus,
+$1-e^{-n2^{-r}}$ is the probability that there is one or more than one $tail\
+length$ of bit-string at least $r$.
+
+The accuracy of this Algorithm is not outstanding, because of growth with a base
+2 index. But we only need to record the maximum $tail\ length$ in main
+memory~\cite{leskovec2014mining}. Assume a stream has $n$ distinct elements. It
+needs $O(\log n)$ bits to record bit-string($n$ different results). Because $R$
+equals or less than size of the bit-string, $O(\log\log n)$ bits is enough to
+record longest $tail\ length$ and to estimate the number of distinct elements. 
+\paragraph{Loglog Counting Algorithm}
+
+Loglog Counting Algorithm~\cite{durand2003loglog} is similar with
+Flajolet-Martin Algorithm. But This algorithm estimates the Cardinality of
+stream by using the leftmost 1-bit position of bit-string rather than $tail
+length$ which used by Flajolet-Martin Algorithm. The leftmost 1-bit position of
+the $i$ bit-string refer to as $L_i$. The probability of all $L-i \leq k$ is
+$(1-2^{-k})$. Thus, the probability that at least one $L_i \geqslant k$ is
+$1-e^{-n2^{-k}}$, where $n$ is the number of bit-strings. In order to reduce
+estimation error, Loglog counting separates hash results into $m$ buckets and
+$m$=$2^b$~\cite{durand2003loglog}. The first $b$ bits in bit-string is the index
+of the buckets. The rest bits in bit-string are used for finding leftmost 1-bit
+position. Assume $M_i$ indicates the maximum leftmost 1-bit position among
+bit-strings in the $i$ bucket. Thus, we Estimate the number of distinct elements
+by $\hat{n}$ = $2^{-\frac{\sum M_i}{m}}$~\cite{durand2003loglog}. Loglog
+counting Algorithm needs $O(\log\log N)$ space complexity, where N is the number
+of hash-values (the number of distinct elements in stream). 
+
+\paragraph{HyperLoglog Counting Algorithm}
+
+HyperLoglog Counting Algorithm~\cite{flajolet2007hyperloglog} is the improvement
+of LogLog Couning Algorihtm. The geometric mean which used by Loglog Counting is
+very sensitive on discrete values, and the buckets might by empty if the number
+of stream is not quite a lot~\cite{flajolet2007hyperloglog}. Thus, HyperLoglog
+Counting harmonic mean instead of geometric mean. Thus, The Estimation of
+cardinality of stream shell be obtain by $\frac{\alpha_m m^2 }{\sum 2^{-M_i}}$
+with $\alpha_m$=$(m \int_0^\infty(\log_2(\frac{2+u}{1+u}))^m\ du)^{-1}$ , where
+$M_i$ expresses the maximum leftmost 1-bit position among bit-strings in the $i$
+bucket~\cite{flajolet2007hyperloglog}.
+
+\paragraph{ $F_2$}
+
+\subsection{Sliding Window}
+\todo{ writing paragraph}
+sliding window 放下面，写几个  带silding window 算 cardinality 的例子
+
+\subsubsection{Sliding HyperLoglog Algorithm}
+
+
+\subsubsection{LRU-LC Algorithm}
+
 
 \subsection{Clustering}
+\subsubsection{CluStream Framework}
 
 \subsection{Sketches}
 
