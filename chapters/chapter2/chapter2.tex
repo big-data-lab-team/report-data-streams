@@ -248,7 +248,7 @@ with $\alpha_m$=$(m \int_0^\infty(\log_2(\frac{2+u}{1+u}))^m\ du)^{-1}$ , where
 $M_i$ expresses the maximum leftmost 1-bit position among bit-strings in the $i$
 bucket~\cite{flajolet2007hyperloglog}.
 
-\subsection{ $F_2$}
+\subsection{Second Momenta $F_2$}
 \paragraph{Alon-Matias-Szegedy Algorithm}
 Alon, Matias and Szegedy~\cite{alon1999space} proposed AMS sketch to solve this
 problem. Now, let us assume that we have $d$ hash functions $h_1$,...,$h_d$ hash
@@ -258,16 +258,16 @@ $d$*$w$ matrix. Each element $e$ from stream is mapped to an entry based on the
 hash function $h_i(e)$ for each row in the matrix. After mapping elements with
 $h$ functions, each changed entry $Z[i][j]$ is updated by $Z[i][j]$ +=
 $g_i(e)*c$, where $c$ is count~\cite{garofalakis2016data}. To estimate $F_2$, we
-can have a estimation from each row $j$, it refer to as $\sum_k=1^w Z[j][k]^2$,
+can have a estimation from each row $j$, it refer to as $\sum_{k=1}^w Z[j][k]^2$,
 and obtain the median of these estimates as final result.
 
-\subsection{$F_{k>2}$}
+\subsection{High-Order Moments $F_{k>2}$}
 \paragraph{Count-Min sketch}
 The Count-Min sketch~\cite{cormode2005improved} was introduced to solve
 $F_\infty$ and frequency items problems. It maintains an matrix, refer to as
 $CM$, of $w$*$d$ size which has a counter in each cell. Applying $d$ pairwise
 independent hash function $h_1$,...,$h_d$ : $\{1...m\} \rightarrow \{1...w\}$,
-one counter in each row shell be increased, when a new element $e$ arrivals.
+one counter in each row shell be increased, when a new element $e$ arrivals~\cite{garofalakis2016data}.
 e.g. In row $j$, the counter $CM[j][h_j(e)]$ increase by 1. We can estimate the
 frequency of element $e$ with $\hat{n_e} = \min_{j=1}^d CM[j][h_j(e)]$, thereby
 estimating higher-order moments~\cite{cormode2005improved}.
@@ -377,7 +377,27 @@ size of the array(the number of buckets for hashing).
 
 \subsection{Clustering}
 \subsubsection{CluStream Framework}
-
+In the paper~\cite{aggarwal2003framework} authors discussed a framework using
+for clustering evolving data streams. It is called CluStream. This framework
+have two components, the Online micro-clustering component is used for storage
+of summary statistic in data steams, these information are computed based on
+micro-clusters which use \textbf{cluster feature vector}~\cite{zhang1996birch}
+to cluster data streams. In online component, Pyramidal pattern is be used to
+store micro-clusters as snapshots in order to acquire summary statistics over
+different time horizons. The offline component is designed for analyst, which
+can present quick understanding of the clusters of data streams with the
+statistic information from online component and specific input for example what
+time horizon is using for clustering, how many clusters should data stream be
+clustering. In the offline macro-clustering component, we can use its
+\emph{subtractive} property of the micro-clustering to generate higher level
+clusters over different time horizons~\cite{aggarwal2003framework}. For
+instance, the current clock time is $t_c$ and the user wishes to find clusters
+on a time horizon of length h, then we can find the snapshot in $t_c$ and $(t_c-
+h)$ then we can get the clusters with time horizon of length h. It is not
+possible to save snapshots for every moment, so this framework using pyramidal
+time frame to storage snapshots with different orders. The order of a class of
+snapshots means that the level of granularity in real
+time~\cite{aggarwal2003framework}.
 
 
 \section{Lossless Compression}
