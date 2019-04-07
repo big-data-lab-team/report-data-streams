@@ -250,11 +250,27 @@ bucket~\cite{flajolet2007hyperloglog}.
 
 \subsection{ $F_2$}
 \paragraph{Alon-Matias-Szegedy Algorithm}
-Alon, Matias and Szegedy~\cite{alon1999space} proposed AMS sketch to solve this problem. Now, let us assume that we have $d$ hash functions $h_1$,...,$h_d$ hash elements into {1,2,...,$w$}. $d$ extra 4-wise independent hash functions $g_1$,...,$g_d$ : $\{1...U\}\rightarrow \{-1,1\}$. AMS sketch $Z$ maintains a $d$*$w$ matrix. Each element $e$ from stream is mapped to an entry based on the hash function $h_i(e)$ for each row in the matrix. After mapping elements with $h$ functions, each changed entry $Z[i][j]$ is updated by $Z[i][j]$ += $g_i(e)*c$, where $c$ is count~\cite{garofalakis2016data}. To estimate $F_2$, we can have a estimation from each row $j$, it refer to as $\sum_k=1^w Z[j][k]^2$, and obtain the median of these estimates as final result.
+Alon, Matias and Szegedy~\cite{alon1999space} proposed AMS sketch to solve this
+problem. Now, let us assume that we have $d$ hash functions $h_1$,...,$h_d$ hash
+elements into {1,2,...,$w$}. $d$ extra 4-wise independent hash functions
+$g_1$,...,$g_d$ : $\{1...U\}\rightarrow \{-1,1\}$. AMS sketch $Z$ maintains a
+$d$*$w$ matrix. Each element $e$ from stream is mapped to an entry based on the
+hash function $h_i(e)$ for each row in the matrix. After mapping elements with
+$h$ functions, each changed entry $Z[i][j]$ is updated by $Z[i][j]$ +=
+$g_i(e)*c$, where $c$ is count~\cite{garofalakis2016data}. To estimate $F_2$, we
+can have a estimation from each row $j$, it refer to as $\sum_k=1^w Z[j][k]^2$,
+and obtain the median of these estimates as final result.
 
 \subsection{$F_{k>2}$}
 \paragraph{Count-Min sketch}
-The Count-Min sketch~\cite{cormode2005improved} was introduced to solve $F_\infty$ and frequency items problems. It maintains an matrix, refer to as $CM$, of $w$*$d$ size which has a counter in each cell. Applying $d$ pairwise independent hash function $h_1$,...,$h_d$ : $\{1...m\} \rightarrow \{1...w\}$, one counter in each row shell be increased, when a new element $e$ arrivals. e.g. In row $j$, the counter $CM[j][h_j(e)]$ increase by 1. We can estimate the frequency of element $e$ with $\hat{n_e} = \min_{j=1}^d CM[j][h_j(e)]$, thereby estimating higher-order moments~\cite{cormode2005improved}.
+The Count-Min sketch~\cite{cormode2005improved} was introduced to solve
+$F_\infty$ and frequency items problems. It maintains an matrix, refer to as
+$CM$, of $w$*$d$ size which has a counter in each cell. Applying $d$ pairwise
+independent hash function $h_1$,...,$h_d$ : $\{1...m\} \rightarrow \{1...w\}$,
+one counter in each row shell be increased, when a new element $e$ arrivals.
+e.g. In row $j$, the counter $CM[j][h_j(e)]$ increase by 1. We can estimate the
+frequency of element $e$ with $\hat{n_e} = \min_{j=1}^d CM[j][h_j(e)]$, thereby
+estimating higher-order moments~\cite{cormode2005improved}.
 
 
 \subsection{Sliding Window}
@@ -282,13 +298,33 @@ Sliding HyperLoglog gives the same estimation with applying HyperLoglog on the
 steam during $[t-w, t]$ period. But It needs more memory usage.
 
 \subsubsection{LRU-LC Algorithm}
-LRU-LC sketch~\cite{shan2016lru} adapts Linear counting sketch to sliding window model. It applies the well-known memory page replacement algorithm, least recently used replacement policy~\cite{o1993lru} (LRU) to evicting stale information in time order~\cite{shan2016lru}. To update the aging degree of information from the sketch, Entries in the entry array $V$ is used instead of bit array which LC retains. Each entry consists of backward pointer(bp), forward pointer(fp) and time different between two adjacent item($\bigtriangleup t$), $\bigtriangleup t_i$ = $t_i - t_{i-1}$, marked as two state: $active$(be hit during last $W$ unites of time) and $inactive$(stale or be not hit), grouping into different part of LRU-LC.
-All active entries constitute linked queue refer to as LRU queue, and are sorted in order of the last time it is hit, as figure~\ref{fig:LRU-LC}. Assume the LRU queue has $k$ entries, thus, the aging degree of an entry $V[i]$ in LRU queue shell be calculated as:
+LRU-LC sketch~\cite{shan2016lru} adapts Linear counting sketch to sliding window
+model. It applies the well-known memory page replacement algorithm, least
+recently used replacement policy~\cite{o1993lru} (LRU) to evicting stale
+information in time order~\cite{shan2016lru}. To update the aging degree of
+information from the sketch, Entries in the entry array $V$ is used instead of
+bit array which LC retains. Each entry consists of backward pointer(bp), forward
+pointer(fp) and time different between two adjacent item($\bigtriangleup t$),
+$\bigtriangleup t_i$ = $t_i - t_{i-1}$, marked as two state: $active$(be hit
+during last $W$ unites of time) and $inactive$(stale or be not hit), grouping
+into different part of LRU-LC. All active entries constitute linked queue refer
+to as LRU queue, and are sorted in order of the last time it is hit, as
+figure~\ref{fig:LRU-LC}. Assume the LRU queue has $k$ entries, thus, the aging
+degree of an entry $V[i]$ in LRU queue shell be calculated as:
 \begin{equation*}
    D_{aging}[i] = W-\sum_{j=i}^{k}\bigtriangleup t_j
 \end{equation*}
 
-where $D_{aging}[i]$ indicates the aging degree of the entry $V[i]$, $W$ is the window size~\cite{shan2016lru} and $\bigtriangleup t_j$ is the component $\bigtriangleup t$ in the entries which behind $V[i]$. The active entries shell be removed and sent into inactive group, if its aging degree equals 0. We shows algorithm of LRU-LC in Algorithm~\ref{algo:LRU-LC}. LRU-LC updates aging degree of entries by decreasing $\bigtriangleup t$ of the first entry in LRU queue, see line 26-27 in Algorithm~\ref{algo:LRU-LC}. Finally, the Cardinality of the stream over the window $W$(during $W$ units of time) shell be estimated by $ -mlog\frac{z}{m}$, where $z$ is the number of $inactive$ entries and $m$ is the size of the array(the number of buckets for hashing).
+where $D_{aging}[i]$ indicates the aging degree of the entry $V[i]$, $W$ is the
+window size~\cite{shan2016lru} and $\bigtriangleup t_j$ is the component
+$\bigtriangleup t$ in the entries which behind $V[i]$. The active entries shell
+be removed and sent into inactive group, if its aging degree equals 0. We shows
+algorithm of LRU-LC in Algorithm~\ref{algo:LRU-LC}. LRU-LC updates aging degree
+of entries by decreasing $\bigtriangleup t$ of the first entry in LRU queue, see
+line 26-27 in Algorithm~\ref{algo:LRU-LC}. Finally, the Cardinality of the
+stream over the window $W$(during $W$ units of time) shell be estimated by $
+-mlog\frac{z}{m}$, where $z$ is the number of $inactive$ entries and $m$ is the
+size of the array(the number of buckets for hashing).
 
 
 \begin{algorithm}
