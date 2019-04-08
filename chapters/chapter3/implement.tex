@@ -211,19 +211,3 @@ point finally.
 \caption{Function recursive(S, L, R, N, X)}
 \label{algo:recursive}
 \end{algorithm}
-
-\section{Implementation of Polynomial Regression}
-
-We implement polynomial regression method to compress the accelerometer data
-($a.x$, $a.y$, $a.z$). In the dataset, we process polynomial regression with the
-relationship between independent variable $t$ and dependent variables $a.x$,
-$a.y$ and $a.z$. For tolerance checking, we use infinity norm and euclidean
-norm. The implementation works need small memory to record data points, and some
-CPU time to compute coefficients.
-
-\begin{figure}
-  \centering
-\includegraphics[width=0.7\textwidth]{figures/point-in-chord.png}
-\caption{The point selected to determine the direction}
-\label{fig:compare_point}
-\end{figure}
