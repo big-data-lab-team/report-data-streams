@@ -10,16 +10,17 @@ This is a LaTeX template for Master's thesis or PHD thesis, derived from officia
 Steps to get started:   
 - Clone the repo ( `git clone git@github.com:big-data-lab-team/concordia-master-thesis-template.git`)   
 - Make structural changes in `cuthesis_masters.tex` file.   
-- Define your constants such as thesis author, department, etc in `constants.tex` file.   
-- If you want to add new packages or define new styles, change them in `config.tex`.   
+<!-- - Define your constants such as thesis author, department, etc in `constants.tex` file.    -->
+- If you want to add new packages or define new styles, change them in `packages.tex`.   
 - Each chapters have their own folders, so you can modify them separately in their own folders.   
 
 To build pdf, open `cuthesis.tex` in [TexMaker](http://www.xm1math.net/texmaker/) and build it.   
 
 ## How to generate the pdf from command line   
 0. Install ```pdflatex``` and ```bibtex```  
-1. Compile the document: ```pdflatex cuthesis; pdflatex cuthesis``` (yes, twice).  
-2. Generate the bibliography: ```bibtex cuthesis; pdflatex cuthesis``` (yes, once again).  
+1. Generate the figures: ./scripts/ltc-plot.py ; ./scripts/figures.gnplt.
+2. Compile the document: ```pdflatex cuthesis; pdflatex cuthesis``` (yes, twice).  
+3. Generate the bibliography: ```bibtex cuthesis; pdflatex cuthesis``` (yes, once again).  
  
 Modify `.gitignore` according to your requirements.  
 
