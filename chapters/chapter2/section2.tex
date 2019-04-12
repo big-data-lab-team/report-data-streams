@@ -7,6 +7,101 @@
 \subsection{S-LZW}
 
 \subsection{LEC}
+LEC algorithm was first proposed by Marcelloni et
+al.~\cite{marcelloni2008simple}, which is a approximated version of
+exponential-Golomb code~\cite{teuhola1978compression}. In
+paper~\cite{marcelloni2008simple}, authors measured temperature and humidity by
+sensors and compressed data by using LEC. It uses very small dictionary whose
+size is determined by the number of the bits after ADC
+converter~\cite{marcelloni2008simple,marcelloni2009efficient}.  For instance, in
+a sensor node, a measure $m_i$ is gained and converted into numeral value $r_i$
+represented on $R$ bit by ADC. For each new data point $r_i$, LEC compute the
+difference of adjacent points $d_i$ = $r_i$ - $r_{i-1}$, in order to compute
+$d_0$, the $r_{-1}$ equals the central value among $2^R$. The residue $d_i$
+encoded by entropy encoder, and represented as a bit sequence in 2 parts $s_i |
+a_i$ , where $s_i$ is the value of the bits needed to represent the difference
+$d_i$, and $a_i$ represent $d_i$ based on special rule:
+\begin{enumerate}
+    \item If $d_i = 0$, $a_i$ is not present.    
+    \item If $d_i > 0$, $a_i$ is the binary expression of $n_i$ low-order bits
+    of the $d_i$
+    \item If $d_i < 0$, $a_i$ is the binary expression of $n_i$ low-order bits
+    of the two's complement representation of ($d_i$ - 1)
+\end{enumerate}
+
+In the paper~\cite{marcelloni2008simple}, the authors generated the $s_i$ from
+$n_i$ by Huffman coding. Let's say the $s_i$ is the representation at $n_i$ in
+the Huffman code, $n_i$ = $(\log{_2}{\left|{b_i}\right|} +
+1)$~\cite{li2016temporal} and $n_i \leq R$. Table~\ref{table:LEC} is used in
+paper~\cite{marcelloni2009efficient}. From the Table~\ref{table:LEC}, it
+supports R+1 groups($n_i$) and each group $s_i$ contains $2^{n_i}$ numeral
+value.  
+\begin{table}[]
+\begin{tabular}{|l|l|l|}
+\hline
+$n_i$ & $s_i$        & $d_i$                                       \\ \hline
+0     & 00           & 0                                           \\ 
+1     & 010          & −1, +1                                      \\
+2     & 011          & −3, −2, +2, +3                              \\
+3     & 100          & −7, . . . , −4, +4, . . ., +7               \\
+4     & 101          & −15, . . . , −8, +8, . . ., +15             \\
+5     & 110          & −31, . . . , −16, +16, . . ., +31           \\
+6     & 1110         & −63, . . . , −32, +32, . . ., +63           \\
+7     & 11110        & −127, . . . , −64, +64, . . ., +127         \\
+8     & 111110       & −255, . . . , −128, +128, . . ., +255       \\
+9     & 1111110      & −511, . . . , −256, +256, . . ., +511       \\
+10    & 11111110     & −1023, . . . , −512, +512, . . ., +1023     \\
+11    & 111111110    & −2047, . . . , −1024, +1024, . . ., +2047   \\
+12    & 1111111110   & −4095, . . . , −2048, +2048, . . ., +4095   \\
+13    & 11111111110  & −8191, . . . , −4096, +4096, . . ., +8191   \\
+14    & 111111111110 & −16383, . . . , −8192, +8192, . . ., +16383 \\
+\hline
+\end{tabular}
+\caption{The dictionary table used in the experiments~\cite{marcelloni2009efficient}}
+\label{table:LEC}
+\end{table}
+ 
 \subsection{S-LEC}
+S-LEC Algorithm is a extension and improvement of LEC Algorithm by Li et
+al.~\cite{li2016temporal}. Same with LEC, it encodes residues in compression
+process, because of the correlation characteristic of sensor stream, e.g. the
+different of stream data unlikely be too large. In LEC, the result after
+encoding has two parts $s_i$ and $ a_i$, and the $s_i$ part shell cause
+information redundancy, if a set of residues are in same group which means
+repeated group index $s_i$. S-LEC reduces the size of representation by
+exploiting the correlation amount adjacent residues. The main idea is using a
+extra two bits of sequential code $b_i$ to present the positional relationship
+of groups of adjacent residues~\cite{li2016temporal}. The encoding result
+$s_i|a_i$ is replaced by $b_i|s_i|a_i$, but the group index $s_i$ shell be
+omitted if two adjacent residues are in same group or neighboring group. Assume
+the number of the group in table is K, the $b_i$ is defined
+as~\cite{li2016temporal}: 
+
+\begin{enumerate}
+    \item $b_i$ = 00, if $s_i$ = $s_{i-1}$
+    \item $b_i$ = 01, if $n_i$ = $n_{i-1}$ - 1($n_{i-1} \geqslant 1$), or $n_i$
+    = $n_{i-1}$ + 2($n_{i-1}$ = 0)
+    \item $b_i$ = 10, if $n_i$ = $n_{i-1}$ - 1($n_{i-1} \leqslant K$), or $n_i$
+    = $n_{i-1}$ - 2($n_{i-1}$ = K)
+    \item $b_i$ = 11, otherwise. The representation $b_i|s_i|a_i$ is required. 
+  \end{enumerate}
+
+When the $b_i$ equals 11, the representation need more bits than LEC result,
+because of extra $b_i$. S-LEC proposed some context situations to solve this
+problem. In paper~\cite{li2016temporal}, the groups is divided into three
+clusters: $C_1$ = {$n_i$|$i$ = 0, 1, 2, 3}, $C_2$ = {$n_i$|$i$ = 4, 5} and 
+$C_3$ = {$n_i$|$i$ = 6, ..., K}. The idea of reducing group code as
+follow~\cite{li2016temporal}:
+
+\begin{enumerate}
+    \item $s_i$ remove the first "1", If $n_{i-1} \in C_1$
+    \item $s_i$ remove the first two "1"s, If $n_{i-1} \in C_2$
+    \item $s_i$ remove the first three "1"s, If $n_{i-1} \in C_3$
+\end{enumerate}
+S-LEC gives better Compression ratio then LEC when they are in same SME(Square
+Mean Error)~\cite{li2016temporal}. We need to save the table into memory when we
+uses these two algorithms, and in order to improve compression ratio as much as
+possible, it is necessary to encode $n_i$ by prefix code method base on the
+elements distribution.
 
 \subsection{TMT}

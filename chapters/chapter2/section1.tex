@@ -219,42 +219,46 @@ the number of the buckets.
 \paragraph{HyperLoglog Counting Algorithm}
 
 HyperLoglog Counting Algorithm~\cite{flajolet2007hyperloglog} is the improvement
-of Loglog Counting Algorithm. The geometric mean which used by Loglog Counting is
-very sensitive on discrete values, and the buckets might by empty if the number
-of stream is not quite a lot~\cite{flajolet2007hyperloglog}. Thus, HyperLoglog
-Counting Algorithm uses harmonic mean instead of geometric mean. Thus, The estimate of
-cardinality of stream shell be obtain by $\frac{\alpha_m m^2 }{\sum 2^{-M_i}}$
-with $\alpha_m$=$(m \int_0^\infty(\log_2(\frac{2+u}{1+u}))^m\ du)^{-1}$ , where
-$M_i$ expresses the maximum leftmost 1-bit position among bit-strings in the $i$
+of Loglog Counting Algorithm. The geometric mean which used by Loglog Counting
+is very sensitive on discrete values, and the buckets might by empty if the
+number of stream is not quite a lot~\cite{flajolet2007hyperloglog}. Thus,
+HyperLoglog Counting Algorithm uses harmonic mean instead of geometric mean.
+Thus, The estimate of cardinality of stream shell be obtain by $\frac{\alpha_m
+m^2 }{\sum 2^{-M_i}}$ with $\alpha_m$ = $(m
+\int_0^\infty(\log_2(\frac{2+u}{1+u}))^m\ du)^{-1}$ , where $M_i$ expresses the
+maximum leftmost 1-bit position among bit-strings in the $i$
 bucket~\cite{flajolet2007hyperloglog}.
 
 \subsection{Second Momenta $F_2$}
 \paragraph{Alon-Matias-Szegedy Sketch}
 Alon, Matias and Szegedy~\cite{alon1999space} proposed AMS sketch to solve this
-problem. Now, let us assume that we have $d$ hash functions $h_1$,...,$h_d$ hash
-elements into \{1,2,...,$w$\}. $d$ extra 4-wise independent hash functions
-$g_1$,...,$g_d$ : $\{1...U\}\rightarrow \{-1,1\}$. One AMS sketch $Z$ maintains a
-$d$*$w$ matrix. Each element $e$ from stream is mapped to an entry based on the
-hash function $h_i(e)$ for each row in the matrix. After mapping elements with
-$h$ functions, each changed entry $Z[i][j]$ is updated by $Z[i][j]$ +=
-$g_i(e)*c$, where $c$ is update weight which can be positive or negative~\cite{garofalakis2016data}. To estimate $F_2$, we
-can process estimation from each row $j$, it refer to as $\sum_{k=1}^w Z[j][k]^2$,
-and obtain the median of these estimates as final result.
+problem. Now, let us assume that we have $d$ hash functions $h_1$, ..., $h_d$
+hash elements into \{1, 2, ..., $w$\}. $d$ extra 4-wise independent hash
+functions $g_1$, ..., $g_d$ : $\{1...U\}\rightarrow \{-1, 1\}$. One AMS sketch
+$Z$ maintains a $d$*$w$ matrix. Each element $e$ from stream is mapped to an
+entry based on the hash function $h_i(e)$ for each row in the matrix. After
+mapping elements with $h$ functions, each changed entry $Z[i][j]$ is updated by
+$Z[i][j]$ += $g_i(e)*c$, where $c$ is update weight which can be positive or
+negative~\cite{garofalakis2016data}. To estimate $F_2$, we can process
+estimation from each row $j$, it refer to as $\sum_{k=1}^w Z[j][k]^2$, and
+obtain the median of these estimates as final result.
 
 \subsection{High-Order Moments $F_{k>2}$}
 \paragraph{Count-Min sketch}
 The Count-Min sketch~\cite{cormode2005improved} was introduced to solve
 $F_\infty$ and frequency items problems. It maintains an matrix, refer to as
 $CM$, of $w$*$d$ size which has a counter in each cell. Applying $d$ pairwise
-independent hash function $h_1$,...,$h_d$ : $\{1...m\} \rightarrow \{1...w\}$,
-one counter in each row shell be increased, when a new element $e$ arrivals~\cite{garofalakis2016data}.
-e.g. In row $j$, the counter $CM[j][h_j(e)]$ increase by 1. We can estimate the
-frequency of element $e$ with $\hat{n_e} = \min_{j=1}^d CM[j][h_j(e)]$, thereby
-estimating higher-order moments~\cite{cormode2005improved}.
+independent hash function $h_1$, ..., $h_d$ : $\{1...m\} \rightarrow \{1...w\}$,
+one counter in each row shell be increased, when a new element $e$
+arrivals~\cite{garofalakis2016data}. e.g. In row $j$, the counter
+$CM[j][h_j(e)]$ increase by 1. We can estimate the frequency of element $e$ with
+$\hat{n_e} = \min_{j=1}^d CM[j][h_j(e)]$, thereby estimating higher-order
+moments~\cite{cormode2005improved}.
 
 
 \subsection{Sliding Window}
-The sliding window model was addressed by Datar et al.~\cite{datar2002maintaining}. A sliding window can contain most recent $n$
+The sliding window model was addressed by Datar et
+al.~\cite{datar2002maintaining}. A sliding window can contain most recent $n$
 elements of stream, or can be all the elements within specific time period $t$,
 e.g., one hour, one day~\cite{leskovec2014mining}. Sliding window model has been
 used by many algorithms. We introduces two of them below.
@@ -263,47 +267,48 @@ used by many algorithms. We introduces two of them below.
 Sliding HyperLoglog Algorithm is proposed in~\cite{chabchoub2010sliding},
 adapting the HyperLoglog algorithm by maintaining some additional time
 information. The purpose of this algorithm is to estimate the number of distinct
-elements in last $w$ units of time, $w$ smaller than the window size $W$~\cite{chabchoub2010sliding}.
-Representing the $L_i$(the position of leftmost 1-bit) by a pair $<t_i, L_i>$,
-where $t_i$ is the arrival timestamp of element~\cite{chabchoub2010sliding}, is applied for
-adding time information. There is a list to store pairs in each bucket, which
-prefer to as LFPM(\emph{List of Future Possible Maxima}). Once a new pair
-$<t_k, L_k>$ arrives, at first we delete old data where $t_i < t_k - W$ where
-$W$ is the window size, and delete all data where $L_i \leq L_k$, finally add
-this new pair into LFPM of corresponding bucket~\cite{chabchoub2010sliding}. To
-answer a request "How many distinct elements during $w$ units of time." at time
-$t$, $M_i$, the biggest $L_i$ in each bucket is computed for estimation.
-Sliding HyperLoglog gives the same estimate with applying HyperLoglog on the
-stream during $[t-w, t]$ period. But It needs more memory usage.
+elements in last $w$ units of time, $w$ smaller than the window size
+$W$~\cite{chabchoub2010sliding}. Representing the $L_i$(the position of leftmost
+1-bit) by a pair $<t_i, L_i>$, where $t_i$ is the arrival timestamp of
+element~\cite{chabchoub2010sliding}, is applied for adding time information.
+There is a list to store pairs in each bucket, which prefer to as
+LFPM(\emph{List of Future Possible Maxima}). Once a new pair $<t_k, L_k>$
+arrives, at first we delete old data where $t_i < t_k - W$ where $W$ is the
+window size, and delete all data where $L_i \leq L_k$, finally add this new pair
+into LFPM of corresponding bucket~\cite{chabchoub2010sliding}. To answer a
+request "How many distinct elements during $w$ units of time." at time $t$,
+$M_i$, the biggest $L_i$ in each bucket is computed for estimation. Sliding
+HyperLoglog gives the same estimate with applying HyperLoglog on the stream
+during $[t-w, t]$ period. But It needs more memory usage.
 
 \subsubsection{LRU-LC Algorithm}
 LRU-LC sketch~\cite{shan2016lru} adapts Linear counting sketch to sliding window
 model. It applies the well-known memory page replacement algorithm, least
 recently used replacement policy~\cite{o1993lru} (LRU) to evicting stale
 information in time order~\cite{shan2016lru}. To update the aging degree of
-information from the sketch, the entry array $V$ is used instead of
-bit array which LC retains. Each entry consists of backward pointer(bp), forward
+information from the sketch, the entry array $V$ is used instead of bit array
+which LC retains. Each entry consists of backward pointer(bp), forward
 pointer(fp) and time different between two adjacent item($\bigtriangleup t$),
-$\bigtriangleup t_i$ = $t_i - t_{i-1}$. It is marked as two state: $active$(be hit
-during last $W$ unites of time) and $inactive$(stale or be not hit), and grouped
-into different part of LRU-LC. All active entries constitute linked queue refer
-to as LRU queue, and are sorted in order of the last time it is hit, as
-figure~\ref{fig:LRU-LC}. Assume the LRU queue has $k$ entries, thus, the aging
-degree of an entry $V[i]$ in LRU queue shell be calculated as:
+$\bigtriangleup t_i$ = $t_i - t_{i-1}$. It is marked as two state: $active$(be
+hit during last $W$ unites of time) and $inactive$(stale or be not hit), and
+grouped into different part of LRU-LC. All active entries constitute linked
+queue refer to as LRU queue, and are sorted in order of the last time it is hit,
+as figure~\ref{fig:LRU-LC}. Assume the LRU queue has $k$ entries, thus, the
+aging degree of an entry $V[i]$ in LRU queue shell be calculated as:
 \begin{equation*}
    D_{aging}[i] = W-\sum_{j=i}^{k}\bigtriangleup t_j
 \end{equation*}
 
 Where $D_{aging}[i]$ indicates the aging degree of the entry $V[i]$, $W$ is the
 window size~\cite{shan2016lru} and $\bigtriangleup t_j$ is the component
-$\bigtriangleup t$ in the entries of LRU queue which behind $V[i]$. The active entries shell
-be removed and sent into inactive group, if its aging degree equals 0. We shows
-algorithm of LRU-LC in Algorithm~\ref{algo:LRU-LC}. LRU-LC updates aging degree
-of entries by decreasing $\bigtriangleup t$ of the first entry in LRU queue, see
-line 26-27 in Algorithm~\ref{algo:LRU-LC}. Finally, the cardinality of the
-stream over the window $W$(during $W$ units of time) shell be estimated by $
--mlog\frac{z}{m}$, where $z$ is the number of $inactive$ entries and $m$ is the
-size of the array(the number of buckets for hashing).
+$\bigtriangleup t$ in the entries of LRU queue which behind $V[i]$. The active
+entries shell be removed and sent into inactive group, if its aging degree
+equals 0. We shows algorithm of LRU-LC in Algorithm~\ref{algo:LRU-LC}. LRU-LC
+updates aging degree of entries by decreasing $\bigtriangleup t$ of the first
+entry in LRU queue, see line 26-27 in Algorithm~\ref{algo:LRU-LC}. Finally, the
+cardinality of the stream over the window $W$(during $W$ units of time) shell be
+estimated by $ -mlog\frac{z}{m}$, where $z$ is the number of $inactive$ entries
+and $m$ is the size of the array(the number of buckets for hashing).
 
 
 \begin{algorithm}
