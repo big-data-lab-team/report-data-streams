@@ -24,15 +24,15 @@ could be. With new associated ball  $\mathcal{B}_j$, we re-define it as follow:
 \begin{equation*}
     B = \bigcap_{i=1}^{j-1} box(\mathcal{B}_i) 
 \end{equation*}
-Firstly, checking the intersection with box($\mathcal{B}_j$) and $B$, which
+Firstly, we check the intersection with box($\mathcal{B}_j$) and $B$, which
 shows in Algorithm~\ref{algo:euclidean} line 9. Secondly, for each
 $\mathcal{B}_i$ belongs to $S$, check the intersection between $\mathcal{B}_i$
 and $\mathcal{B}_j$ (12 line in Algorithm~\ref{algo:euclidean}). At the same
 time $\mathcal{B}_i$ will be removed if it includes $\mathcal{B}_j$, because
 smaller ball intersects $\mathcal{B}_j$ than a bigger ball which contains the
-smaller one(15 line in Algorithm~\ref{algo:euclidean}). Finally, finding a point
-in intersection of balls in $S$ by running funtion \texttt{find\_bisection(S,
-B)}.Our code is available at
+smaller one(15 line in Algorithm~\ref{algo:euclidean}). Finally, we find a point
+in intersection of balls in $S$ by running function \texttt{find\_bisection(S,
+B)}. Our code is available at
 \url{https://github.com/big-data-lab-team/stream-summarization} under MIT
 license.
 
@@ -41,12 +41,9 @@ license.
 % describe function find_bisection
 In function \texttt{find\_bisection(S, B)}, we selected dimension of balls as
 $n$ used at the beginning of bisection, also computed minimum/maximum value of
-bounding box $B$ at $n$ dimension, which corresponds to $left$ and $right$ in
+bounding box $B$ at the $n_{th}$ dimension, which corresponds to $left$ and $right$ in
 bisection method. The $X$ represents a point in all elements in $S$. It would be
-returned if it could be found in function \texttt{recursive(S, L, R, N, X)}.
-
-% describe function recursive
-The parameter $X$ put into function \texttt{recursive(S, L, R, N, X)}, because
+returned if it could be found in function \texttt{recursive(S, L, R, N, X)}. The parameter $X$ is put into function \texttt{recursive(S, L, R, N, X)}, because
 it is necessary to update the values (see Algorithm~\ref{algo:recursive} line
 28) of $X$ during the process. In 30 line of Algorithm~\ref{algo:recursive}, it
 happens in case of $left > right$, which means:
@@ -59,7 +56,7 @@ intersection. Therefore, any point in the intersection of $min\_id$ and
 $max\_id$, could be used for determining the direction of bisection. In our
 implement, we select a point in connection of these two ball's center, which
 also locates in intersecting object(line/chord when order=2, plane/circle when
-order=3).Figure~\ref{fig:compare_point} shows the point we selected in 2D.
+order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 
 
 \note{Algorithm~\ref{algo:euclidean} line 9, code is box($B_j$), but not problem}
@@ -114,7 +111,7 @@ data point until coming data point, in order to checking if there is
 intersection among them. For instance, in 3D-t, assume we have a the	
 base point $Z = D_0$ and the tolerance range $R_1$ which is a ball
 as the intersection S. we need a list L to record mapped balls
-from $D_1$ to coming data. For each comming data $D_i, i>1$ mapping
+from $D_1$ to coming data. For each coming data $D_i, i>1$ mapping
 this data into $t_1$, and add it into list. Then the work is check out
 if all balls intersect, and form a public intersection. The method is
 based on plane sweep and binary search. At first, select one parameter,
@@ -211,19 +208,3 @@ point finally.
 \caption{Function recursive(S, L, R, N, X)}
 \label{algo:recursive}
 \end{algorithm}
-
-\section{Implementation of Polynomial Regression}
-
-We implement polynomial regression method to compress the accelerometer data
-($a.x$, $a.y$, $a.z$). In the dataset, we process polynomial regression with the
-relationship between independent variable $t$ and dependent variables $a.x$,
-$a.y$ and $a.z$. For tolerance checking, we use infinity norm and euclidean
-norm. The implementation works need small memory to record data points, and some
-CPU time to compute coefficients.
-
-\begin{figure}
-  \centering
-\includegraphics[width=0.7\textwidth]{figures/point-in-chord.png}
-\caption{The point selected to determine the direction}
-\label{fig:compare_point}
-\end{figure}
