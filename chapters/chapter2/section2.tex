@@ -1,6 +1,38 @@
 \section{Lossless Compression}
 %\subsection{LZ77}
 \subsection{LZSS}
+LZSS~\cite{storer1982data} is a lossless textual compression algorithm. It is a
+derivative and improvement of LZ77~\cite{ziv1977universal} which processes
+compression by using previous data as dictionary. There is a sliding window and
+a forward buffer applied in both algorithm. In LZ77 compression algorithm, it
+outputs the original alphabet with empty pointer, e.g.(0, 0)A, if on sub-string
+in forward buffer is found in dictionary\cite{ziv1977universal}, but it might
+happen that this character $A$ and next alphabet compose a string appearing in
+dictionary. LZSS solves these problems by defining a parameter
+\emph{MIN\_LENGTH}(size of output pointers) and only output pointers ($n$, $m$),
+where $n$ indicates the position of the first character of the repeating string,
+$m$ is the length of the string~\cite{storer1982data}, rather than ($n$, $m$)$C$
+in LZ77, where $C$ is the first first character at sub-string in forward buffer
+stop finding in dictionary. The compression process as blow:
+
+\begin{enumerate}
+    \item Find the longest string $str$ which also appears in sliding
+    window(dictionary) in forward buffer.
+    \item Compute pointers $n$ and $m$
+    \item Check if the length of $str$ is bigger or equals MIN\_LENGTH. If True,
+    it outputs pointers and data stream goes forward length of $str$, else outputs
+    the first character in forward buffer and stream goes forward 1
+    byte(character).
+\end{enumerate}
+
+Assume sliding window and forward buffer is no-limited, MIN\_length = 2, a
+example of using LZSS compression is given: A string $aaBccDaacEaccFacac$ is
+encoded into $aaBccD$(1, 2)$cE$(8, 2)$cF$(8, 2)(8, 2) also simple to compress
+and decompress, and it only decodes by its encoding result(no need to send
+dictionary).
+
+\todo{add figure show the structure of LZSS}
+
 \subsection{A-LZSS}
 
 \subsection{LZW}
