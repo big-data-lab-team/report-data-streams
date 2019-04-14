@@ -41,15 +41,15 @@ implemented LZSS for the devices with limited memory, storage and power. The
 authors compressed accelerometer data using A-LZSS which combines LZSS and
 entropy coding(Huffman code used in~\cite{pope2018accelerometer}). A flag bit is
 assigned to indicate either entropy code or pointers $(n, m)$ is returned. The
-pseudo-code of A-LZSS compression algorithm is shown in
-Algorithm~\ref{algo:A-LZSS}. \texttt{value\_pointers($S$, $D$)} is a function
-that returns the pointers $(n, m)$ which represents the repeating sequence of
-elements. Function \texttt{Huffman\_table($x$)} returns the Huffman code of
-input $x$. In order to make stream data in look-ahead buffer and dictionary
-moves forward, function \texttt{go\_forward($D$, $S$, $x$)} shell be invoked,
-where $x$ indicates the length of movement. The length of look-ahead buffer
-$L_{buffer}$ is equals or smaller than the length of dictionary $L_{dict}$,
-because the pointer $m$ is not greater than $L_{dict}$. 
+pseudo-code of A-LZSS compression algorithm is shown in Algorithm~\ref{algo:A-LZSS}.
+\texttt{value\_pointers($S$, $D$)} is a function that returns the pointers $(n,
+m)$ which represents the repeating sequence of elements. Function
+\texttt{Huffman\_table($x$)} returns the Huffman code of input $x$. In order to
+make stream data in look-ahead buffer and dictionary moves forward, function
+\texttt{go\_forward($D$, $S$, $x$)} shell be invoked, where $x$ indicates the
+length of movement. The length of look-ahead buffer $L_{buffer}$ is equals or
+smaller than the length of dictionary $L_{dict}$, because the pointer $m$ is not
+greater than $L_{dict}$. 
 
 In the experiment of Pope et al.~\cite{pope2018accelerometer}, A-LZSS gives
 about 1 uJ per byte of energy with their CC2650 System-on-Chip. If the data from
@@ -101,7 +101,87 @@ saving, because of recording previous data in sliding window as dictionary.
 \end{algorithm}
 
 \subsection{LZW}
+LZW~\cite{welch1984technique} is a dictionary-based lossless compression
+algorithm, derived from LZ78~\cite{ziv1978compression}. Different with LZSS
+which saves dictionary in a sliding window, LZW uses a length-variable
+dictionary(map table) to record the previous appeared data sequences. A initial
+dictionary which contains all characters(e.g. AscII Table) is needed for
+compression~\cite{welch1984technique}, and two variables $P$ and $C$ are
+maintained in LZW. $P$(Previous sequence) indicates the sequence already in hand
+but is not compressed, $C$(Current character) is the new element received. The
+Algorithm of LZW is shown here:
+
+\begin{enumerate}
+    \item Initialize dictionary. Assign $P$ and $C$ to empty.
+    \item Read new element $e$, assign $C$ = $e$.
+    \item Find $P+C$ in dictionary. If found it, assign $P$ = $P+C$. Otherwise
+    output the index of $P$ in dictionary, add entry of $P+C$ in dictionary and
+    update $P$ = $C$.
+    \item Go to step 2 if input data is not empty.
+\end{enumerate}
+
+A dictionary entry shell be created and be appended into dictionary for each
+sequence of data has never seen. According to this feature, the result after
+compression by LZW is self-explaining~\cite{welch1984technique}. It means
+Initial dictionary which is not extended and encoding result is the only things
+needed for decoding process~\cite{welch1984technique}. But LZW can not fit
+resource-constrained IoT devices exactly, because of its extended-dictionary.
+
 \subsection{S-LZW}
+S-LZW was introduced by Sadler et al.~\cite{sadler2006data} which adapts LZW in
+sensor nodes. There are several challenges for using LZW in sensor devices:
+\begin{enumerate}
+    \item What is solution for packages loss in sensor network.
+    \item How to address dictionary extension.
+    \item What strategy is applied when dictionary is fill, if we fix the size
+    of dictionary.
+\end{enumerate}
+
+As we known, the decompression of LZW depends on the previous entries in in the
+table, thus, the decoding process makes mistake when the packages have been lost
+over transmission. To address reason, S-LZW separates the data stream into small
+blocks(512 B), so that each block is independent and not is affected by
+others~\cite{sadler2006data} . Because of limited storage and memory of sensor
+node, the dictionary stored has fixed size, but it may cause decrements of
+compression ratio. In fact, that is not a problem if the data blocks for
+compression is small enough so that the dictionary is not fill until we compress
+whole data in block. In paper~\cite{sadler2006data}, there are two strategy for
+full dictionary: freeze the dictionary and use it for rest stream data in block,
+or reset it and start from scratch~\cite{sadler2006data}. S-LZW applies first
+strategy, because the former provide faster processing speed and better
+compression ratio than the later. S-LZW adds a hash-indexed table,
+Mini-Cache(MC), to store recently used and created dictionary entries for the
+specific scenario that sensor data might repeats itself in short intervals. A
+example of MC is shown in Figure~\ref{fig:MC}. The output of S-LZW adds one
+extra flag bit to distinguish the output is encoded by either dictionary or
+Mini-Cache, e.g. '0' bit indicates encoded from dictionary, '1' means encoded
+from MC. Algorithm~\ref{algo:S-LZW} shows the pseudo-code of S-LZW-MC.
+
+\todo{add figure}
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Example of using Mini-Cache}
+    \label{fig:MC}
+\end{figure}
+
+\todo{add algorithm}
+\begin{algorithm}
+\begin{algorithmic}[1]
+
+\State add algorithm
+
+\end{algorithmic}
+\caption{Algorithm of S-LZW with Mini-Cache}
+\label{algo:S-LZW}
+\end{algorithm}
+
+By using Mini-Cache in S-LZW, the compression ratio improves, because of
+representing data sequences by $O(\log N + 1)$ instead of $O(\log D)$, where $N$
+is the size of Mini-cache, $D$ is the size of the dictionary. In
+paper~\cite{sadler2006data}, S-LZW offers energy savings, and it reduced energy
+consumption on average by over 2.5X.
+
 
 \subsection{LEC}
 LEC algorithm was first proposed by Marcelloni et
