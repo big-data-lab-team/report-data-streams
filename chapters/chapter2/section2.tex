@@ -4,16 +4,17 @@
 LZSS~\cite{storer1982data} is a lossless textual compression algorithm. It is a
 derivative and improvement of LZ77~\cite{ziv1977universal} which processes
 compression by using previous data as dictionary. There is a sliding window and
-a look-ahead buffer applied in both algorithm. In LZ77 compression algorithm, it
-outputs the original alphabet with empty pointer, e.g.(0, 0)A, if on sub-string
-in look-ahead buffer is found in dictionary\cite{ziv1977universal}, but it might
-happen that this character $A$ and next alphabet compose a string appearing in
-dictionary. LZSS solves these problems by defining a parameter
-\emph{MIN\_LENGTH}(size of output pointers) and only output pointers ($n$, $m$),
-where $n$ indicates the position of the first character of the repeating string,
-$m$ is the length of the string~\cite{storer1982data}, rather than ($n$, $m$)$C$
-in LZ77, where $C$ is the first first character at sub-string in look-ahead
-buffer stop finding in dictionary. The compression process as blow:
+a look-ahead buffer applied in both algorithm, Figure~\ref{fig:LZSS} shows the
+structure of LZSS. In LZ77 compression algorithm, it outputs the original
+alphabet with empty pointer, e.g.(0, 0)A, if on sub-string in look-ahead buffer
+is found in dictionary\cite{ziv1977universal}, but it might happen that this
+character $A$ and next alphabet compose a string appearing in dictionary. LZSS
+solves these problems by defining a parameter \emph{MIN\_LENGTH}(size of output
+pointers) and only output pointers ($n$, $m$), where $n$ indicates the position
+of the first character of the repeating string, $m$ is the length of the
+string~\cite{storer1982data}, rather than ($n$, $m$)$C$ in LZ77, where $C$ is
+the first first character at sub-string in look-ahead buffer stop finding in
+dictionary. The compression process as blow:
 
 \begin{enumerate}
     \item Find the longest string $str$ which also appears in sliding
@@ -31,7 +32,12 @@ encoded into $aaBccD$(1, 2)$cE$(8, 2)$cF$(8, 2)(8, 2) also simple to compress
 and decompress, and it only decodes by its encoding result(no need to send
 dictionary).
 
-\todo{add figure show the structure of LZSS}
+\begin{figure}
+    \centering
+    \includegraphics{figures/LZSS.png}
+    \caption{Structure of LZSS}
+    \label{fig:LZSS}
+\end{figure}
 
 \subsection{A-LZSS}
 Accelerometer-LZSS~\cite{pope2018accelerometer} is a lossless, dictionary
@@ -41,15 +47,15 @@ implemented LZSS for the devices with limited memory, storage and power. The
 authors compressed accelerometer data using A-LZSS which combines LZSS and
 entropy coding(Huffman code used in~\cite{pope2018accelerometer}). A flag bit is
 assigned to indicate either entropy code or pointers $(n, m)$ is returned. The
-pseudo-code of A-LZSS compression algorithm is shown in Algorithm~\ref{algo:A-LZSS}.
-\texttt{value\_pointers($S$, $D$)} is a function that returns the pointers $(n,
-m)$ which represents the repeating sequence of elements. Function
-\texttt{Huffman\_table($x$)} returns the Huffman code of input $x$. In order to
-make stream data in look-ahead buffer and dictionary moves forward, function
-\texttt{go\_forward($D$, $S$, $x$)} shell be invoked, where $x$ indicates the
-length of movement. The length of look-ahead buffer $L_{buffer}$ is equals or
-smaller than the length of dictionary $L_{dict}$, because the pointer $m$ is not
-greater than $L_{dict}$. 
+pseudo-code of A-LZSS compression algorithm is shown in
+Algorithm~\ref{algo:A-LZSS}. \texttt{value\_pointers($S$, $D$)} is a function
+that returns the pointers $(n, m)$ which represents the repeating sequence of
+elements. Function \texttt{Huffman\_table($x$)} returns the Huffman code of
+input $x$. In order to make stream data in look-ahead buffer and dictionary
+moves forward, function \texttt{go\_forward($D$, $S$, $x$)} shell be invoked,
+where $x$ indicates the length of movement. The length of look-ahead buffer
+$L_{buffer}$ is equals or smaller than the length of dictionary $L_{dict}$,
+because the pointer $m$ is not greater than $L_{dict}$. 
 
 In the experiment of Pope et al.~\cite{pope2018accelerometer}, A-LZSS gives
 about 1 uJ per byte of energy with their CC2650 System-on-Chip. If the data from
@@ -78,7 +84,7 @@ saving, because of recording previous data in sliding window as dictionary.
     \State tr.bits($code$)  \Comment{Append $code$ in tr in bits}
     
 \ElsIf{$m$ == $S$.length}   \Comment{$S \subseteq D$}
-    \State \Return Null
+    \State \Return null     \Comment{No transmitted data}
     
 \Else                       \Comment{$S \not\subseteq D$, $S-e \subset D$}
     \State go\_forward($D$, $S$, $m$) \Comment{Move stream forward m element}
@@ -152,24 +158,81 @@ strategy, because the former provide faster processing speed and better
 compression ratio than the later. S-LZW adds a hash-indexed table,
 Mini-Cache(MC), to store recently used and created dictionary entries for the
 specific scenario that sensor data might repeats itself in short intervals. A
-example of MC is shown in Figure~\ref{fig:MC}. The output of S-LZW adds one
+example of MC is shown in Table~\ref{table:MC}. The output of S-LZW adds one
 extra flag bit to distinguish the output is encoded by either dictionary or
 Mini-Cache, e.g. '0' bit indicates encoded from dictionary, '1' means encoded
 from MC. Algorithm~\ref{algo:S-LZW} shows the pseudo-code of S-LZW-MC.
 
-\todo{add figure}
-\begin{figure}
-    \centering
-    \includegraphics{}
-    \caption{Example of using Mini-Cache}
-    \label{fig:MC}
-\end{figure}
+\begin{table}[]
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{c}{Dictionary}  \\ \hline
+        Index           & Entry         \\ \hline
+        256             & AA            \\ 
+        257             & AB            \\ 
+        258             & BC            \\ 
+        259             & BA            \\
+        260             & AAA           \\
+        261             & AAAB          \\
+        262             & CA            \\
+        \hline
+        \end{tabular}
+    \caption{Dictionary}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \begin{tabular}{|l|l|}
+        \hline
+        \multicolumn{2}{c}{Mini-Cache}  \\ \hline
+        Index        & Dict\_index      \\ \hline
+        0            & 261              \\
+        1            & 258              \\
+        2            & 262              \\
+        3            & 256              \\
+        \hline
+        \end{tabular}
+    \caption{Dictionary}
+    \end{minipage}
+   
+    \caption{Example of using MC}
+    \label{tab:MC}
+\end{table}
 
-\todo{add algorithm}
 \begin{algorithm}
 \begin{algorithmic}[1]
+\Input
+    \Desc{$P$}{$\quad $Previous sequence}
+    \Desc{$C$}{$\quad $Current element received}
+    \Desc{$D$}{$\quad $Dictionary}
+    \Desc{$MC$}{$\quad $Mini-Cache table}
+\EndInput
+\Output
+    \Desc{tr}{$\quad $Transmitted sequence of bits}
+\EndOutput
 
-\State add algorithm
+\State $P_c$ = $P$ + $C$
+\If{$P_c \not\in D$}
+    \If{$P \in MC$}
+        \State tr.flag(True)    \Comment{Assign flag bit}
+        \State $code$ = $MC$.encode($P$)    \Comment{Encode data using MC}
+        
+    \Else   \Comment{$P \in D$}
+        \State tr.flag(False)
+        \State $code$ = $D$.encode($P$)
+        \State $MC$.add($P$)    \Comment{Add new entry into MC}
+    \EndIf
+    \State $D$.add($P_c$)
+    \State $P$ = $C$
+    
+    \State tr.bits($code$)
+    \State \Return tr
+\Else       \Comment{$P_c$ is not in neither $D$ nor $MC$}
+    \State $P$ = $P+C$
+    \State \Return null \Comment{No transmitted data}
+\EndIf
 
 \end{algorithmic}
 \caption{Algorithm of S-LZW with Mini-Cache}
@@ -280,5 +343,3 @@ Mean Error)~\cite{li2016temporal}. We need to save the table into memory when we
 uses these two algorithms, and in order to improve compression ratio as much as
 possible, it is necessary to encode $n_i$ by prefix code method base on the
 elements distribution.
-
-\subsection{TMT}
