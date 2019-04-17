@@ -1,9 +1,139 @@
 \section{Lossy Compression}
 
 \subsection{LTC}
+LTC approximates the data stream by a piece-wise linear function of time, with
+an error bounded by parameter $\epsilon$. We give the notation of LTC in the
+following: The algorithm receives a stream of data points $x_i$ at times $t_i$
+($i \in \mathbb{N}$), and it transmits a stream of data points $\xi_i$ at times
+$\tau_i$ ($i \in \mathbb{N}$). To simplify the notations, we assume that:
+\begin{equation*}
+\forall k \in \mathbb{N}, \  \exists ! i \in \mathbb{N} \  \tau_k = t_i
+\end{equation*}
+That is, transmission times coincide with reception times.
+We define the \emph{shifted received points} as follows:
+\begin{equation*}
+\forall k \in \mathbb{N}\ , \forall j \in \mathbb{N^*},\ (u^k_j, y^k_j) = (t_{i+j}, x_{i+j}), 
+\end{equation*}
+where $i$ is such that $t_i = \tau_k$ and:
+\begin{equation*}
+\forall k \in \mathbb{N},\  (u^k_0, y^k_0) = (\tau_k, \xi_k).
+\end{equation*}
+This definition is such that $y^k_j$ is the $j^{th}$ data point received
+after the $k^{th}$ transmission and $u^k_j$ is the corresponding timestamp.
+Figure~\ref{fig:ltc} illustrates the notations and algorithm.
+
+The LTC algorithm maintains two lines, the \emph{high line}, and the
+\emph{low line} defined by (1) the latest transmitted point and (2) the
+\emph{high point} (high line) and the \emph{low point} (low line). When
+a point ($t_i$, $x_i$) is received, the high line is updated as
+follows: if $x_i+\epsilon$ is below the high line then the high line is
+updated to the line defined by the last transmitted point and ($t_i$,
+$x_i+\epsilon$); otherwise, the high line is not updated. Likewise, the low line
+is updated from $x_i-\epsilon$. Therefore, any line located between the
+high line and the low line approximates the data points received since
+the last transmitted point with an error bounded by $\epsilon$.
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Input
+   \Desc{$(u^k_j, y^k_j)$}{$\quad \quad $Received data stream}
+   \Desc{$\epsilon$}{$\quad \quad$Error bound}
+\EndInput
+\Output
+   \Desc{tr}{Transmitted points}
+\EndOutput
+\State tr = $(u^0_0, y^0_0)$ \Comment{Last transmitted point}
+\State k = 0 ; j = 1
+\State (lp, hp) = ($y^0_1 - \epsilon$, $y^0_1 + \epsilon$) \Comment{Low and high points}
+
+\While{True} \Comment{Process received points as they come}
+    \State j += 1
+    \State new\_lp = max($y^k_j-\epsilon$, line($u^k_j$, tr, ($u^k_{j-1}$, lp)))
+    \State new\_hp = min($y^k_j+\epsilon$, line($u^k_j$, tr, ($u^k_{j-1}$, hp)))
+    \If{new\_lp $\leq$ new\_hp} \Comment{Keep compressing}
+        \State (lp, hp) = (new\_lp, new\_hp)
+    \Else
+        \State tr = $(u^k_{j-1}, (lp+hp)/2)$
+        \Comment{Transmit point}
+        \State k += 1
+        \State j = 1
+        \State (lp, hp) = ($y^k_j-\epsilon$, $y^k_j+\epsilon$)
+    \EndIf
+\EndWhile
+\end{algorithmic}
+\caption{Original LTC algorithm, adapted from~\cite{schoellhammer2004lightweight}.}
+\label{algo:ltc}
+\end{algorithm}
+
+Using these notations, the original LTC algorithm can
+be written as in Algorithm~\ref{algo:ltc}. For readability, we assume
+that access to data points is blocking, i.e., the program will wait
+until the points are available. We also assume that the content of
+variable \texttt{tr} is transmitted after each assignment of this
+variable. Function \texttt{line}, omitted for brevity, returns the
+ordinate at abscissa $x$ (1st argument) of the line defined by the points
+in its 2nd and 3rd arguments.
+
+\begin{figure}[b]
+\centering
+\includegraphics[width=0.8\columnwidth]{./figures/ltc.pdf}
+\caption{Illustration of the LTC algorithm. Blue 
+dots are received points, red dots are transmitted points. Dashed lines 
+represent the high and low lines when a point is 
+transmitted.\vspace*{-0.3cm}}
+\label{fig:ltc}
+\end{figure}
+
 \subsection{PLAMLis and Enhanced PLAMLis}
 
 \subsection{A-ARMA}
+Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA to
+adapt ARMA into sensor nodes. Same with ARMA model, A-ARMA is also composed of
+two terms, \texttt{Auto-Regression(AR)} term and \texttt{Moving-Average(MA)}
+term, respectively predicting data value using $p$($q$) prior values or errors.
+To deal with the limit of computational complexity, A-ARMA adopts low-order ARMA
+with sliding window model. The main idea of A-ARMA is maintaining and updating a
+ARMA model in memory based on Sliding window. Assume we define Sliding window
+$W$ whose size is $W$, the minimum error tolerance on root-mean-square
+error(RMSE) $th_{err}$ and length of window movement each time $S$. The
+algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first $W$ data
+is using to initialize the ARMA model, and compare the RMSE between the original
+and predicted subsequent $S$ data by moving sliding window $S$ length each time.
+If the RMSE is larger than $th_{err}$, the saved ARMA model is remodeled with
+the current samples in sliding window. In decompression process, the stream data
+are predicted basing on the parameters transmitted.
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Input
+    \Desc{$stream$}{$\quad \quad \quad $Data stream received}
+    \Desc{$W$}{$\quad \quad \quad $Sliding window}
+    \Desc{$th_{err}$}{$\quad \quad $Threshold of error tolerance on root-mean-square error}
+    \Desc{$S$}{$\quad \quad \quad $Length of sliding window move}
+    \Desc{$p$}{$\quad \quad \quad $Order of AR term}
+    \Desc{$q$}{$\quad \quad \quad $Order of MA term}
+\EndInput
+\Output
+    \Desc{$model_{(p, q)}$}{$\quad \quad \quad $Parameters of ARMA($p$, $q$) model}
+\EndOutput
+
+\State Read stream till $W$ is full \Comment{Get first $W$ data from $stream$}
+\State $model_{(p, q)}$ = build\_ARMA($W$.samples, $p$, $q$)  \Comment{Build ARMA model}
+\While{$stream$ is not empty}
+    \State $W$.go\_forward($S$) \Comment{Moving sliding window forward $S$ length}
+    \State $samples$ = $W$.tail($S$)    
+    \State $RMSE$ = compute\_error($samples$,  $model_{(p, q)}$.predict())
+    \If{$RMSE > th_{err}$}
+        \State $model_{(p, q)}$ = build\_ARMA($W$.samples, $p$, $q$)
+        \State \Return $model_{(p, q)}$ 
+    \Else
+        \State \Return null \Comment{No transmitted data, model does not change}
+    \EndIf
+\EndWhile
+\end{algorithmic}
+\caption{A-ARMA algorithm}
+\label{algo:A-ARMA}
+\end{algorithm}
 
 \subsection{MA-AR}
 
