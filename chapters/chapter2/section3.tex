@@ -22,16 +22,15 @@ This definition is such that $y^k_j$ is the $j^{th}$ data point received
 after the $k^{th}$ transmission and $u^k_j$ is the corresponding timestamp.
 Figure~\ref{fig:ltc} illustrates the notations and algorithm.
 
-The LTC algorithm maintains two lines, the \emph{high line}, and the
-\emph{low line} defined by (1) the latest transmitted point and (2) the
-\emph{high point} (high line) and the \emph{low point} (low line). When
-a point ($t_i$, $x_i$) is received, the high line is updated as
-follows: if $x_i+\epsilon$ is below the high line then the high line is
-updated to the line defined by the last transmitted point and ($t_i$,
-$x_i+\epsilon$); otherwise, the high line is not updated. Likewise, the low line
-is updated from $x_i-\epsilon$. Therefore, any line located between the
-high line and the low line approximates the data points received since
-the last transmitted point with an error bounded by $\epsilon$.
+The LTC algorithm maintains two lines, the \emph{high line}, and the \emph{low
+line} defined by (1) the latest transmitted point and (2) the \emph{high point}
+(high line) and the \emph{low point} (low line). When a point ($t_i$, $x_i$) is
+received, the high line is updated as follows: if $x_i+\epsilon$ is below the
+high line then the high line is updated to the line defined by the last
+transmitted point and ($t_i$, $x_i+\epsilon$); otherwise, the high line is not
+updated. Likewise, the low line is updated from $x_i-\epsilon$. Therefore, any
+line located between the high line and the low line approximates the data points
+received since the last transmitted point with an error bounded by $\epsilon$.
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -86,22 +85,23 @@ transmitted.\vspace*{-0.3cm}}
 
 \subsection{PLAMLis and Enhanced PLAMLis}
 
-\subsection{A-ARMA}
+\subsection{Adeptive ARMA}
 Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA to
 adapt ARMA into sensor nodes. Same with ARMA model, A-ARMA is also composed of
 two terms, \texttt{Auto-Regression(AR)} term and \texttt{Moving-Average(MA)}
 term, respectively predicting data value using $p$($q$) prior values or errors.
 To deal with the limit of computational complexity, A-ARMA adopts low-order ARMA
-with sliding window model. The main idea of A-ARMA is maintaining and updating a
-ARMA model in memory based on Sliding window. Assume we define Sliding window
-$W$ whose size is $W$, the minimum error tolerance on root-mean-square
-error(RMSE) $th_{err}$ and length of window movement each time $S$. The
-algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first $W$ data
-is using to initialize the ARMA model, and compare the RMSE between the original
-and predicted subsequent $S$ data by moving sliding window $S$ length each time.
-If the RMSE is larger than $th_{err}$, the saved ARMA model is remodeled with
-the current samples in sliding window. In decompression process, the stream data
-are predicted basing on the parameters transmitted.
+with sliding window model~\cite{lu2010optimized}. The main idea of A-ARMA is
+maintaining and updating a ARMA model in memory based on Sliding window. Assume
+we define Sliding window $W$ whose size is $W$, the minimum error tolerance on
+root-mean-square error(RMSE) $th_{err}$ and length of window movement each time
+$S$. The algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first
+$W$ data is using to initialize the ARMA model, and compare the RMSE between the
+original and predicted subsequent $S$ data by moving sliding window $S$ length
+each time. If the RMSE is larger than $th_{err}$, the saved ARMA model is
+remodeled with the current samples in sliding window~\cite{lu2010optimized}. In
+decompression process, the stream data are predicted basing on the parameters
+transmitted.
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -135,6 +135,37 @@ are predicted basing on the parameters transmitted.
 \label{algo:A-ARMA}
 \end{algorithm}
 
-\subsection{MA-AR}
+\subsection{Modified Adaptive Auto-Regression}
+Modified Adaptive Auto-Regression(MA-AR) is a modified version of A-ARMA,
+proposed by Zordan et al.~\cite{zordan2012compress}. In A-ARMA algorithm, the
+ARMA model shell be rebuilt over sliding window, but it might cause bad
+performance, especially in highly noisy environments~\cite{zordan2012compress}.
+MA-AR algorithm uses a $p$-order AR model for each prediction cycle instead of
+sliding window, and applies absolute error on each data rather than RMSE of $S$
+continuous data. Assume $M^{(n, i)}$ indicates the AR model built according to
+data $\{x_n, ..., x_{n+p-1+i} \}$, where $i>0$, and $\hat{x}_{n+p-1+i}$
+indicates the predicted data, then for each predicted cycle, MA-AR works as
+follows:
+
+\begin{enumerate}
+    \item Collect first $p$ samples in sensor node and send them to client side.
+    \item Collect one sample $x_{n+p-1+i}$ each time, $i > 0$, to build
+    $p$-order
+    AR model $M^{(n, i)}$
+    \item Predict $x_{n+p-1+j}$ where $j \in \{1, ..., i\}$ using $M^{(n, i)}$
+    \item Check the error $ |\hat{x}_{n+p-1+j} - x_{n+p-1+j}|$ whether larger
+    than Error Tolerance $\epsilon$.
+        \begin{itemize}
+            \item If $|\hat{x}_{n+p-1+j} - x_{n+p-1+j}| \leqslant \epsilon$, the
+            model is keep. Repeat from step 2.
+            \item Else the last model $M^{(n, i-1)}$ is encoded and transmitted,
+            and new predict cycle is started from $x_{n+p-1+i}$.
+        \end{itemize} 
+\end{enumerate}
+The main idea of this algorithm is continuous estimation of the AR parameters.
+AR model is redefined only according to last coming sample, so the computational
+cost is minimized and the parameters of model can be computed through least
+squares minimization~\cite{zordan2012compress}. 
+
 
 \subsection{DPCM optimization}
