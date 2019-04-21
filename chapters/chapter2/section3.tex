@@ -84,15 +84,39 @@ transmitted.\vspace*{-0.3cm}}
 \end{figure}
 
 \subsection{PLAMLis and Enhanced PLAMLis}
+Same with LTC, PLAMLis and Enhanced PLAMLis represent original stream through a
+sequence of line segments. The main idea of these two algorithm is to represent
+the stream data over a time window using minimum number of segments(reduce
+transmission). PLAMLis gives a greedy algorithm solution. Assume the input
+stream data points $X=\{x_1, ..., x_W\}$ are received over a $W$ size of time
+window. Firstly, for each data points $x_i$, $i \in \{1, ..., W\}$, a longest
+segment $S_{i}$ whose end points are $x_i$ and $x_j$($j>i$) is built. Thereby
+for the data points in window, a sequence longest segments $S = {S_1, ..., S_W}$
+is obtained. Secondly, to pick the minimum number of subsets of S for
+representing original stream $X$, a greedy algorithm is used to select the
+segment $S_k$($k \in \llbracket1, W\rrbracket$) which covers the most number of
+data points $x_i$ in $X$ at each time, then remove it from $S$ and add it into a
+\texttt{result sequence} until all data points in $X$ are covered. The result
+sequence shell be the result of compression.
 
-\subsection{Adeptive ARMA}
+Enhanced PLAMLis solves this problem with a top-down recursive segmentation
+algorithm which has smaller computational cost than PLAMLis. Assume $W$ data
+points $x_i$ in time window, the segment $S_{(1, W)}$ whose end points are $x_1$
+and $x_W$ is created, then checking whether the maximum error is within error
+tolerance $\epsilon$ determines stopping the recursive or not. If the maximum
+error is bigger than $\epsilon$, the segment is split into two shorter segments
+$S_{(1, k)}$ and $S_{(k, W)}$ in data point $x_k$, $1<k<W$. Applying this
+procedure recursively on each segment until the maximum error of all segments is
+within the error tolerance.
+
+\subsection{Adaptive ARMA}
 Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA to
 adapt ARMA into sensor nodes. Same with ARMA model, A-ARMA is also composed of
 two terms, \texttt{Auto-Regression(AR)} term and \texttt{Moving-Average(MA)}
 term, respectively predicting data value using $p$($q$) prior values or errors.
 To deal with the limit of computational complexity, A-ARMA adopts low-order ARMA
 with sliding window model~\cite{lu2010optimized}. The main idea of A-ARMA is
-maintaining and updating a ARMA model in memory based on Sliding window. Assume
+maintaining and updating a ARMA model in memory based on sliding window. Assume
 we define Sliding window $W$ whose size is $W$, the minimum error tolerance on
 root-mean-square error(RMSE) $th_{err}$ and length of window movement each time
 $S$. The algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first
