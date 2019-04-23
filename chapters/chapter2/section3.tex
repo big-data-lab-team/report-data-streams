@@ -114,7 +114,7 @@ within the error tolerance~\cite{pham2008enhance, zordan2014performance}.
 
 \subsection{Polynomial Regression}
 Different with Piece-wise Linear Approximations, Polynomial
-Regression~\cite{2014zordan2014performance} gives a higher order $p \geqslant1$
+Regression~\cite{zordan2014performance} gives a higher order $p \geqslant1$
 approximations by using standard regression methods based on least squares
 fitting~\cite{phillips2003interpolation}. The approximation shell be a sequence
 of curves(order = $p$) rather than linear segments. The algorithm start with
@@ -125,12 +125,12 @@ approximation cycle, the best-fitting polynomial coefficients are re-computed
 with $\{ x_1, ..., x_{p+1+i}\}$ and check whether the different of each original
 point and approximated point meets the error tolerance, if not the coefficients
 of previous regression shell be transmitted and a new approximated starts at the
-current sample~\cite{2014zordan2014performance}. Assume $M_j^k$ is the $j_{th}$
+current sample~\cite{zordan2014performance}. Assume $M_j^k$ is the $j_{th}$
 Polynomial Regression model in the $k$ approximated procedure, the steps of the
 algorithm is given as in Algorithm~\ref{algo:polynomial}. The least squares
 fitting cost significant computational complexity then piece-wise linear
 approximations, but polynomial regression gives better performance on
-approximated accuracy~\cite{2014zordan2014performance}.
+approximated accuracy~\cite{zordan2014performance}.
 
 \begin{algorithm}
 \begin{algorithmic}[1]
