@@ -112,6 +112,60 @@ $S_{(1, k)}$ and $S_{(k, W)}$ in data point $x_k$, $1<k<W$. Applying this
 procedure recursively on each segment until the maximum error of all segments is
 within the error tolerance~\cite{pham2008enhance, zordan2014performance}.
 
+\subsection{Polynomial Regression}
+Different with Piece-wise Linear Approximations, Polynomial
+Regression~\cite{2014zordan2014performance} gives a higher order $p \geqslant1$
+approximations by using standard regression methods based on least squares
+fitting~\cite{phillips2003interpolation}. The approximation shell be a sequence
+of curves(order = $p$) rather than linear segments. The algorithm start with
+collecting $p+1$ samples $\{x_1, ..., x_{p+1} \}$ to obtain the coefficients of
+first $p$-order polynomial function. Upon receiving one sample $x_{p+1+i}$ at
+each time, where $x_{p+1+i}$ indicates the $(p+1+i)_{th}$ sample($i>0$) in this
+approximation cycle, the best-fitting polynomial coefficients are re-computed
+with $\{ x_1, ..., x_{p+1+i}\}$ and check whether the different of each original
+point and approximated point meets the error tolerance, if not the coefficients
+of previous regression shell be transmitted and a new approximated starts at the
+current sample~\cite{2014zordan2014performance}. Assume $M_j^k$ is the $j_{th}$
+Polynomial Regression model in the $k$ approximated procedure, the steps of the
+algorithm is given as in Algorithm~\ref{algo:polynomial}. The least squares
+fitting cost significant computational complexity then piece-wise linear
+approximations, but polynomial regression gives better performance on
+approximated accuracy~\cite{2014zordan2014performance}.
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Input
+    \Desc{$\chi$}{Received data stream}
+    \Desc{$\epsilon$}{Error bound}
+    \Desc{$p$}{The order of polynomial function}
+\EndInput
+\Output
+    \Desc{tr}{Transmitted coefficients}
+\EndOutput
+
+\State $S$ = $\O$
+\State $k$=1; $j$=0
+\While{True}
+    \State $S = S \cup \chi$
+    \If{$i \geqslant p+1$}
+        \State j += 1
+        \State $M_j^k$ = model($S$, $p$)    \Comment{Compute coefficients}
+        \ForAll{$x_i \in S$ and $\hat{x}_i \in$ predict($M_j^k$)}   \Comment{Check if error bound is met}
+            \If{$|\hat{x}_i - x_i| > \epsilon$}
+                \State tr = $M_{j-1}^k$ \Comment{Transmit coefficients}
+                \State k += 1; j = 0
+                \State $S$ = $\chi$
+            \EndIf
+        \EndFor
+    \EndIf
+\EndWhile
+\end{algorithmic}
+\caption{Polynomial Regression Algorithm}
+\label{algo:polynomial}
+\end{algorithm}
+
+
+
 \subsection{Adaptive ARMA}
 Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA to
 adapt ARMA into sensor nodes. Same with ARMA model, A-ARMA is also composed of
@@ -193,6 +247,3 @@ The main idea of this algorithm is continuous estimation of the AR parameters.
 AR model is redefined only according to last coming sample, so the computational
 cost is minimized and the parameters of model can be computed through least
 squares minimization~\cite{zordan2012compress}. 
-
-
-\subsection{DPCM optimization}
