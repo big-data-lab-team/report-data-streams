@@ -1,16 +1,23 @@
 \section{Lossy Compression}
 
+\TG{You should say here that you will use lossy compression and in particular
+LTC in the future.}
+
 \subsection{LTC}
-LTC approximates the data stream by a piece-wise linear function of time, with
-an error bounded by parameter $\epsilon$. We give the notation of LTC in the
-following: The algorithm receives a stream of data points $x_i$ at times $t_i$
+\TG{expand acronym}
+\TG{Add reference to LTC paper. Exlain that you are providing a more formal 
+description here.}
+The LTC algorithm approximates the data stream by a piece-wise linear function of time, with
+an error bounded by parameter $\epsilon$. \english{We give the notation of LTC in the
+following:} The algorithm receives a stream of data points $x_i$ at times $t_i$
 ($i \in \mathbb{N}$), and it transmits a stream of data points $\xi_i$ at times
 $\tau_i$ ($i \in \mathbb{N}$). To simplify the notations, we assume that:
 \begin{equation*}
 \forall k \in \mathbb{N}, \  \exists ! i \in \mathbb{N} \  \tau_k = t_i
 \end{equation*}
 That is, transmission times coincide with reception times.
-We define the \emph{shifted received points} as follows:
+We define the \emph{shifted received points} \TG{I don't know why \textbackslash emph underlines
+the text but it's not nice.} as follows:
 \begin{equation*}
 \forall k \in \mathbb{N}\ , \forall j \in \mathbb{N^*},\ (u^k_j, y^k_j) = (t_{i+j}, x_{i+j}), 
 \end{equation*}
@@ -20,7 +27,8 @@ where $i$ is such that $t_i = \tau_k$ and:
 \end{equation*}
 This definition is such that $y^k_j$ is the $j^{th}$ data point received
 after the $k^{th}$ transmission and $u^k_j$ is the corresponding timestamp.
-Figure~\ref{fig:ltc} illustrates the notations and algorithm.
+Figure~\ref{fig:ltc} illustrates the notations and algorithm. \TG{You should make sure 
+that the figure isn't 2 pages below it's mention.}
 
 The LTC algorithm maintains two lines, the \emph{high line}, and the \emph{low
 line} defined by (1) the latest transmitted point and (2) the \emph{high point}
@@ -84,27 +92,30 @@ transmitted.\vspace*{-0.3cm}}
 \end{figure}
 
 \subsection{PLAMLis and Enhanced PLAMLis}
-Same with LTC, PLAMLis~\cite{liu2007energy} and Enhanced
-PLAMLis~\cite{pham2008enhance} represent original stream through a sequence of
-line segments. The main idea of these two algorithm is to represent the stream
-data over a time window using minimum number of segments(reduce transmission).
+\TG{Expand acronyms. You should also add a list of acronyms to the document}
+Similar to LTC, PLAMLis~\cite{liu2007energy} and Enhanced
+PLAMLis~\cite{pham2008enhance} represent the original stream through a sequence of
+line segments. The main idea of these two algorithms is to represent the stream
+data over a time window using a minimum number of segments\english{(reduce transmission)}.
 PLAMLis gives a greedy algorithm solution. Assume the input stream data points
-$X=\{x_1, ..., x_W\}$ are received over a $W$ size of time
-window~\cite{liu2007energy, zordan2014performance}. Firstly, for each data
-points $x_i$, $i \in \{1, ..., W\}$, a longest segment $S_{i}$ whose end points
-are $x_i$ and $x_j$($j>i$) is built. Thereby for the data points in window, a
-sequence longest segments $S = {S_1, ..., S_W}$ is obtained. Secondly, to pick
+$X=\{x_1, ..., x_W\}$ are received over a time
+window of size $W$~\cite{liu2007energy, zordan2014performance} \TG{Reference looks misplaced}.
+ Firstly, for each data
+points $x_i$, $i \in \{1, ..., W\}$, a \TG{the longest segment? or a long segent?} 
+longest segment $S_{i}$ whose end points
+are $x_i$ and $x_j$ ($j>i$) is built. Thereby for the data points in the window, a
+sequence of longest segments $S = {S_1, ..., S_W}$ is obtained. Secondly, to pick
 the minimum number of subsets of S for representing original stream $X$, a
-greedy algorithm is used to select the segment $S_k$($k \in \llbracket1,
-W\rrbracket$) which covers the most number of data points $x_i$ in $X$ at each
+greedy algorithm is used to select the segment $S_k$ ($k \in \llbracket1,
+W\rrbracket$) which covers the largest number of data points $x_i$ in $X$ at each
 time, then remove it from $S$ and add it into a \texttt{result sequence} until
-all data points in $X$ are covered. The result sequence shell be the result of
+all data points in $X$ are covered. The result sequence is the result of
 compression~\cite{zordan2012compress, zordan2014performance}.
 
 Enhanced PLAMLis solves this problem with a top-down recursive segmentation
 algorithm which has smaller computational cost than
 PLAMLis~\cite{pham2008enhance, zordan2014performance}. Assume $W$ data points
-$x_i$ in time window, the segment $S_{(1, W)}$ whose end points are $x_1$ and
+$x_i$ in time window, the segment $S_{(1, W)}$ with end points $x_1$ and
 $x_W$ is created, then checking whether the maximum error is within error
 tolerance $\epsilon$ determines stopping the recursive or not. If the maximum
 error is bigger than $\epsilon$, the segment is split into two shorter segments
@@ -112,25 +123,33 @@ $S_{(1, k)}$ and $S_{(k, W)}$ in data point $x_k$, $1<k<W$. Applying this
 procedure recursively on each segment until the maximum error of all segments is
 within the error tolerance~\cite{pham2008enhance, zordan2014performance}.
 
+\TG{How do these algorithms compare to LTC?}
+
 \subsection{Polynomial Regression}
-Different with Piece-wise Linear Approximations, Polynomial
+
+Different from piece-wise linear approximations, Polynomial
 Regression~\cite{zordan2014performance} gives a higher order $p \geqslant1$
-approximations by using standard regression methods based on least squares
-fitting~\cite{phillips2003interpolation}. The approximation shell be a sequence
-of curves(order = $p$) rather than linear segments. The algorithm start with
+approximation by using standard regression methods based on least squares
+fitting~\cite{phillips2003interpolation} \TG{Undefined reference. Make sure that
+Latex compilation doesn't say ``There were undefined references''.}. The approximation is a sequence
+of curves (order = $p$) rather than linear segments. The algorithm starts with
 collecting $p+1$ samples $\{x_1, ..., x_{p+1} \}$ to obtain the coefficients of
 first $p$-order polynomial function. Upon receiving one sample $x_{p+1+i}$ at
-each time, where $x_{p+1+i}$ indicates the $(p+1+i)_{th}$ sample($i>0$) in this
+each time, where $x_{p+1+i}$ indicates the $(p+1+i)_{th}$ sample ($i>0$) in this
 approximation cycle, the best-fitting polynomial coefficients are re-computed
-with $\{ x_1, ..., x_{p+1+i}\}$ and check whether the different of each original
-point and approximated point meets the error tolerance, if not the coefficients
-of previous regression shell be transmitted and a new approximated starts at the
-current sample~\cite{zordan2014performance}. Assume $M_j^k$ is the $j_{th}$
-Polynomial Regression model in the $k$ approximated procedure, the steps of the
-algorithm is given as in Algorithm~\ref{algo:polynomial}. The least squares
-fitting cost significant computational complexity then piece-wise linear
-approximations, but polynomial regression gives better performance on
-approximated accuracy~\cite{zordan2014performance}.
+with $\{ x_1, ..., x_{p+1+i}\}$ and the algorithm checks whether the new polynomial approximates
+the data points within the desired error tolerance. If not, the coefficients
+of the previous regression are transmitted and a new approximation starts at the
+current sample~\cite{zordan2014performance}. Assume $M_j^k$ is the $j^{th}$
+polynomial regression model in the $k$ approximated procedure \TG{What is the $k$
+approximated procedure?}, the steps of the
+algorithm are given in Algorithm~\ref{algo:polynomial}. The least squares
+fitting \english{cost significant computational complexity then piece-wise linear
+approximations}, but polynomial regression gives better performance on
+approximated accuracy~\cite{zordan2014performance} \TG{What does this mean? We can 
+set $\epsilon$ in both cases.}.
+
+\TG{So you need to keep in memory all the points between two transmissions?}
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -167,22 +186,26 @@ approximated accuracy~\cite{zordan2014performance}.
 
 
 \subsection{Adaptive ARMA}
-Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA to
-adapt ARMA into sensor nodes. Same with ARMA model, A-ARMA is also composed of
+
+Adaptive ARMA(A-ARMA)~\cite{lu2010optimized} is a improved version of ARMA
+\TG{You should explain ARMA first} to
+adapt ARMA to sensor nodes. Similar to the ARMA model, A-ARMA is also composed of
 two terms, \texttt{Auto-Regression(AR)} term and \texttt{Moving-Average(MA)}
 term, respectively predicting data value using $p$($q$) prior values or errors.
 To deal with the limit of computational complexity, A-ARMA adopts low-order ARMA
 with sliding window model~\cite{lu2010optimized}. The main idea of A-ARMA is
 maintaining and updating a ARMA model in memory based on sliding window. Assume
-we define Sliding window $W$ whose size is $W$, the minimum error tolerance on
-root-mean-square error(RMSE) $th_{err}$ and length of window movement each time
-$S$. The algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first
-$W$ data is using to initialize the ARMA model, and compare the RMSE between the
+we define a sliding window $W$ of size $W$, the minimum error tolerance on
+root-mean-square error (RMSE) $th_{err}$ and \english{length of window movement each time
+$S$}. The algorithm of A-ARMA is given in Algorithm~\ref{algo:A-ARMA}. The first
+$W$ data points are used to initialize the ARMA model, and to compare the RMSE between the
 original and predicted subsequent $S$ data by moving sliding window $S$ length
 each time. If the RMSE is larger than $th_{err}$, the saved ARMA model is
-remodeled with the current samples in sliding window~\cite{lu2010optimized}. In
-decompression process, the stream data are predicted basing on the parameters
+remodeled with the current samples in sliding window~\cite{lu2010optimized}. In the
+decompression process, the stream data are predicted based on the parameters
 transmitted.
+
+\TG{Again, explain if you wrote the algorithms or reused them.}
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -217,28 +240,29 @@ transmitted.
 \end{algorithm}
 
 \subsection{Modified Adaptive Auto-Regression}
-Modified Adaptive Auto-Regression(MA-AR) is a modified version of A-ARMA,
-proposed by Zordan et al.~\cite{zordan2012compress}. In A-ARMA algorithm, the
-ARMA model shell be rebuilt over sliding window, but it might cause bad
+
+Modified Adaptive Auto-Regression (MA-AR) is a modified version of A-ARMA,
+proposed by Zordan et al.~\cite{zordan2012compress}. In the A-ARMA algorithm, the
+ARMA model is rebuilt over \TG{each?} sliding window, which might cause bad
 performance, especially in highly noisy environments~\cite{zordan2012compress}.
-MA-AR algorithm uses a $p$-order AR model for each prediction cycle instead of
-sliding window, and applies absolute error on each data rather than RMSE of $S$
+The MA-AR algorithm uses a $p$-order AR model for each prediction cycle \TG{define prediction cycle} instead of
+sliding window, and applies \TG{controls the?} absolute error on each data rather than RMSE of $S$
 continuous data. Assume $M^{(n, i)}$ indicates the AR model built according to
 data $\{x_n, ..., x_{n+p-1+i} \}$, where $i>0$, and $\hat{x}_{n+p-1+i}$
-indicates the predicted data, then for each predicted cycle, MA-AR works as
+indicates the predicted data, then for each predicted \TG{prediction?} cycle, MA-AR works as
 follows:
 
 \begin{enumerate}
     \item Collect first $p$ samples in sensor node and send them to client side.
-    \item Collect one sample $x_{n+p-1+i}$ each time, $i > 0$, to build
+    \item Collect one sample $x_{n+p-1+i}$ \english{each time}, $i > 0$, to build
     $p$-order
-    AR model $M^{(n, i)}$
-    \item Predict $x_{n+p-1+j}$ where $j \in \{1, ..., i\}$ using $M^{(n, i)}$
-    \item Check the error $ |\hat{x}_{n+p-1+j} - x_{n+p-1+j}|$ whether larger
-    than Error Tolerance $\epsilon$.
+    AR model $M^{(n, i)}$.
+    \item Predict $x_{n+p-1+j}$ where $j \in \{1, ..., i\}$ using $M^{(n, i)}$.
+    \item Check whether error $ |\hat{x}_{n+p-1+j} - x_{n+p-1+j}|$ is larger
+    than error tolerance $\epsilon$.
         \begin{itemize}
             \item If $|\hat{x}_{n+p-1+j} - x_{n+p-1+j}| \leqslant \epsilon$, the
-            model is keep. Repeat from step 2.
+            model is kept. Repeat from step 2.
             \item Else the last model $M^{(n, i-1)}$ is encoded and transmitted,
             and new predict cycle is started from $x_{n+p-1+i}$.
         \end{itemize} 
