@@ -22,12 +22,13 @@ autonomy of 39.7~h without transmission and 28.8~h with transmission.
 \caption{Setup with Neblina.}
 \label{fig:neblina-wrist}
 \end{wrapfigure}
-We validated the behaviour of our LTC extension on a PC using data 
+We validated the behavior of our LTC extension on a PC using data 
 acquired with Neblina. We collected two 3D accelerometer time-series, a 
 short one and a longer one, acquired on two different subjects 
 performing biceps curl, with a 50~Hz sampling rate (see 
-Figure~\ref{fig:datasets-1}). In both cases, the subject was wearing 
-Neblina on their wrist, as in Figure~\ref{fig:neblina-wrist}. It should be noted that the longest
+Figure~\ref{fig:datasets-1}) \TG{Make sure the Figure is aligned with the page, it's not the case}.
+In both cases, the subject was wearing 
+Neblina on their wrist, as in Figure~\ref{fig:neblina-wrist} \TG{Remove Figure wrapping, it's confusing.}. It should be noted that the longest
 time-series also has a higher amplitude, perhaps due to differences between 
 subjects.
 
@@ -75,7 +76,7 @@ maximum is reached most of the time on these time-series.
 
 \paragraph{Infinity vs Euclidean norms}
 The average ratio between the compression ratios obtained
-with the infinity and Euclidean norm is 1.03 for 2D data, and 1.06
+with the infinity and Euclidean norms is 1.03 for 2D data, and 1.06
 for 3D data. These ratios are lower than the theoretical values of
 $\frac{4}{\pi}$ in 2D and $\frac{6}{\pi}$ in 3D, which are obtained for
 random-uniform signals. Unsurprisingly, the infinity norm surpasses the
@@ -270,3 +271,6 @@ measured the max and average latency resulting from compression.
    \caption{Results from Experiment 2}
    \label{table:results-energy}
 \end{table}
+
+\TG{In your conclusion chapter, you should explain what has been implemented
+by Motsai on Neblina, this is also a result of your thesis.}

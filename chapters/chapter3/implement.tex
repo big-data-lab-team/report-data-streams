@@ -1,20 +1,21 @@
 \section{Implementation of LTC n-dimension}
-To implement LTC in nD with the infinity norm, we maintain a cuboid
+
+To implement LTC in n dimensions with the infinity norm, we maintain a cuboid
 representation of $\cap_{l=1}^j{\mathcal{B}_l}$ across the
 iterations of the \texttt{while} loop in
 Algorithm~\ref{algo:general-ltc}. The implementation works with
 constant memory and requires limited CPU time.
 
 With the Euclidean norm, the intersection test is more complex. We keep in
-memory a growing set $S$ of balls and the bounding box $B$ of their
-intersection. Then, when a new point arrives, we consider the associated ball
+memory a growing set $S$ of n-balls and the bounding box $B$ of their
+intersection. Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
 Algorithm~\ref{algo:euclidean}. \texttt{box()} is a function that returns the
 bounding box of an n-ball. \texttt{find\_bisection(S, B)} in
-Algorithm~\ref{algo:find_bisection_function} and \texttt{recursive(S, L, R, N,
-X)} in Algorithm~\ref{algo:recursive} searches for a point in all the  elements
-in S, using plane sweep and bisection initialized by the bounds of B.
-
+Algorithm~\ref{algo:find_bisection_function} and \texttt{recursive(S, L, R,
+N, X)} in Algorithm~\ref{algo:recursive} searches for a point in the
+intersection of all the n-balls in S, using plane sweep and bisection
+initialized by the bounds of B.
 
 Different with Infinity norm, maintain balls intersection is not
 straightforward. So in Euclidean norm, the function  \texttt{find\_bisection(S,
@@ -32,11 +33,13 @@ time $\mathcal{B}_i$ will be removed if it includes $\mathcal{B}_j$, because
 smaller ball intersects $\mathcal{B}_j$ than a bigger ball which contains the
 smaller one(15 line in Algorithm~\ref{algo:euclidean}). Finally, we find a point
 in intersection of balls in $S$ by running function \texttt{find\_bisection(S,
-B)}. Our code is available at
+B)}. \TG{This paragraph has overlap with the previous one, writing should be revised
+such that the description of the algorithm is straight and unambiguous.} Our code is available at
 \url{https://github.com/big-data-lab-team/stream-summarization} under MIT
-license.
+license. \TG{You should mention that either at the beginning or at the end of the
+section, not right in the middle.}
 
-
+\TG{Use ``n-ball'' instead of ``ball'' everywhere.}
 
 % describe function find_bisection
 In function \texttt{find\_bisection(S, B)}, we selected dimension of balls as
@@ -62,25 +65,30 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 \note{Algorithm~\ref{algo:euclidean} line 9, code is box($B_j$), but not problem}
 \note{line 16, remove $B_i$ from $S$, Add $B_j$ done in line 19}
 
+\TG{Algorithms are confusing: see my comments in the algorithms. Revise description accordingly.
+Also, add a reference to plane sweep.}
+
+\TG{The chapter is missing a conclusion.}
+
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
-    \Desc{$S$}{Set of intersecting balls}
-    \Desc{$B$}{Bounding box of the intersection of balls in $S$}
-    \Desc{$\mathcal{B}_j$}{New ball to check}
+    \Desc{$S$}{Set of intersecting n-balls}
+    \Desc{$B$}{Bounding box of the intersection of n-balls in $S$}
+    \Desc{$\mathcal{B}_j$}{New n-ball to check}
 \EndInput
 \Output
-    \Desc{$S$}{Updated set of intersecting balls}
+    \Desc{$S$}{Updated set of intersecting n-balls}
     \Desc{$B$}{Updated bounding box}
-    \Desc{$T$}{True if all the balls in S and $\mathcal{B}_j$ intersect}
+    \Desc{$T$}{True if all the n-balls in S and $\mathcal{B}_j$ intersect}
 \EndOutput
 
 %\If{$\mathcal{B}_j \cap B = \O$} \Comment{Ball is outside bounding box}
-\If{box($\mathcal{B}_j$) $\cap B = \O$} \Comment{Ball is outside bounding box}
+\If{box($\mathcal{B}_j$) $\cap B = \O$} \Comment{N-ball is outside bounding box}
     \State \Return ($S$, $B$, False)
 \EndIf
 \If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \cap \mathcal{B}_i = \O$}
-    \State \Return ($S$, False) \Comment{Some balls don't intersect}
+    \State \Return ($S$, $B$, False) \Comment{Some n-balls don't intersect}
 \EndIf
 \If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \subset \mathcal{B}_i$} \Comment{Remove inclusions}
 %\State Remove $\mathcal{B}_i$ from $B$. %Add $\mathcal{B}_j$ to $B$. 
@@ -141,16 +149,18 @@ point finally.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
-   \Desc{$S$}{Set of intersecting balls}
-   \Desc{$B$}{Bounding box of the intersection of balls in $S$}
+   \Desc{$S$}{Set of intersecting n-balls} \TG{I don't think you know that they are intersecting at this point.
+   It should be candidate n-balls.}
+   \Desc{$B$}{Bounding box of the intersection of n-balls in $S$}
 \EndInput
 \Output
-   \Desc{$X$}{Point in all balls in $S$, $X = \{x_1,...,x_n\}$}
+   \Desc{$X$}{Point in all n-balls in $S$, $X = \{x_1,...,x_n\}$}
 \EndOutput
 
-\State $n$ = dimension of balls
-\State $left$ = min\_value($B$, $n$) \Comment{Minimum value of $B$ at $n_{th}$ dimension}
-\State $right$ = max\_value($B$, $n$) \Comment{Maximum value of $B$ at $n_{th}$ dimension}
+\State $n$ = dimension of n-balls
+\State $left$ = min\_value($B$, $n$) \Comment{Minimum value of $B$ along $n^{th}$ dimension}
+\State $right$ = max\_value($B$, $n$) \Comment{Maximum value of $B$ along $n^{th}$ dimension}
+\State \TG{How is X initialized?}
 \If{recursive(S, left, right, n, X)}
     \State \Return $X$
 \Else
@@ -166,17 +176,18 @@ point finally.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
-   \Desc{$S$}{Set of intersecting balls}
+   \Desc{$S$}{Set of intersecting n-balls} \TG{There's no guarantee that they intersect when this function is called.}
    \Desc{$L$}{Min value used in bisection}
    \Desc{$R$}{Max value used in bisection}
-   \Desc{$N$}{The $N_{th}$ dimension, $N \in \{1...n\}$}
-   \Desc{$X$}{Point in all balls in $S$, $X = \{x_1,...,x_n\}$}
+   \Desc{$N$}{The $N^{th}$ dimension, $N \in \{1...n\}$}
+   \TG{Why not just use $n$?}
+   \Desc{$X$}{Point in all n-balls in $S$, $X = \{x_1,...,x_n\}$} \TG{If you know the point already, what are you looking for?}
 \EndInput
 \Output
-   \Desc{$T$}{True if a point be found by using bisection}
+   \Desc{$T$}{True if a point is found by using bisection}
 \EndOutput
 \If{$N$ == 1}
-    \State $X.x_1$ = $\frac{L+R}{2}$
+    \State $X.x_1$ = $\frac{L+R}{2}$ \TG{isn't it X.x_N?}
     \State \Return True
 \EndIf
 \While{$L \leqslant R$ }
