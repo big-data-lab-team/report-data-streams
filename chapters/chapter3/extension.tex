@@ -4,13 +4,13 @@ We note that the formulation of LTC
 in~\cite{schoellhammer2004lightweight} relies on the intersection of 
 \emph{convex cones} in dimension $n+1$. For $n=1$, it corresponds to 
 the intersection of triangles, which can efficiently be computed by 
-maintaining boundary lines, as detailed previously. In higher 
-dimension, however, cone intersections are not so straightforward, due 
+maintaining boundary lines, as detailed previously \TG{Refer to specific chapterr and section}. In higher 
+dimension, however, cone intersections are not so straightforward to compute, due 
 to the fact that the intersection between cones may not be a cone.
 
 To address this issue, we formulate LTC as an intersection test between
-\emph{balls} of dimension $n$, that is, segments for $n=1$, disks for
-$n=2$, etc. Balls are defined from the \emph{norm} used in
+\emph{n-balls}, that is, segments for $n=1$, disks for
+$n=2$, etc. N-balls are defined from the \emph{norm} used in
 the vector space of data points. For $n=1$, the choice of the norm does
 not really matter, as all p-norms and the infinity norm are identical.
 In dimension $n$, however, norm selection will be critical.
@@ -19,6 +19,7 @@ In dimension $n$, however, norm selection will be critical.
 
 \subsection{Definitions}
 
+\TG{This now refers to notations presented 10 pages before. You should refer to it at the very least.}
 Let $(u_0^k, y_0^k) \in \mathbb{R}^{n+1}$ be the latest transmitted point. For convenience, all the subsequent points will be
 expressed in the orthogonal space with origin $(\tau_k, \xi_k)$. We denote by $(v_j, z_j)_{j \in \llbracket 0, m \rrbracket}$ such points:
 \begin{equation*}
@@ -27,7 +28,7 @@ expressed in the orthogonal space with origin $(\tau_k, \xi_k)$. We denote by $(
 Let $\mathcal{B}_j$ be the ball of $\mathbb{R}^n$ of centre $\frac{v_1}{v_j}z_j$ and radius
 $\frac{v_1}{v_j}\epsilon$:
 \begin{equation*}
-\mathcal{B}_j = \left\{ z \in \mathbb{R}^n,\\norm{z-\frac{v_1}{v_j}z_j} \leq\frac{v_1}{v_j}\epsilon \right\}
+\mathcal{B}_j = \left\{ z \in \mathbb{R}^n,\norm{z-\frac{v_1}{v_j}z_j} \leq\frac{v_1}{v_j}\epsilon \right\}
 \end{equation*}
 Note that $v_1$ is defined as soon as one point is received after the last
 transmission.
@@ -40,7 +41,7 @@ We define the \emph{LTC property} as follows:
 \epsilon.
 \end{equation*}
 The original LTC algorithm ensures that the LTC property is
-verified between each transmission. Indeed, all the data points
+verified between each transmissions. Indeed, all the data points
 $z$ such that $(v_1, z)$ is between the high line and the low line
 verify the property. Line 13 in Algorithm~\ref{algo:ltc} guarantees that
 such a point exists.
@@ -56,7 +57,7 @@ that is:
 \label{eq:ltc-property}
 \end{equation}
 Note that $(\mathcal{B}_j)_{j \in \llbracket 1, m \rrbracket}$ is a sequence
-of balls of strictly decreasing radius, since $v_j > v_1$.
+of n-balls of strictly decreasing radius, since $v_j > v_1$.
 
 \section{Algorithm}
 
@@ -90,27 +91,28 @@ point. It is written in Algorithm~\ref{algo:general-ltc}.
 \label{algo:general-ltc}
 \end{algorithm}
 
-\section{Ball intersections}
+\section{Intersections of n-balls}
 
 Although Algorithm~\ref{algo:general-ltc} looks simple, one should not
 overlook the fact that there is no good general algorithm to test
-whether a set of balls intersect. The best general algorithm we could find
+whether a set of n-balls intersect. The best general algorithm we could find
 so far relies on Helly's theorem which is formulated as follows~\cite{helly1923mengen}:
 \begin{theorem}
 Let $\left\{ X_i \right\}_{i \in \llbracket 1, m \rrbracket}$ be a collection of convex subsets of $\mathbb{R}^n$. If the intersection of every $n+1$
 subsets is non-empty, then the whole collection has an non-empty intersection.
 \end{theorem}
-\noindent This theorem leads to an algorithm of complexity ${m \choose n+1}$ which is not usable in resource-constrained environments.
+\noindent This theorem leads to an algorithm of complexity ${m \choose
+n+1}$ which is not usable in resource-constrained environments such as connected objects.
 
 The only feasible algorithm that we found is norm-specific. It
 maintains a representation of the intersection
-$\bigcap_{j=1}^{m}{\mathcal{B}_j}$ which is updated at every iteration.
+$\bigcap_{j=1}^{m}{\mathcal{B}_j}$ that is updated at every iteration.
 The intersection tests can then be done in constant time. However,
 updating the representation of the intersection may be costly
 depending on the norm used. For the infinity norm, the representation
 is a rectangular cuboid which is straightforward to update by
 intersection with an n-ball.
-For the Euclidean norm, the representation is a volume with no particular property,
+For the Euclidean norm, the representation is an arbitrary volume,
 which is more costly to maintain.
 
 \section{Effect of the norm}
