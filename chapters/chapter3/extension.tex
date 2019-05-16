@@ -4,7 +4,7 @@ We note that the formulation of LTC
 in~\cite{schoellhammer2004lightweight} relies on the intersection of 
 \emph{convex cones} in dimension $n+1$. For $n=1$, it corresponds to 
 the intersection of triangles, which can efficiently be computed by 
-maintaining boundary lines, as detailed previously \TG{Refer to specific chapterr and section}. In higher 
+maintaining boundary lines, as detailed previously~\ref{sec:ltc} \TG{\#\#Refer to specific chapter and section}. In higher 
 dimension, however, cone intersections are not so straightforward to compute, due 
 to the fact that the intersection between cones may not be a cone.
 
@@ -19,27 +19,27 @@ In dimension $n$, however, norm selection will be critical.
 
 \subsection{Definitions}
 
-\TG{This now refers to notations presented 10 pages before. You should refer to it at the very least.}
-Let $(u_0^k, y_0^k) \in \mathbb{R}^{n+1}$ be the latest transmitted point. For convenience, all the subsequent points will be
-expressed in the orthogonal space with origin $(\tau_k, \xi_k)$. We denote by $(v_j, z_j)_{j \in \llbracket 0, m \rrbracket}$ such points:
-\begin{equation*}
+\TG{\#\#This now refers to notations presented 10 pages before. You should refer to it at the very least.}
+According to equations~\eqref{eq:ltc-2} and~\eqref{eq:ltc-3} in section~\ref{sec:ltc}, let $(u_0^k, y_0^k) \in \mathbb{R}^{n+1}$ be the latest transmitted point. For convenience, all the subsequent points will be
+expressed in the orthogonal space with origin $(\tau_k, \xi_k)$ through equation~\eqref{eq:ltc-3}. We denote by $(v_j, z_j)_{j \in \llbracket 0, m \rrbracket}$ such points:
+\begin{equation}
 \forall j \leq m,\  (v_j, z_j) = (u_j^k - \tau_k, y_j^k - \xi_k)
-\end{equation*}
+\end{equation}
 Let $\mathcal{B}_j$ be the ball of $\mathbb{R}^n$ of centre $\frac{v_1}{v_j}z_j$ and radius
 $\frac{v_1}{v_j}\epsilon$:
-\begin{equation*}
+\begin{equation}
 \mathcal{B}_j = \left\{ z \in \mathbb{R}^n,\norm{z-\frac{v_1}{v_j}z_j} \leq\frac{v_1}{v_j}\epsilon \right\}
-\end{equation*}
+\end{equation}
 Note that $v_1$ is defined as soon as one point is received after the last
 transmission.
 
 \subsection{LTC property}
 
 We define the \emph{LTC property} as follows:
-\begin{equation*}
+\begin{equation}
 \exists z \in \mathbb{R}^n, \ \forall j \in \llbracket 1, m \rrbracket, \norm{\frac{v_j}{v_1}z-z_j} \leq
 \epsilon.
-\end{equation*}
+\end{equation}
 The original LTC algorithm ensures that the LTC property is
 verified between each transmissions. Indeed, all the data points
 $z$ such that $(v_1, z)$ is between the high line and the low line
@@ -47,10 +47,10 @@ verify the property. Line 13 in Algorithm~\ref{algo:ltc} guarantees that
 such a point exists.
 
 The LTC property can be re-written as follows:
-\begin{equation*}
+\begin{equation}
 \exists z \in \mathbb{R}^n, \ \forall j \in \llbracket 1, m \rrbracket, \norm{z-\frac{v_1}{v_j}z_j} \leq
 \frac{v_1}{v_j}\epsilon
-\end{equation*}
+\end{equation}
 that is:
 \begin{equation}
 \bigcap_{j=1}^m \mathcal{B}_j \neq \O
@@ -80,7 +80,7 @@ point. It is written in Algorithm~\ref{algo:general-ltc}.
     \State j += 1
     \State ($v_j, z_j$) = ($u_j^k - \tau, y_j^k - \xi$)
     \If{$\bigcap_{l=1}^j{\mathcal{B}_l} = \O$}
-        \State Pick $z$ in $\bigcap_{l=1}^{j-1}{\mathcal{B}_j}$ \Comment{Transmit point}
+        \State Pick $z$ in $\bigcap_{l=1}^{j-1}{\mathcal{B}_l}$ \Comment{Transmit point}
         \State tr = ($\tau$, $\xi$) = ($u^k_{j-1}, z$)
         \State k += 1
         \State j = 1
@@ -123,10 +123,10 @@ let us compare the infinity norm and the
 Euclidean norm in dimension 2. By comparing the unit disk to a
 square of side 2, we obtain that the compression ratio of a random stream would
 be $\frac{4}{\pi}$ times larger with the infinity norm than with the 
-Euclidean norm. In 3D, this ratio would be $\frac{6}{\pi}$. Conversely, 
+Euclidean norm (see Figure~\ref{fig:norm-comparison-2D}). In 3D, this ratio would be $\frac{6}{\pi}$ (see Figure~\ref{fig:norm-comparison-3D}). Conversely, 
 a compression error bounded by $\epsilon$ with the infinity norm 
 corresponds to a compression error of $\frac{\epsilon}{\sqrt{n}}$ with 
-the Euclidean norm. \TG{This could be clarified, e.g., through a figure.} Unsurprisingly, the
+the Euclidean norm. \TG{??This could be clarified, e.g., through a figure.}\todo{cannot understand this sentence.} Unsurprisingly, the
 infinity norm is more tolerant than the Euclidean norm.
 
 It should also be noted that using the infinity norm in $\mathbb{R}^n$ 
@@ -154,3 +154,24 @@ instance a temperature and a pressure sensor.
 %~ specified as ``10~mg in x, 
 %~ 10~mg in y and 10~mg in z", then the multiple unidimensional version 
 %~ should be used.
+
+\todo{3D graph}
+\begin{figure*}
+\centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/2D_Comparison.png}
+        \caption{Comparison of compression ratio in 2D}
+        \label{fig:norm-comparison-2D}
+    \end{subfigure}%
+
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=0.5\textwidth]{figures/2D_Comparison.png}
+        \caption{Comparison of compression ratio in 3D}
+        \label{fig:norm-comparison-3D}
+    \end{subfigure}
+
+\caption{Comparisons between Infinity norm and Euclidean norm}
+\label{fig:norm-comparison}
+\end{figure*}

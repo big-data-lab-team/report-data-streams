@@ -15,26 +15,19 @@ autonomy of 39.7~h without transmission and 28.8~h with transmission.
 
 \subsection{Experiment 1: validation}
 
-%\todo{(Put a picture of Neblina in a box worn 
-%on the wrist)}
-\begin{wrapfigure}{R}{3cm}
-\includegraphics[width=3cm]{figures/neblina-wrist.png}
-\caption{Setup with Neblina.}
-\label{fig:neblina-wrist}
-\end{wrapfigure}
 We validated the behavior of our LTC extension on a PC using data 
 acquired with Neblina. We collected two 3D accelerometer time-series, a 
 short one and a longer one, acquired on two different subjects 
 performing biceps curl, with a 50~Hz sampling rate (see 
-Figure~\ref{fig:datasets-1}) \TG{Make sure the Figure is aligned with the page, it's not the case}.
+Figure~\ref{fig:datasets-1}). \TG{\#\#Make sure the Figure is aligned with the page, it's not the case}
 In both cases, the subject was wearing 
-Neblina on their wrist, as in Figure~\ref{fig:neblina-wrist} \TG{Remove Figure wrapping, it's confusing.}. It should be noted that the longest
+Neblina on their wrist. It should be noted that the longest
 time-series also has a higher amplitude, perhaps due to differences between 
 subjects.
 
 \begin{figure*}
 \centering
-\begin{subfigure}{1.2\columnwidth}
+\begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=0.3\columnwidth]{figures/5-time-bicep-curl-plot-x.pdf}
 \includegraphics[width=0.3\columnwidth]{figures/5-time-bicep-curl-plot-y.pdf}
@@ -46,7 +39,7 @@ subjects.
 of az data is -7.81mg. It was shifted to 0 so that the graphs can all 
 use the same y scale.}
 
-\begin{subfigure}{1.2\columnwidth}
+\begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=0.3\columnwidth]{figures/Mohammad-bicep-curl-plot-x.pdf}
 \includegraphics[width=0.3\columnwidth]{figures/Mohammad-bicep-curl-plot-y.pdf}
@@ -175,14 +168,14 @@ average for Euclidean norm).
 
 \begin{figure*}
 \centering
-\begin{subfigure}{1.2\columnwidth}
+\begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=0.3\columnwidth]{./figures/walking-1000-x.pdf}
 \includegraphics[width=0.3\columnwidth]{./figures/walking-1000-y.pdf}
 \includegraphics[width=0.3\columnwidth]{./figures/walking-1000-z.pdf}
 \caption{Walking}
 \end{subfigure}
-\begin{subfigure}{1.2\columnwidth}
+\begin{subfigure}{\columnwidth}
 \centering
 \includegraphics[width=0.3\columnwidth]{./figures/running-1000-x.pdf}
 \includegraphics[width=0.3\columnwidth]{./figures/running-1000-y.pdf}
@@ -200,7 +193,7 @@ average for Euclidean norm).
 %~ \end{figure}
 
 \subsection{Experiment 2: impact on energy consumption}
-
+\label{sec:experiment2-ltc}
 We acquired two 3D accelerometer time-series at 200~Hz for two 
 activities: walking and running (see Figure~\ref{fig:datasets-2}). In 
 both cases, the subject was wearing Neblina on their wrist as in 
@@ -272,5 +265,8 @@ measured the max and average latency resulting from compression.
    \label{table:results-energy}
 \end{table}
 
-\TG{In your conclusion chapter, you should explain what has been implemented
+\TG{??In your conclusion chapter, you should explain what has been implemented
 by Motsai on Neblina, this is also a result of your thesis.}
+\BO{what does "what has been implemented by Motsai on Neblina" mean?? What I have done or all the things implemented on Neblina by Motsai e.g. Temperature Sensor, Gyroscope sensor?}
+
+\todo{explain what has been implemented by Motsai On Neblina, in Conclusion chapter}
