@@ -4,7 +4,7 @@ We note that the formulation of LTC  in~\cite{schoellhammer2004lightweight}
 relies on the intersection of  \emph{convex cones} in dimension $n+1$. For
 $n=1$, it corresponds to  the intersection of triangles, which can efficiently
 be computed by  maintaining boundary lines, as detailed
-previously~\ref{sec:ltc}. In higher  dimension, however, cone intersections are
+previously Section~\ref{sec:ltc}. In higher dimension, however, cone intersections are
 not so straightforward to compute, due  to the fact that the intersection
 between cones may not be a cone.
 \todo{reconstructed LTC related work~\ref{sec:ltc}}
@@ -52,7 +52,7 @@ Function \texttt{line}, omitted for brevity, returns the ordinate at abscissa
 $x$ (1st argument) of the line defined by the points in its 2nd and 3rd
 arguments.
 
-\begin{figure}[b]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\columnwidth]{./figures/ltc.pdf}
 \caption{Illustration of the LTC algorithm. Blue 
@@ -113,6 +113,7 @@ Note that $v_1$ is defined as soon as one point is received after the last
 transmission.
 
 \subsection{LTC property}
+\label{sec:ltc-property}
 
 We define the \emph{LTC property} as follows:
 \begin{equation}
@@ -122,7 +123,7 @@ We define the \emph{LTC property} as follows:
 The original LTC algorithm ensures that the LTC property is
 verified between each transmissions. Indeed, all the data points
 $z$ such that $(v_1, z)$ is between the high line and the low line
-verify the property. Line 13 in Algorithm~\ref{algo:ltc} guarantees that
+verify the property. Line 13 in Algorithm~\ref{algo:ltc-notation} guarantees that
 such a point exists.
 
 The LTC property can be re-written as follows:
@@ -197,6 +198,7 @@ For the Euclidean norm, the representation is an arbitrary volume,
 which is more costly to maintain.
 
 \section{Effect of the norm}
+\label{sec:effect-norm}
 
 As mentioned before, norm selection in $\mathbb{R}^n$ has a critical impact on
 the compression error and ratio. To appreciate this effect, let us compare the
