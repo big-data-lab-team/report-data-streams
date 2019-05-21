@@ -10,54 +10,55 @@ constant memory and requires limited CPU time.
 % memory a growing set $S$ of n-balls and the bounding box $B$ of their
 % intersection. 
 With the Euclidean norm, the intersection test is more complex. We keep in
-memory a growing set $S$ of n-balls and the bounding box $B$ which represents an approximate range of their intersection. We define $B$ as follow:
+memory a growing set $S$ of n-balls and the bounding box $B$ which represents an
+approximate range of their intersection. We define $B$ as follow:
 \begin{equation*}
     B = \bigcap_{l=1}^{j-1} box(\mathcal{B}_l) 
 \end{equation*}
-Where \texttt{box()} is a function that returns the
-bounding box of an n-ball.
+Where \texttt{box()} is a function that returns the bounding box of an n-ball.
 Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
-Algorithm~\ref{algo:euclidean}. 
-Firstly, we check the intersection with box($\mathcal{B}_j$) and $B$, which
-shows in Algorithm~\ref{algo:euclidean} line 9.
-Secondly, for each
-$\mathcal{B}_i$ belongs to $S$, check the intersection between $\mathcal{B}_i$
-and $\mathcal{B}_j$ (12 line in Algorithm~\ref{algo:euclidean}). At the same
-time $\mathcal{B}_i$ will be removed if it includes $\mathcal{B}_j$, because
-smaller n-ball intersects $\mathcal{B}_j$ than a bigger n-ball which contains the
-smaller one(15 line in Algorithm~\ref{algo:euclidean}). 
-Finally, we search a point
-in intersection of all n-balls in $S$, using plane sweep and bisection
-initialized by the bounds of B. Function \texttt{find\_bisection(S,
-B)} (
-see Algorithm~\ref{algo:find_bisection_function}) and \texttt{recursive(S, L, R, N, $X^n$)} (see Algorithm~\ref{algo:recursive}) show how it works. \TG{\#\#This paragraph has overlap with the previous one, writing should be revised
-such that the description of the algorithm is straight and unambiguous.} 
+Algorithm~\ref{algo:euclidean}.  Firstly, we check the intersection with
+box($\mathcal{B}_j$) and $B$, which shows in Algorithm~\ref{algo:euclidean} line
+9. Secondly, for each $\mathcal{B}_i$ belongs to $S$, check the intersection
+between $\mathcal{B}_i$ and $\mathcal{B}_j$ (12 line in
+Algorithm~\ref{algo:euclidean}). At the same time $\mathcal{B}_i$ will be
+removed if it includes $\mathcal{B}_j$, because smaller n-ball intersects
+$\mathcal{B}_j$ than a bigger n-ball which contains the smaller one(15 line in
+Algorithm~\ref{algo:euclidean}).  Finally, we search a point in intersection of
+all n-balls in $S$, using plane sweep~\ref{shamos1976geometric,
+souvaine2008line} and bisection initialized by the bounds of B. Function
+\texttt{find\_bisection(S, B)} ( see
+Algorithm~\ref{algo:find_bisection_function}) and \texttt{recursive(S, L, R, N,
+$X^n$)} (see Algorithm~\ref{algo:recursive}) show how it works. 
 
-\TG{\#\#Use ``n-ball'' instead of ``ball'' everywhere.}
+\TG{\#\#This paragraph has overlap with the previous one, writing should be revised
+such that the description of the algorithm is straight and unambiguous.} 
 
 % describe function find_bisection
 In function \texttt{find\_bisection(S, B)}, we selected dimension of n-balls as
 $n$ used at the beginning of bisection, also computed minimum/maximum value of
-bounding box $B$ at the $n_{th}$ dimension, which corresponds to $left$ and $right$ in
-bisection method. The return object $X^n$ represents a n-dimensional point in the intersection of all n-balls in $S$. It would be
-returned if we have $True$ result from function \texttt{recursive(S, L, R, N, $X^n$)}. $X^n$ is initialized and put into function \texttt{recursive(S, L, R, N, $X^n$)}, because
+bounding box $B$ at the $n_{th}$ dimension, which corresponds to $left$ and
+$right$ in bisection method. The return object $X^n$ represents a n-dimensional
+point in the intersection of all n-balls in $S$. It would be returned if we have
+$True$ result from function \texttt{recursive(S, L, R, N, $X^n$)}. $X^n$ is
+initialized and put into function \texttt{recursive(S, L, R, N, $X^n$)}, because
 it is necessary to update the values (see Algorithm~\ref{algo:recursive} line
-28) of $X^n$ during the recursive process. In 30 line of Algorithm~\ref{algo:recursive}, it
-happens in case of $left > right$, which means:
+28) of $X^n$ during the recursive process. In 30 line of
+Algorithm~\ref{algo:recursive}, it happens in case of $left > right$, which
+means:
 \begin{equation*}
     mid \  \bigcap \  (min\_id \cap max\_id) = \O
 \end{equation*}
 
-In Algorithm~\ref{algo:euclidean} line 12, It guarantees any two n-balls in $S$ has
-intersection. Therefore, any point in the intersection of $min\_id$ and
+In Algorithm~\ref{algo:euclidean} line 12, It guarantees any two n-balls in $S$
+has intersection. Therefore, any point in the intersection of $min\_id$ and
 $max\_id$, could be used for determining the direction of bisection. In our
 implement, we select a point in connection of these two n-ball's center, which
 also locates in intersecting object(line/chord when order=2, plane/circle when
 order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 
 \TG{\#\#Algorithms are confusing: see my comments in the algorithms. Revise description accordingly.}\\
-\TG{Also, add a reference to plane sweep.}
 
 \begin{figure}
   \centering
