@@ -1,9 +1,12 @@
 \section{LTC n-dimension compare with Regression}
 
-From the previous experiments, we know that LTC has good performance on 
-walking and running accelerometer data sets. However as we seen, the running data set (Figure~\ref{fig:datasets-2}) looks like it is made of many high-degree plane curves.
-We wonder whether high-degree Regression compression method performs better with our accelerometer data sets. In this
-paragraph, we implement the Polynomial Regression compression method mentioned in~\ref{sec:polynomial} with LTC in different dimensions. \TG{\#\#refer to description in ch2}
+From the previous experiments, we know that LTC has good performance on  walking
+and running accelerometer data sets. However as we seen, the running data set
+(Figure~\ref{fig:datasets-2}) looks like it is made of many high-degree plane
+curves. We wonder whether high-degree Regression compression method performs
+better with our accelerometer data sets. In this paragraph, we implement the
+Polynomial Regression compression method mentioned in~\ref{sec:polynomial} with
+LTC in different dimensions.
 
 % need  a graph for polynomial regression with different p,  by using 200Hz
 % walking and running data set, also need a table to show the RMSE and
@@ -12,29 +15,65 @@ paragraph, we implement the Polynomial Regression compression method mentioned i
 \subsection{Implementation of Polynomial Regression}
 
 We implemented polynomial regression method to compress 3D acceleration data
-($t$, $a.x$, $a.y$, $a.z$). In the implementation, we process polynomial regression
-compression method on each accelerometer parameter, with the relationship between independent variables $t$ (Time-stamp) and dependent
-variables $a.x$, $a.y$ or $a.z$ (e.g. $t \sim a.x$). It means 
-three regression models shell be transmitted to represent a curve in 3D space.
-For tolerance checking, we use infinity norm
-and Euclidean norm. 
-\todo{explain Polynomial regression clearly, and add a pseudo-code}
-\BO{Do I need a pseudo-code to show what this algorithm looks like?}
+($t$, $a.x$, $a.y$, $a.z$). In the implementation, we process polynomial
+regression compression method on each accelerometer parameter, with the
+relationship between independent variables $t$ (Time-stamp) and dependent
+variables $a.x$, $a.y$ or $a.z$ (e.g. $t \sim a.x$). It means  three regression
+models shell be transmitted to represent a curve in 3D space. For tolerance
+checking, we use infinity norm and Euclidean norm.
 
-\BO{Do I need to add a chapter about extension regression method to nD?}
+\todo{re-write section~\ref{sec:polynomial} according to follow describe}
+As we mentioned in Section~\ref{sec:polynomial}, $M_{j}^{k}$ means the $j^{th}$
+polynomial regression model after $k^{th}$ transmission, but to apply this
+method on the acceleration data which is 3-dimensional, we need three model for
+it (each for per parameter). Assuming $Mx_{j}^{k}$, $My_{j}^{k}$ and
+$Mz_{j}^{k}$ represent the regression model on each parameter $x$, $y$ and $z$
+respectively. Algorithm~\ref{algo:n-polynomial} shows how polynomial regression
+is applied on 3D acceleration data. In line 13, the coefficients of three
+regression model of parameters $x$, $y$ and $z$ are calculated. The function
+\texttt{max\_residue()} returns the maximum error between predicted data and
+original data. If the maximum residue is larger than $\epsilon$, then the last
+regression models which meet error tolerance and the timestamp of last data are
+transmitted as compression result.
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Input
+    \Desc{($\chi, t_i$)}{$\quad $Received data stream at time $t_i$}
+    \Desc{$\epsilon$}{$\quad $Error bound}
+    \Desc{$p$}{$\quad $The order of polynomial function}
+\EndInput
+\Output
+    \Desc{tr}{Transmitted coefficients}
+\EndOutput
+\State $S$ = $\O$
+\State $k$=0; $j$=0
 
-\TG{\#\#You didn't explain in Ch2 how polynomial regression was extended to dim n.}
+\While{True}
+    \State $S = S \cup (\chi, t_i)$
+    \If{$S.length() \geqslant p+1$}
+        \State j += 1
+        \State ($Mx_{j}^{k}$, $My_{j}^{k}$, $Mz_{j}^{k}$) = model($S$, $p$)    \Comment{Compute coefficients}
+        \If{max\_residue($Mx_{j}^{k}$, $My_{j}^{k}$, $Mz_{j}^{k}$, $S$) $> \epsilon$}
+            \State tr = ($Mx_{j-1}^{k}$, $My_{j-1}^{k}$, $Mz_{j-1}^{k}$, $t_{i-1}$)
+            \State k += 1; j = 0
+            \State $S$ = $\chi$
+        \EndIf
+    \EndIf
+\EndWhile
 
+\end{algorithmic}
+\caption{Polynomial Regression Algorithm for 3D Accelerometer data}
+\label{algo:n-polynomial}
+\end{algorithm}
 
-We use Polynomial Regression method on previous walking and running data set.
-Figure~\ref{fig:poly-regression-3-degree} and Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data. \TG{\#\#Wrong reference, there isn't
-a Figure 8d.}
-
-
-\todo{add this sentence to conclusion}
-The implementation needs much memory to record data points,
-and some CPU time to compute coefficients.
-
+We use implemented polynomial regression method on previous walking and running
+data set. Figure~\ref{fig:poly-regression-3-degree} and
+Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data. In the
+compression process, we need to keep in memory all the data between two
+transmissions and update regression models when each new data arriving. So,
+using polynomial regression method needs more memory and processing time than
+n-dimensional LTC for Infinity norm, but for Euclidean norm, we need to also
+record n-balls between two transmissions and execute intersection checking. 
 
 \begin{figure*}
 \centering
@@ -95,8 +134,21 @@ data is (N+1)*M*4+4 (Int32 for Time-stamp). Polynomial regression using more
 processing time to calculate coefficients and build model when each new data
 point comes. 
 
-From the Table~\ref{table:CR-compare-walking} and Table ~\ref{table:CR-compare-running}, We can learn that increasing the Dimension $n$ is detrimental to compression ratio with both n-dimensional LTC and Polynomial Regression, and LTC gives better compression ratio then regression method on different dimensions. Also same with experiment 2 in Section~\ref{sec:experiment2-ltc}, the Compression ratio is higher for the infinity norm than for the Euclidean and is higher for the walking than for running.
-For given degree of polynomial regression method, the higher degree results smaller compression ratio for walking and running in general, but the variations are slight. However, in Table~\ref{table:CR-compare-walking}, when dimension is 2 and 3, the 5-degree regression regression compresses more data then 3-degree regression method by using Infinity norm to check error tolerance in walking data set, and in Table~\ref{table:CR-compare-running} the 5-degree regression method works better when dimension equals 1 for both norm, equals 2 for infinity norm.
+From the Table~\ref{table:CR-compare-walking} and Table
+~\ref{table:CR-compare-running}, We can learn that increasing the Dimension $n$
+is detrimental to compression ratio with both n-dimensional LTC and Polynomial
+Regression, and LTC gives better compression ratio then regression method on
+different dimensions. Also same with experiment 2 in
+Section~\ref{sec:experiment2-ltc}, the Compression ratio is higher for the
+infinity norm than for the Euclidean and is higher for the walking than for
+running. For given degree of polynomial regression method, the higher degree
+results smaller compression ratio for walking and running in general, but the
+variations are slight. However, in Table~\ref{table:CR-compare-walking}, when
+dimension is 2 and 3, the 5-degree regression regression compresses more data
+then 3-degree regression method by using Infinity norm to check error tolerance
+in walking data set, and in Table~\ref{table:CR-compare-running} the 5-degree
+regression method works better when dimension equals 1 for both norm, equals 2
+for infinity norm.
 
 
 
@@ -109,7 +161,7 @@ Dimension & Infinity   & Euclidean   & Infinity    & Euclidean     & Infinity   
 2          & 89.6\%     & 88.7\%      & 83.35\%     & 83.35\%       & 83.55\%       & \multicolumn{2}{l|}{83.1\%}    \\ \hline
 3          & 88.9\%     & 87.6\%      & 80.24\%     & 78.68\%       & 80.8\%        & \multicolumn{2}{l|}{77.96\%}   \\ \hline
 \end{tabular}
-\caption{Comparisons of compression ratio on Walking data set\TG{\#\#What are the \% here? Compression ratio?} \TG{\#\#This table and the next one are not referenced or discussed in the text!}}
+\caption{Comparisons of compression ratio on Walking data set}
 \label{table:CR-compare-walking}
 \end{table}
 
