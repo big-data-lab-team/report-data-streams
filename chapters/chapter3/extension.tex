@@ -182,7 +182,10 @@ Let $\left\{ X_i \right\}_{i \in \llbracket 1, m \rrbracket}$ be a collection of
 convex subsets of $\mathbb{R}^n$. If the intersection of every $n+1$ subsets is
 non-empty, then the whole collection has an non-empty intersection.
 \end{theorem}
-\noindent This theorem leads to an algorithm of complexity ${m \choose n+1}$
+% \noindent This theorem leads to an algorithm of complexity ${m \choose n+1}$
+% which is not usable in resource-constrained environments such as connected
+% objects.
+\noindent This theorem leads to an algorithm of complexity ${\binom{m}{n+1}}$
 which is not usable in resource-constrained environments such as connected
 objects.
 
