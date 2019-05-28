@@ -2,17 +2,19 @@
 
 \TG{You should say here that you will use lossy compression and in particular
 LTC in the future.}
-在这个论文里，我们之关注Lossy compression method. 
-因为基本上sensor 都会有一些误差 and 我们不许要 准确的数据，我们希望通过牺牲一定的精确度，增强我们的压缩ratio，而且我们的环境要求  尽可能少的使用 memory， 
-因此 lossy compression 是我们主要focus 的算法。 
-\todo{需要说 为什么使用LTC，而不是其他}
+% 在这个论文里，我们之关注Lossy compression method. 
+% 因为基本上sensor 都会有一些误差 and 我们不许要 准确的数据，我们希望通过牺牲一定的精确度，增强我们的压缩ratio，而且我们的环境要求  尽可能少的使用 memory， 
+% 因此 lossy compression 是我们主要focus 的算法。 
+% \todo{需要说 为什么使用LTC，而不是其他}
 
+
+\todo{re-write LTC}
 \subsection{Lightweight Temporal Compression Algorithm}
 \label{sec:ltc}
 \TG{Add reference to LTC paper.}
 The Lightweight Temporal Compression (LTC)~\cite{schoellhammer2004lightweight}
 algorithm approximates the data stream by a piece-wise linear function of time,
-with an error bounded by parameter $\epsilon$. 
+with an error bounded by parameter $\epsilon$.
 
 The LTC algorithm maintains two lines, the \emph{high line}, and the \emph{low
 line} defined by (1) the latest transmitted point and (2) the \emph{high point}
@@ -23,6 +25,7 @@ transmitted point and ($t_i$, $x_i+\epsilon$); otherwise, the high line is not
 updated. Likewise, the low line is updated from $x_i-\epsilon$. Therefore, any
 line located between the high line and the low line approximates the data points
 received since the last transmitted point with an error bounded by $\epsilon$.
+
 
 
 \subsection{Piece-wise Linear Approximation with Minimum number of Line Segments
@@ -36,17 +39,17 @@ through a sequence of line segments. The main idea of this algorithm is to
 represent the stream data over a time window using a minimum number of segments
 so that amount of data transferred is reduced. PLAMLis gives a greedy algorithm
 solution. Assume the input stream data points $X=\{x_1, ..., x_W\}$ are received
-over a time window of size $W$. Firstly, for each data points $x_i$, $i \in
-\{1, ..., W\}$, a longest segment $S_{i}$ from point $x_i$ to point $x_j$
-($j>i$) is built within the error bound. Thereby for the data points in the
-window, a sequence of longest segments $S = {S_1, ..., S_W}$ is obtained.
-Secondly, to pick the minimum number of subsets of S for representing original
-stream $X$, a greedy algorithm is used to select the segment $S_k$ ($k \in
-\llbracket1, W\rrbracket$) which covers the largest number of data points $x_i$
-in $X$ at each time, then remove it from $S$ and add it into a \texttt{result
-sequence} until all data points in $X$ are covered~\cite{liu2007energy}. The
-result sequence is the result of compression~\cite{zordan2012compress,
-zordan2014performance}.
+over a time window of size $W$.
+Firstly, for each data points $x_i$, $i \in \{1, ..., W\}$, a longest segment
+$S_{i}$ from point $x_i$ to point $x_j$ ($j>i$) is built within the error bound.
+Thereby for the data points in the window, a sequence of longest segments $S =
+{S_1, ..., S_W}$ is obtained. Secondly, to pick the minimum number of subsets of
+S for representing original stream $X$, a greedy algorithm is used to select the
+segment $S_k$ ($k \in \llbracket1, W\rrbracket$) which covers the largest number
+of data points $x_i$ in $X$ at each time, then remove it from $S$ and add it
+into a \texttt{result sequence} until all data points in $X$ are
+covered~\cite{liu2007energy}. The result sequence is the result of
+compression~\cite{zordan2012compress, zordan2014performance}.
 
 
 \subsection{Enhanced Piece-wise Linear Approximation with Minimum number of Line
@@ -68,8 +71,11 @@ zordan2014performance}.
 
 \TG{How do these algorithms compare to LTC?}
 
+
+\todo{Try to add more content}
 \subsection{Polynomial Regression}
 \label{sec:polynomial}
+
 Different from piece-wise linear approximations, Polynomial
 Regression~\cite{zordan2014performance} gives a higher order $p \geqslant1$
 approximation by using standard regression methods based on least squares
@@ -82,13 +88,14 @@ approximation cycle, the best-fitting polynomial coefficients are re-computed
 with $\{ x_1, ..., x_{p+1+i}\}$ and the algorithm checks whether the new
 polynomial approximates the data points within the desired error tolerance. If
 not, the coefficients of the previous regression are transmitted and a new
-approximation starts at the current sample~\cite{zordan2014performance}. During
-the compression process, all the points between transmissions need to be kept in
-memory, and the least squares fitting required larger computational cost than
-piece-wise linear approximations. However, polynomial regression gives better
-performance in term of Root Mean Square Error (RMSE) between reconstructed data
-and original data. It means that the result from regression method is closer
-original data than result from piece-wise linear approximation
+approximation starts at the current sample~\cite{zordan2014performance}. 
+
+During the compression process, all the points between transmissions need to be
+kept in memory, and the least squares fitting required larger computational cost
+than piece-wise linear approximations. However, polynomial regression gives
+better performance in term of Root Mean Square Error (RMSE) between
+reconstructed data and original data. It means that the result from regression
+method is closer original data than result from piece-wise linear approximation
 method~\cite{zordan2014performance}.
 
 % \begin{algorithm}
@@ -123,14 +130,23 @@ method~\cite{zordan2014performance}.
 % \label{algo:polynomial}
 % \end{algorithm}
 
-
 \subsection{Adaptive Auto-Regression Moving-Average technique}
 
 
 Adaptive Auto-Regression Moving-Average (A-ARMA)~\cite{lu2010optimized} is a
-improved version of Auto-Regression Moving-Average (ARMA).
-
-\todo{ explain ARMA first}.
+improved version of Auto-Regression Moving-Average (ARMA). ARMA model is formed
+by combining AR and MA model, and it usually used as  a tool to predict future
+values over time series data~\cite{chatfield2016analysis}. ARMA model
+\texttt{ARMA($p$, $q$)}, containing $p$ AR terms and $q$ MA terms, is defined
+as:
+\begin{equation}
+X_t = \sum_{i=1}^{p}a_{i}X_{t-i} + Z_t + \sum_{i=1}^{q}\beta_{i}Z_{t-i}
+\end{equation}
+\noindent The equation reproduced from~\cite{chatfield2016analysis}, where
+$a_1, ..., a_p$ and $\beta_1, ..., \beta_q$ are parameters of AR model and MA
+model respectively, $Z_{t-q}, ...,Z_{t}$ are white noise (usually understand as
+residuals of the previous forecasts, $Z_t = X_t -
+X_{t-1}$)~\cite{chatfield2016analysis}.
 
 Similar to the ARMA model, A-ARMA is also composed of
 two terms, \texttt{Auto-Regression (AR)} term and \texttt{Moving-Average (MA)}
@@ -143,14 +159,15 @@ Let's assume $W$ is a sliding window with $W$ window size, $th_{err}$ is the
 minimum error tolerance on root-mean-square error (RMSE) and $S$ means the
 length of each movement of sliding window. The adapted algorithm of A-ARMA is
 given in Algorithm~\ref{algo:A-ARMA}. $model_{(p, q)}$ is the parameters of
-ARMA($p$, $q$) model, obtaining through function \texttt{build_ARMA()}. Function
-\texttt{go_forward()} makes the sliding window $W$ to move $S$ length (read $S$
-data samples), and function \texttt{tail($S$)} returns $S$ samples at the end of
-the window. RMSE is calculates by function \texttt{compute_error()}. The first
-$W$ data points are used to initialize the ARMA model, and to compare the RMSE
-between the original and predicted subsequent $S$ data by moving sliding window
-$S$ length each time. If the RMSE is larger than $th_{err}$, the saved ARMA
-model is remodeled with the current samples in sliding
+ARMA($p$, $q$) model, obtaining through function \texttt{build\_ARMA()}.
+Function \texttt{go\_forward()} makes the sliding window $W$ to move $S$ length
+(read $S$ data samples), and function \texttt{tail($S$)} returns $S$ samples at
+the end of the window. RMSE is calculates by function \texttt{compute\_error()}.
+
+The first $W$ data points are used to initialize the ARMA model, and to compare
+the RMSE between the original and predicted subsequent $S$ data by moving
+sliding window $S$ length each time. If the RMSE is larger than $th_{err}$, the
+saved ARMA model is remodeled with the current samples in sliding
 window~\cite{lu2010optimized}. In the decompression process, the stream data are
 predicted based on the parameters transmitted.
 
@@ -182,7 +199,7 @@ predicted based on the parameters transmitted.
     \EndIf
 \EndWhile
 \end{algorithmic}
-\caption{A-ARMA algorithm adapted from~\cite{lu2010optimized}}
+\caption{A-ARMA algorithm, adapted from~\cite{lu2010optimized}}
 \label{algo:A-ARMA}
 \end{algorithm}
 
@@ -222,12 +239,13 @@ the ARMA model is built or updated over fixed window of $W$ samples. It might
 cause bad performance to predict next $S$ samples with trained ARMA model over a
 fixed window, especially in highly noisy environments~\cite{zordan2012compress}.
 Assuming the prediction cycle means a process to find a AR model which represent
-as mush original data as possible within error tolerance. The MA-AR algorithm
-uses a $p$-order AR model for each prediction cycle instead of sliding window,
-and controls the absolute error on each data rather than RMSE of $S$ continuous
-data. Assume $M^{(n, i)}$ indicates the AR model built according to data
-$\{x_n, ..., x_{n+p-1+i} \}$, where $i>0$, and $\hat{x}_{n+p-1+i}$ indicates the
-predicted data, then for each prediction cycle, MA-AR works as follows:
+as mush original data as possible within error tolerance.
+The MA-AR algorithm uses a $p$-order AR model for each prediction cycle instead
+of sliding window, and controls the absolute error on each data rather than RMSE
+of $S$ continuous data. Assume $M^{(n, i)}$ indicates the AR model built
+according to data $\{x_n, ..., x_{n+p-1+i} \}$, where $i>0$, and
+$\hat{x}_{n+p-1+i}$ indicates the predicted data, then for each prediction
+cycle, MA-AR works as follows:
 
 \begin{enumerate}
     \item Collect first $p$ samples in sensor node and send them to client side.
