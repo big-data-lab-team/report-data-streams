@@ -45,7 +45,7 @@ authors compressed accelerometer data using A-LZSS which combines LZSS and
 entropy coding (Huffman code used in~\cite{pope2018accelerometer}). A flag bit is
 assigned to indicate that either an entropy code or a length-distance pair $(n, m)$ is applied to encoding. 
 
-%% pseudo-code
+%% A-LZSS pseudo-code
 
 
 % The pseudo-code of A-LZSS compression algorithm is shown in
@@ -53,7 +53,7 @@ assigned to indicate that either an entropy code or a length-distance pair $(n, 
 % that returns the pair $(n, m)$ which represents the repeating sequence of
 % elements. Function \texttt{Huffman\_table($x$)} returns the Huffman code of
 % input $x$. To make stream data in look-ahead buffer and dictionary
-% go forward (read subsequent data into look-ahead buffer) \TG{\#\#what do you mean by ``move forward?''}, function \texttt{go\_forward($D$, $S$, $m$)} is invoked,
+% go forward (read subsequent data into look-ahead buffer), function \texttt{go\_forward($D$, $S$, $m$)} is invoked,
 % where $m$ indicates the number of byte stream goes forward. The length of look-ahead buffer
 % $L_{buffer}$ is equal or smaller than the length of dictionary $L_{dict}$,
 % because the length $m$ is not greater than $L_{dict}$.
@@ -162,6 +162,8 @@ from MC.
     \label{table:MC}
 \end{table}
 
+%% S-LZW-MC pseudo-code   Extracted from or reproduced from, ,  adapted from
+
 By using Mini-Cache in S-LZW, the compression ratio improves, because of
 representing data sequences by $O(\log N + 1)$ instead of $O(\log D)$,
 where $N$ is the size of Mini-cache, $D$ is the size of the dictionary.
@@ -198,6 +200,7 @@ Table~\ref{table:LEC} is used for compression process in~\cite{marcelloni2008sim
 supports R+1 groups($n_i$) and each group $s_i$ contains $2^{n_i}$ numeral
 value.
 \begin{table}[]
+\centering
 \begin{tabular}{|l|l|l|}
 \hline
 $n_i$ & $s_i$        & $d_i$                                  \\ \hline
@@ -218,7 +221,7 @@ $n_i$ & $s_i$        & $d_i$                                  \\ \hline
 14    & 111111111110 & -16383, ..., -8192, +8192, ..., +16383 \\
 \hline
 \end{tabular}
-\caption{The dictionary table used in the experiments~\cite{marcelloni2009efficient}}
+\caption{The dictionary used in LEC, reproduced from~\cite{marcelloni2009efficient}}
 \label{table:LEC}
 \end{table}
  
