@@ -45,8 +45,56 @@ authors compressed accelerometer data using A-LZSS which combines LZSS and
 entropy coding (Huffman code used in~\cite{pope2018accelerometer}). A flag bit is
 assigned to indicate that either an entropy code or a length-distance pair $(n, m)$ is applied to encoding. 
 
-%% A-LZSS pseudo-code
+The pseudo-code of A-LZSS compression algorithm is shown in
+Algorithm~\ref{algo:A-LZSS}. The function \texttt{longest\_match()} returns the $D$ which donates the distance from cursor (the first symbol of look-ahead buffer) to the first symbol of the match sequence, and the length $L$ of longest matching sequence in buffer and dictionary~\cite{pope2018accelerometer}. In line 21 and 22 of Algorithm~\cite{pope2018accelerometer}, the $D-1$ and $L-1$ are written in to bit stream rather than $D$ and $L$, since $D$ and $L$ can not be 0. It might save one bit to record the value $2^n$, for instance, three bit is enough to record the number 8, and the subtracted 1 will be added back in decompression process.
 
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Input
+    \Desc{$symbols$}{$\quad \quad \quad \quad \quad \quad $Byte stream}
+    \Desc{$L\_bits$}{$\quad \quad \quad \quad \quad \quad $number of bits for look-ahead buffer}
+    \Desc{$D\_bits$}{$\quad \quad \quad \quad \quad \quad $number of bits for dictionary}
+    \Desc{$minimum\_match$}{$\quad \quad \quad \quad \quad \quad $Minimum length of match sequence (always $> 0$)}
+    \Desc{$table$}{$\quad \quad \quad \quad \quad \quad $Huffman table to code symbol}
+\EndInput
+\Output
+    \Desc{$codes$}{$\quad \quad \quad \quad \quad \quad $Bit stream}
+\EndOutput
+
+\State Create $codes$ stream of length symbols.length()+2   \Comment{Initialize}
+\State $codes$.writeBit(true)   \Comment{Write out compression flag}
+\State $codes$.writeBits($symbols$.length(), 15)    \Comment{Write out number of symbols}
+
+\While{$symbols \neq  \text{\O}$}   \Comment{Symbols to codes loop}
+    %\State // Find longest prefix of look-ahead in dictionary
+    \State D,L = longest\_match($symbols$, $L\_bits$, $D\_bits$) \Comment{Find longest prefix}
+    
+    \If{ L $< minimum\_match$}  \Comment{If not worth it, write Huffman code}
+        \State $codes$.writeBit(true)   \Comment{Write code type flag}
+        \State $symbol$ = $symbols$.readByte()  \Comment{Read one symbol}
+        \State $code$ = $table$.getCode($symbol$)   \Comment{Look up Huffman code}
+        \State $codes$.writeBits($code$, $code$.length)
+    \Else   \Comment{Otherwise, write $<$ D, L $>$ code}
+        \State $codes$.writeBit(false)  \Comment{Write code type flag}
+        \State $codes$.writeBits(D-1, $D\_bits$)    \Comment{Write $<$ D, L $>$ code}
+        \State $codes$.writeBits(L-1, $L\_bits$)
+        \State $symbols$.skipBytes(L)   \Comment{Advance cursor L}
+    \EndIf
+\EndWhile
+\If{$codes$.length() $\leqslant symbols$.length()}  \Comment{If expanded}
+    \State $codes$.clear()
+    \State $codes$.writeBit(false)
+    \State $codes$.writeBits($symbols$.length(), 15)
+    \State $codes$.writeSymbols($symbols$) \Comment{Write out uncompressed symbols}
+\EndIf
+\end{algorithmic}
+\caption{A-LZSS Compression Algorithm, reproduced from~\cite{pope2018accelerometer}}
+\label{algo:A-LZSS}
+\end{algorithm}
+
+In paper~\cite{pope2018accelerometer}, authors apply A-LZSS to activities of daily living (ADL)~\cite{jackson1963studies} accelerometer data 
+
+%% A-LZSS pseudo-code
 
 % The pseudo-code of A-LZSS compression algorithm is shown in
 % Algorithm~\ref{algo:A-LZSS}. \texttt{value\_pair($S$, $D$)} is a function
@@ -58,8 +106,8 @@ assigned to indicate that either an entropy code or a length-distance pair $(n, 
 % $L_{buffer}$ is equal or smaller than the length of dictionary $L_{dict}$,
 % because the length $m$ is not greater than $L_{dict}$.
 
-In the experiment of Pope et al.~\cite{pope2018accelerometer}, A-LZSS gives
-about 1~$\mu$J (micro Joule) per bit of energy with their CC2650 System-on-Chip. If the data from devices
+In the experiment of Pope et al.~\cite{pope2018accelerometer}, the compression ratio at most reach 3.3:1 (the size of original data is 3.3 times the size of compressed data) by using A-LZSS and A-LZSS
+gives about 1~$\mu$J (micro Joule) per bit of energy in the best cast with their CC2650 System-on-Chip. If the data from devices
 repeats in high proportion, A-LZSS could be a good choice for energy
 saving, because of recording previous data in sliding window as dictionary.
 A-LZSS shell give a coding result as same as Huffman code, when the data-set without repetitions of elements.
@@ -123,8 +171,8 @@ specific scenario that sensor data might repeats itself in short intervals. A
 example of MC is shown in Table~\ref{table:MC}. The output of S-LZW adds one
 extra flag bit to distinguish the output is encoded by either dictionary or
 Mini-Cache, e.g. '0' bit indicates encoded from dictionary, '1' means encoded
-from MC.
-\begin{table}[]
+from MC. Figure~\ref{fig:S-LZW-MC} is the flow chat of S-LZW with Mini-Cache.
+\begin{table}
     \begin{minipage}{.45\textwidth}
         \centering
         \begin{tabular}{|l|l|}
@@ -155,14 +203,19 @@ from MC.
         3            & 256              \\
         \hline
         \end{tabular}
-    \caption{Dictionary}
+    \caption{Mini-Cache}
     \end{minipage}
    
     \caption{Example of using MC}
     \label{table:MC}
 \end{table}
 
-%% S-LZW-MC pseudo-code   Extracted from or reproduced from, ,  adapted from
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/S-LZW-MC.png}
+    \caption{Flow chart of S-LZW-MC, extracted from~\cite{sadler2006data}}
+    \label{fig:S-LZW-MC}
+\end{figure}
 
 By using Mini-Cache in S-LZW, the compression ratio improves, because of
 representing data sequences by $O(\log N + 1)$ instead of $O(\log D)$,
@@ -193,13 +246,14 @@ $d_i$, and $a_i$ represent $d_i$ based on the following rules:
     \item If $d_i < 0$, $a_i$ is the binary expression of $n_i$ low-order bits
     of the two's complement representation of ($d_i$ - 1)
 \end{enumerate}
+
 \noindent Where $n_i$ = 0 if $d_i$ = 0, else $n_i$ = $(\log{_2}{\left|{b_i}\right|} +
 1)$~\cite{li2016temporal} and $n_i \leq R$.
 
 Table~\ref{table:LEC} is used for compression process in~\cite{marcelloni2008simple, marcelloni2009efficient}. It
 supports R+1 groups($n_i$) and each group $s_i$ contains $2^{n_i}$ numeral
 value.
-\begin{table}[]
+\begin{table}
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
@@ -268,5 +322,5 @@ two algorithms, and in order to improve compression ratio as much as
 possible, it is necessary to encode $n_i$ by prefix code method base on the
 elements distribution.
 
-\TG{It would be useful to give an idea of the compression ratios and perhaps 
+\TG{\#\#It would be useful to give an idea of the compression ratios and perhaps 
 compute times provided by these algorithms}
