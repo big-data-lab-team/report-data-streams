@@ -5,3 +5,81 @@ described in Ch3 and 4 was published and give the reference.}
 
 \TG{Mention OrpaillCC (you are a co-author). Mention internship and
 implementation at Motsai.}
+
+%%----------------------------------------------------------------------------%%
+%IoT, Embedded system, sensors,
+%Motsai(internship coding), Neblina, Big Data, Stream
+
+% context
+% problem description
+% goal motivation
+% outline and contribution(publication)
+% sensor network 技术将会引来更多的挑战，随着无线连通的普及，the units in IoT will reach 26 billion by 2020(Gartnar 2014)
+% IoT越来越普及，因为智能家居的普及，我们的生活就围绕IoT中。再这个网络中objects 可以互相交流。很多家居都拥有嵌入式系统，从而可以通过终端e.g.手机，电脑进行控制，比如用手机操作灯的开 关，空调温度的高低...同时多样的传感器时生活更加智能，aceleramiter....
+% 给我们生活提供更加有效的信息。同时当big data, 数据分析兴起的时候，数据变得尤为重要，越来越有价值，但是因为sensor 产生的都是stream data, 它带来了一些挑战。
+% 1，2，3
+% （数据流无法再次查询，需要空间存储数据，但是devices空间是由限制的，尽管）
+% 因此再数据流信息的挖掘中，有很多之前的研究。
+% 。。。。
+% 。。。
+% 。。。。
+% 然而再现实世界中，sensor 网络中的devices没有过多的空间 severs KB, 并且电量是有限的。因此在sensor网络中，如果我们要传输大量的数据，电量会消耗很多。数据需要发发送到client端，不管是通过 Wifi, Bluetooth etc. 
+
+%%----------------------------------------------------------------------------%%
+
+%IoT embedded system
+With the recent technological advances internet of Things(IoT) applications, the
+connected devices In IoT will reach 75 billion by 2025
+\footnote{\url{https://www.statista.com/statistics/471264/iot-number-of-connected-devices-worldwide}}. 
+So far the IoT has been involved in many field e.g. medical care, military,
+sports and industrial manufacturing~\cite{boudargham2017exhaustive,
+lai2013survey, da2014internet}. In industrial domains, the connected objects are
+often used for capturing properties such as temperature, and receiving signal or
+data from others. In domestic domains, many household products are expected to
+provide more function which could make human activities more convenient and
+improve the quality of life. For example, people can remotely control household
+equipment with our smart electronics e.g. mobile phone and PC, through
+aggregating embedded system with those equipment. Embedded system plays an
+important role in IoT because it can increase processing power of devices and
+execute specific task or application. 
+
+The most typical network of connected object is WSNs, which are being
+increasingly deployed for enabling continuous monitoring and sensing of physical
+variables of our world~\cite{li2016temporal}.
+
+And with the rise of data science, the data become more and more important cause
+it could provide knowledge and information after filter and learning. Thus The
+stream data produced in IoT also important. But cause the characteristic of
+stream data, it it needed to process stream data timely due to its volume and
+velocity. We may lose the opportunity to process them at all, if we did not do
+it in real time. So some previous research has discussed various stream analytic
+problems, such as estimating cardinality, frequency moments and clustering.
+
+Power consumption is among the biggest challenges targeting connected 
+objects, particularly in the industrial domains, where several sensing 
+systems are commonly launched in the field to run for days or even 
+weeks without being recharged. Typically, such devices use sensors to 
+capture properties such as temperature or motion, and stream them to a 
+host system over a radio transmission protocol such as Bluetooth 
+Low-Energy (BLE). System designers aim to reduce the rate of data 
+transmission as much as possible, as radio transmission is a 
+power-hungry operation.
+
+Compression is a key technique to reduce the rate of radio 
+transmission.  While in several applications lossless compression 
+methods are more desirable than lossy compression techniques, in the 
+context of IoT and sensor data streams, the measured sensor data 
+intrinsically involves noise and measurement errors, which can 
+be treated as a configurable tolerance for a lossy compression algorithm. 
+
+Resource-intensive lossy compression algorithms such as the ones based on 
+polynomial interpolation, discrete cosine and Fourier transforms, or 
+auto-regression methods~\cite{lu2010optimized} are not well-suited for 
+connected objects, due to the limited memory available on 
+these systems (typically a few KB), and the energy consumption 
+associated with CPU usage. Instead, compression algorithms need 
+to find a trade-off between reducing network communications and 
+increasing memory and CPU usage. As 
+discussed in~\cite{zordan2014performance}, linear compression methods 
+provide a very good compromise between these two factors, leading to 
+substantial energy reduction.
