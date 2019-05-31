@@ -6,7 +6,7 @@ described in Ch3 and 4 was published and give the reference.}
 \TG{Mention OrpaillCC (you are a co-author). Mention internship and
 implementation at Motsai.}
 
-%%----------------------------------------------------------------------------%%
+%------------------------------------------------------------------------------%
 %IoT, Embedded system, sensors,
 %Motsai(internship coding), Neblina, Big Data, Stream
 
@@ -14,9 +14,10 @@ implementation at Motsai.}
 % problem description
 % goal motivation
 % outline and contribution(publication)
+
 % sensor network 技术将会引来更多的挑战，随着无线连通的普及，the units in IoT will reach 26 billion by 2020(Gartnar 2014)
 % IoT越来越普及，因为智能家居的普及，我们的生活就围绕IoT中。再这个网络中objects 可以互相交流。很多家居都拥有嵌入式系统，从而可以通过终端e.g.手机，电脑进行控制，比如用手机操作灯的开 关，空调温度的高低...同时多样的传感器时生活更加智能，aceleramiter....
-% 给我们生活提供更加有效的信息。同时当big data, 数据分析兴起的时候，数据变得尤为重要，越来越有价值，但是因为sensor 产生的都是stream data, 它带来了一些挑战。
+% 给我们生活提供更加有效的信息。同时当big data, 数据分析兴起的时候，数据变得尤为重要，越来越有价值，但是因为sensor 产生的都是streaming data, 它带来了一些挑战。
 % 1，2，3
 % （数据流无法再次查询，需要空间存储数据，但是devices空间是由限制的，尽管）
 % 因此再数据流信息的挖掘中，有很多之前的研究。
@@ -25,9 +26,39 @@ implementation at Motsai.}
 % 。。。。
 % 然而再现实世界中，sensor 网络中的devices没有过多的空间 severs KB, 并且电量是有限的。因此在sensor网络中，如果我们要传输大量的数据，电量会消耗很多。数据需要发发送到client端，不管是通过 Wifi, Bluetooth etc. 
 
-%%----------------------------------------------------------------------------%%
+% 
+% %Iot
+% 随着IoT 的普及, 2025.....
+% 到目前位置 IoT 被使用到很多领域
+% 
+% % sensors and WSN
+% WSN 是IoT 的一种，并被普遍使用在工业中
+% sensors 通过有限，或者low energy 的无线技术 进行连接，很多数据通过sensor measure 并传输到 sink sensor 或者 client 端
+% 
+% % data stream, big data
+% 在 IoT 网络中传输的数据 是 data stream, 他与普通数据的不同是 。。。。。
+% 随着数据科学的兴起，数据变得有位的重要，而 objected devices 产生的数据同样具有可挖掘的价值。但是因为streaming data 的特性 我们需要处理他in real-time 否则可能会失去它。
+% 
+% % Embedded system
+% 
+% 嵌入式系统 提供给 connected objects 计算能力，使得 devices 有一定的计算能力，从而我们可以进行一些操作，
+% 比如说 online analysis （也可以offline）
+% 
+% % Problem
+% however 电力消耗是一个 很大的问题，因为很多devices 是wireless 的 需要连续工作很长时间才会充电
+% 
+% % Neblina
+% Neblina 是一个......
 
-%IoT embedded system
+% goal 
+
+% outline
+
+%-----------------------------------------------------------------------------%
+
+% -------------------- context------------------------%
+
+%% -------IoT embedded system--------%%
 With the recent technological advances internet of Things(IoT) applications, the
 connected devices In IoT will reach 75 billion by 2025
 \footnote{\url{https://www.statista.com/statistics/471264/iot-number-of-connected-devices-worldwide}}. 
@@ -39,47 +70,157 @@ data from others. In domestic domains, many household products are expected to
 provide more function which could make human activities more convenient and
 improve the quality of life. For example, people can remotely control household
 equipment with our smart electronics e.g. mobile phone and PC, through
-aggregating embedded system with those equipment. Embedded system plays an
-important role in IoT because it can increase processing power of devices and
-execute specific task or application. 
+aggregating embedded system with those equipment. 
 
+%% -----streaming data, big data ----%%
 The most typical network of connected object is WSNs, which are being
 increasingly deployed for enabling continuous monitoring and sensing of physical
-variables of our world~\cite{li2016temporal}.
+variables of our world~\cite{li2016temporal}. Sensor devices are connected by
+network cables or low energy wireless network e.g. Bluetooth Low Energy
+(BLE)~\cite{bluetoothlowenergy} and IEEE 802.15.4~\cite{IEEE802.15.4} and send
+the streaming data to sink sensor node or client side.
 
-And with the rise of data science, the data become more and more important cause
-it could provide knowledge and information after filter and learning. Thus The
-stream data produced in IoT also important. But cause the characteristic of
-stream data, it it needed to process stream data timely due to its volume and
-velocity. We may lose the opportunity to process them at all, if we did not do
-it in real time. So some previous research has discussed various stream analytic
+%% -----data stream, big data--------%%
+\todo{write the part of big data}\BO{what i'mma write}
+\todo{add reference}
+Streaming data is produced by connected objects in IoT and transferred over the
+network.  And with the rise of data science, the data become more and more
+important cause it could provide knowledge and information after filter and
+learning. Thus The streaming data produced in IoT also important. But cause the
+characteristic of streaming data, it is needed to process streaming data timely
+due to its volume and velocity. We may lose the opportunity to process them at
+all, if we did not do it in real time.
+
+%% --------Embedded system--------%%
+Embedded system provides connected devices processing power and the ability of
+executing specific tasks or applications, so the real-time processing is
+available. 
+%-------------- problem description-------------%
+
+Power consumption is among the biggest challenges targeting connected  objects,
+particularly in the industrial domains, where several sensing  systems are
+commonly launched in the field to run for days or even  weeks without being
+recharged. Typically, such devices use sensors to  capture properties such as
+temperature or motion, and stream them to a  host system over a radio
+transmission protocol such as Bluetooth  Low-Energy (BLE). System designers aim
+to reduce the rate of data  transmission as much as possible, as radio
+transmission is a  power-hungry operation.
+
+% ------------------ goal motivation -----------------%
+
+% 我们的目标是利用data stream summarization 减少传输数据
+% 例如 当 cardinality = 1 时，表示数据 时不变的， 从而我们只需要传输1个数据而不是所有数据 从而减少数据的传输
+
+The goal of this thesis is to reduce the rate of data transmission through data
+stream summarization. For instance, Only one data point will be transmitted
+rather than all data points if the cardinality of the stream equals 1, which
+means the streaming data are constant.
+
+
+% ----------------------- Neblina --------------------%
+Motsai's Neblina module, a system with a Nordic Semiconductor nRF52832
+micro-controller, 64~KB of RAM,  and Bluetooth Low Energy connectivity. Neblina
+has a 3D  accelerometer, a 3D gyroscope, a 3D magnetometer, and environmental
+sensors for humidity, temperature and pressure. The platform is  equipped with
+sensor fusion algorithms for 3D orientation tracking and  a machine learning
+engine for complex motion analysis and motion  pattern
+recognition~\cite{sarbishei2016accuracy}.
+
+
+
+
+% ------- outline and contribution(publication)-------%
+
+
+
+% LTC summary
+The Lightweight Temporal Compression method 
+(LTC~\cite{schoellhammer2004lightweight}) has been designed 
+specifically for energy-constrained systems, initially sensor networks. 
+It approximates data points by a piece-wise linear function that 
+guarantees an upper bound on the reconstruction error, and a reduced 
+memory footprint in $\mathcal{O}(1)$. However, LTC has only been 
+described for 1D streams, while streams acquired by connected objects, such as 
+acceleration or gyroscopic data, are often multi-dimensional. 
+
+
+%% contribution 
+
+The contribution of this thesis is given as follow:
+\begin{enumerate}
+  \item Formalize the description of original LTC algorithm
+  \item Extend LTC to dimension $n$.
+  \item Propose an algebraic formulation of n-dimensional LTC algorithm.
+  \item Introduce an norm-independent expression of n-dimensional LTC, according to
+  the algebraic formulation.
+\end{enumerate}
+
+% In this paper, we extend LTC to dimension $n$. To do so, we propose an 
+% algebraic formulation of the algorithm that also yields a 
+% norm-independent expression of it.
+
+%% internship and publish
+I did 4 months internship in Motsai from Sep. 2019 to Dec. 2019, and I implement
+our extension on  Motsai's Neblina module
+\footnote{\url{https://motsai.com/products/neblina}}, and we test it on 3D
+acceleration streams acquired during human exercises, namely biceps curling,
+walking and  running. Our paper "A multi-dimensional extension of the
+Lightweight Temporal Compression method " was published~\cite{li2018multi} in
+IEEE Big Data conference 2018. Our implementation of LTC is available as free
+software.
+
+
+
+% define transmitted, received points, compression ratio
+In this thesis I assume that the stream consists of a sequence of data points
+received at uneven intervals. The compression algorithm  \emph{transmits} fewer
+points than it receives. The transmitted points  might be included in the
+stream, or computed from stream points. The  \emph{compression ratio} is
+calculated by (1-$\frac{1}{C_R}$) where $C_R$ is the ratio between the number of
+received points and the number of transmitted points. An application
+reconstructs the stream from the transmitted points: the  \emph{reconstruction
+error} is the maximum absolute difference between  a point of the reconstructed
+stream, and the corresponding  point in the original stream.
+
+
+% Outline
+Chapter~\ref{sec:relatedwork} provides some background on stream summarization,
+lossless compression and lossy compression methods.
+Chapter~\ref{chap:ltc-extension} formalizes the description initially proposed
+in~\cite{schoellhammer2004lightweight} and presents our norm-independent
+extension to dimension $n$, together with description of our implementation in
+Section~\ref{sec:implementation}. Chapter~\ref{chap:expsAndResults} reports on
+experiments to validate our  implementation, and evaluates the impact of
+n-dimensional LTC on  energy consumption of connected objects.
+
+
+
+
+
+% \todo{add follow content into Chapter 2}
+% Compression is a key technique to reduce the rate of radio 
+% transmission.  While in several applications lossless compression 
+% methods are more desirable than lossy compression techniques, in the 
+% context of IoT and sensor data streams, the measured sensor data 
+% intrinsically involves noise and measurement errors, which can 
+% be treated as a configurable tolerance for a lossy compression algorithm. 
+
+% Resource-intensive lossy compression algorithms such as the ones based on 
+% polynomial interpolation, discrete cosine and Fourier transforms, or 
+% auto-regression methods~\cite{lu2010optimized} are not well-suited for 
+% connected objects, due to the limited memory available on 
+% these systems (typically a few KB), and the energy consumption 
+% associated with CPU usage. Instead, compression algorithms need 
+% to find a trade-off between reducing network communications and 
+% increasing memory and CPU usage. As 
+% discussed in~\cite{zordan2014performance}, linear compression methods 
+% provide a very good compromise between these two factors, leading to 
+% substantial energy reduction.
+
+
+
+% data summarization 可以提取数据特征
+\todo{write data summarization, or move this to Section 2.1}
+\url{https://www-users.cs.umn.edu/~kumar001/papers/varun_icdm05-summ.pdf}
+So some previous research has discussed various stream analytic
 problems, such as estimating cardinality, frequency moments and clustering.
-
-Power consumption is among the biggest challenges targeting connected 
-objects, particularly in the industrial domains, where several sensing 
-systems are commonly launched in the field to run for days or even 
-weeks without being recharged. Typically, such devices use sensors to 
-capture properties such as temperature or motion, and stream them to a 
-host system over a radio transmission protocol such as Bluetooth 
-Low-Energy (BLE). System designers aim to reduce the rate of data 
-transmission as much as possible, as radio transmission is a 
-power-hungry operation.
-
-Compression is a key technique to reduce the rate of radio 
-transmission.  While in several applications lossless compression 
-methods are more desirable than lossy compression techniques, in the 
-context of IoT and sensor data streams, the measured sensor data 
-intrinsically involves noise and measurement errors, which can 
-be treated as a configurable tolerance for a lossy compression algorithm. 
-
-Resource-intensive lossy compression algorithms such as the ones based on 
-polynomial interpolation, discrete cosine and Fourier transforms, or 
-auto-regression methods~\cite{lu2010optimized} are not well-suited for 
-connected objects, due to the limited memory available on 
-these systems (typically a few KB), and the energy consumption 
-associated with CPU usage. Instead, compression algorithms need 
-to find a trade-off between reducing network communications and 
-increasing memory and CPU usage. As 
-discussed in~\cite{zordan2014performance}, linear compression methods 
-provide a very good compromise between these two factors, leading to 
-substantial energy reduction.
