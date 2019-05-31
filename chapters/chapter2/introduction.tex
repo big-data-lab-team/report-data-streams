@@ -1,0 +1,22 @@
+\section{Introduction}
+
+
+\todo{add follow content into Chapter 2}
+Compression is a key technique to reduce the rate of radio 
+transmission.  While in several applications lossless compression 
+methods are more desirable than lossy compression techniques, in the 
+context of IoT and sensor data streams, the measured sensor data 
+intrinsically involves noise and measurement errors, which can 
+be treated as a configurable tolerance for a lossy compression algorithm. 
+
+Resource-intensive lossy compression algorithms such as the ones based on 
+polynomial interpolation, discrete cosine and Fourier transforms, or 
+auto-regression methods~\cite{lu2010optimized} are not well-suited for 
+connected objects, due to the limited memory available on 
+these systems (typically a few KB), and the energy consumption 
+associated with CPU usage. Instead, compression algorithms need 
+to find a trade-off between reducing network communications and 
+increasing memory and CPU usage. As 
+discussed in~\cite{zordan2014performance}, linear compression methods 
+provide a very good compromise between these two factors, leading to 
+substantial energy reduction.

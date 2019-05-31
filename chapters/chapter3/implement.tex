@@ -1,5 +1,5 @@
 \section{Implementation of LTC n-dimension}
-
+\label{sec:implementation}
 To implement LTC in n dimensions with the infinity norm, we maintain a cuboid
 representation of $\cap_{l=1}^j{\mathcal{B}_l}$ across the
 iterations of the \texttt{while} loop in
@@ -48,7 +48,7 @@ it is necessary to update the values (see Algorithm~\ref{algo:recursive} line
 Algorithm~\ref{algo:recursive}, it happens in case of $left > right$, which
 means:
 \begin{equation*}
-    mid \  \bigcap \  (min\_id \cap max\_id) = \O
+    mid \  \bigcap \  (min\_id \cap max\_id) = \text{\O}
 \end{equation*}
 
 In Algorithm~\ref{algo:euclidean} line 12, It guarantees any two n-balls in $S$
@@ -84,11 +84,11 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
     \Desc{$x$}{Point inside intersection. It might be Null}
 \EndOutput
 
-%\If{$\mathcal{B}_j \cap B = \O$} \Comment{Ball is outside bounding box}
-\If{box($\mathcal{B}_j$) $\cap B = \O$} \Comment{N-ball is outside bounding box}
+%\If{$\mathcal{B}_j \cap B = \text{\O}$} \Comment{Ball is outside bounding box}
+\If{box($\mathcal{B}_j$) $\cap B = \text{\O}$} \Comment{N-ball is outside bounding box}
     \State \Return ($S$, $B$, False, Null)
 \EndIf
-\If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \cap \mathcal{B}_i = \O$}
+\If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \cap \mathcal{B}_i = \text{\O}$}
     \State \Return ($S$, $B$, False, Null) \Comment{Some n-balls don't intersect}
 \EndIf
 \If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \subset \mathcal{B}_i$} \Comment{Remove inclusions}
@@ -137,38 +137,37 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
-   \Desc{$S$}{Set of n-balls} \TG{\#\#There's no guarantee that they intersect when this function is called.}
+   \Desc{$S$}{Set of n-balls}
    \Desc{$L$}{Min value used in bisection}
    \Desc{$R$}{Max value used in bisection}
    \Desc{$N$}{The $N^{th}$ dimension, $N \in \{1...n\}$}
    \TG{??Why not just use $n$?}
-   \Desc{$X^n$}{N-dimensional point which records point of intersection, $X^n$ = $(x_1,...,x_n)$} \TG{\#\#If you know the point already, what are you looking for?}
+   \Desc{$X^n$}{N-dimensional point which records point of intersection, $X^n$ = $(x_1,...,x_n)$} 
+   %\TG{\#\#If you know the point already, what are you looking for?}
 \EndInput
 \Output
    \Desc{$T$}{True if a point is found by using bisection}
 \EndOutput
 \If{$N$ == 1}
-    \State $X^n.x_N$ = $\frac{L+R}{2}$ \TG{\#\#isn't it $X^n$.$x_N$?} 
-    \State \Return True
+    \State $X^n.x_N$ = $\frac{L+R}{2}$; $\ $\Return True
 \EndIf
 \While{$L \leqslant R$ }
-    \State $mid$ = $\frac{L+R}{2}$
-    \State $surface$ = $\{x_{N}...x_{n}\}$
-    \State $left$ = -$\infty$, $\ right$ = +$\infty$
+    \State $mid$ = $\frac{L+R}{2}$; $\ surface$ = $\{x_{N}...x_{n}\}$
+    \State $left$ = -$\infty$; $\ right$ = +$\infty$
     \ForAll{$\mathcal{B}_i \in S$}
         \State $min$ = min\_value($\mathcal{B}_i \cap surface$, N-1)
         \State $max$ = max\_value($\mathcal{B}_i \cap surface$, N-1)
         \If{$left < min$}
-            \State $left$ = $min$, $\ min\_id$ = $\mathcal{B}_i$
+            \State $left$ = $min$; $\ min\_id$ = $\mathcal{B}_i$
         \EndIf
         \If{$right > max$}
-            \State $right$ = $max$, $\ max\_id$ = $\mathcal{B}_i$
+            \State $right$ = $max$; $\ max\_id$ = $\mathcal{B}_i$
         \EndIf
     \EndFor
     
     \If{$left \leqslant right$}
-        \State $X^n.x_N$ = $mid$
-        \State \Return recursive($S$, $left$, $right$, $N-1$, $X^n$)
+        \State $X^n.x_N$ = $mid$; $\ $
+        \Return recursive($S$, $left$, $right$, $N-1$, $X^n$)
     \ElsIf{$\ \forall\ P$ (Point) $\in (min\_id \cap max\_id)$ s.t. $P.x_N < mid$}
         \State $right$ = $mid$
     \Else

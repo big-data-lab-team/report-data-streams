@@ -133,7 +133,7 @@ The LTC property can be re-written as follows:
 \end{equation}
 that is:
 \begin{equation}
-\bigcap_{j=1}^m \mathcal{B}_j \neq \O
+\bigcap_{j=1}^m \mathcal{B}_j \neq \text{\O}
 \label{eq:ltc-property}
 \end{equation}
 Note that $(\mathcal{B}_j)_{j \in \llbracket 1, m \rrbracket}$ is a sequence
@@ -159,7 +159,7 @@ point. It is written in Algorithm~\ref{algo:general-ltc}.
 \While{True}
     \State j += 1
     \State ($v_j, z_j$) = ($u_j^k - \tau, y_j^k - \xi$)
-    \If{$\bigcap_{l=1}^j{\mathcal{B}_l} = \O$}
+    \If{$\bigcap_{l=1}^j{\mathcal{B}_l} = \text{\O}$}
         \State Pick $z$ in $\bigcap_{l=1}^{j-1}{\mathcal{B}_l}$ \Comment{Transmit point}
         \State tr = ($\tau$, $\xi$) = ($u^k_{j-1}, z$)
         \State k += 1
