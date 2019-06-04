@@ -1,5 +1,154 @@
 \section{Introduction}
 
+% introduce Streaming data
+Streaming data has become more and more important since the rise of the Internet
+of Things. Devices in IoT communicate using streaming data which is transmitted
+at high speed, and short intervals and it may never be reviewed if the system
+does not process it immediately or store it. 
+
+
+% Some stream summarization techniques have been researched and proposed to address
+% issues related to high data volume and velocity. 
+% use summarization and stream compression could be use
+To decrease the number of the data transmitted, summarization of stream is
+useful and effective.  
+% Summarization is a key data mining concept which involves techniques for finding a compact description of a data-set. Summarization can be viewed as compressing a given set
+% of transactions into a smaller set of patterns while retaining the maximum possible information~\cite{chandola2007summarization}. \todo{change}
+
+Summarization can be considered as a process to discover a compressed
+description or smaller patterns of original data-set with lowest possible
+\emph{information loss}~\cite{chandola2007summarization}. 
+
+Some general stream summarization techniques are able to utilize for data
+reduction:
+%% sampling 
+\paragraph{Sampling} captures a sub-sample of a data stream that represents the
+entire stream. When the data is huge and we cannot save it into working storage,
+we could take a sample from whole data, and estimate the query results base on
+fraction of sample and whole data.  For instance, we can answer the query "What
+fraction of the typical user's queries were repeated over the past month?"~\cite{leskovec2014mining} by
+using simple random sampling also know as uniform random
+sampling~\cite{vitter1984faster, Ahrens1985SequentialRS} which all data in
+stream have the same probability to be selected. The common idea is to extract
+the queries from 1/10 of users, each user has 10\% probability be selected. In
+general, we need just to maintain a list of users whose queries should be
+selected, but we might not has enough main memory space. To reduce memory usage,
+the hash function is used instead of keeping list of user. We create 10 buckets
+marked from 0 to 9, and hash each user name of query into one of buckets. If the
+user is hashed to bucket 0, we will select the queries from this user.
+
+There are also others sampling methods utilized for different situation e.g.
+Reservoir-based sampling method~\cite{vitter1985random, vitter1985random,
+Aggarwal2007DataS} which sampling $k$ items from a stream of items of unknown
+length is appropriate for picking up fix size of items by using sampling
+technique. And, weighted (non-uniform) sampling~\cite{chaudhuri1999random} and
+weighted random sampling with reservoir~\cite{efraimidis2006weighted} has been
+proposed for sampling non-uniform stream, which means each items in stream are
+weighted and the probability of selection is depended on its
+weight~\cite{chaudhuri1999random}.
+
+In practice, sampling can help save energy on connected objects. For instance,
+when querying a question on stream, we can estimate the result after sampling
+from whole stream. We need less communication with objects, because we need only
+apart of whole stream to estimate result.
+%% pros and cons
+\todo{pros and cons, might be}
+
+%% filtering 
+\paragraph{Filtering} helps us to omit the elements in the stream.
+In~\cite{leskovec2014mining}, a example is given for spam filtering. We would
+like to filter the stream and only focus on the non-spam email addresses. Same
+with sampling, the list of email addresses is too large to be stored in limited
+memory. A solution to archive filtering without too much memory is using the
+filter technique known as Bloom filtering~\cite{bloom1970space} which eliminate
+most of the elements that do not meet the filtering
+criteria~\cite{leskovec2014mining}. Assume we have list $S$ of non-spam emails,
+Bloom filtering generates an array of $k$ bits by hashing each email address in
+$S$ into the bit-array with $k$ hash functions ($h_1$, ..., $h_k$ : $\{1...m\}
+\rightarrow \{1...n\}$). Each email address in $S$ is hashed by all hash
+function and the corresponding bits in array are changed to 1 based on hash
+results. After initialization, the bit-array  can be utilized for filtering. For
+each new coming streaming data $D$, we get a set of bits according to those $k$
+hash functions and initialized bit-array. The streaming data $D$ will be ignored
+if any one hash result matches 0's in the bit-array~\cite{leskovec2014mining}.
+However, in bloom filter, false positives are possible but not false
+negatives~\cite{ahmed2019data}. It means the email addresses that are not in $S$
+might pass the filter too, but if a email address is blocked by filter, then it
+always be true that the address does not belong to $S$~\cite{ahmed2019data}.
+
+Stream filtering is able to obtain the information or data that we are
+interested and is able to answer the query which requires the specific part of
+entire data stream. For example, some connected sensor objects send longitude
+and latitude stream data to client side, but we just need the data from specific
+locations (longitudes and latitudes).
+
+
+\todo{uniform the Objects, where the summarization process in, connected objects
+(offline) or client side (online)}
+%% sliding window
+Due to the resource constrains of connected object, it is not possible to save
+all streaming data into memory or storage. However, Some time-based queries are
+needed, e.g. All of the web requests in last 5 minutes.
+
+\paragraph{Sliding window} is introduced by Datar et
+al.~\cite{datar2002maintaining} maintains a window that moves with new data
+coming to ensures the analysis and statistics using fresh data. It is also often
+used to keep the most recent $n$ elements of stream or all the elements within
+specific time period $t$, e.g. one hour or one day, in given bounded
+memory~\cite{leskovec2014mining}. 
+
+
+
+% In addition, some streaming algorithms gives the coefficients or characteristics of by summarizing stream. They solve the problems like [table]
+% Dud to the characteristics of streaming data and the devices of the limited storage and memory in IoT,  
+
+In addition, to answer queries over data stream, computing approximate result is
+more suitable for any queries than exact solution~\cite{kejariwal2015real}.
+Previous research has provided some other synopsis constructions for
+summarization. e.g. Histogram~\cite{hesabi2015data, poosala1999approximate} and
+Sketch\todo{reference}
+
+\emph{Histogram} technique gives a distribution of a elements in stream. General
+histogram-based summarization techniques e.g. Equi-width histograms partition
+the domain of element into a set of ranges or buckets of equal length, and
+assign the elements in the stream into these buckets. The distribution of the
+stream would be estimated as the histogram of the frequencies of these
+buckets~\cite{kejariwal2015real, ahmed2019data}.
+
+\emph{Sketches} are used to solve some problems on data stream e.g. estimating
+moments, estimating cardinality or estimating frequent elements.
+
+% example
+%% AMS Sketch
+The Alon-Matias-Szegedy Sketch which was proposed by Alon, Matias and
+Szegedy~\cite{alon1999space} to solve the second frequency moment of data
+stream. It maintains a matrix of $d\times{w}$ size and maps the elements $e$ the
+stream through $d$ hash functions $h_{i}(e)_{i\in \llbracket 1, d \rrbracket}
+\rightarrow$ \{1, 2, ..., $w$\} and $d$ extra 4-wise indepent hahs funtions
+$g_1$, ..., $g_d$ : $\{1...U\}\rightarrow \{-1, 1\}$. Finally, The second
+frequency moments can be estimated according this matrix.
+%% Count-Min Sketch for frequency estimate
+    
+%% FM-Sketch or LRU-LC sketch for cardinality
+
+
+
+
+% introduce compression 
+
+
+
+% Descriptive statistics are brief descriptive coefficients that summarize a given data set,
+% 
+% summarization is different with compression
+% https://link.springer.com/content/pdf/10.1007%2Fs10115-018-1183-0.pdf
+%
+
+
+% 
+
+
+
 
 \todo{add follow content into Chapter 2}
 Compression is a key technique to reduce the rate of radio 
