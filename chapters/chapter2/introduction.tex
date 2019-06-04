@@ -7,6 +7,8 @@ at high speed, and short intervals and it may never be reviewed if the system
 does not process it immediately or store it. 
 
 
+% Some stream summarization techniques have been researched and proposed to address
+% issues related to high data volume and velocity. 
 % use summarization and stream compression could be use
 To decrease the number of the data transmitted, summarization of stream is
 useful and effective.  
@@ -96,42 +98,54 @@ specific time period $t$, e.g. one hour or one day, in given bounded
 memory~\cite{leskovec2014mining}. 
 
 
-In addition, previous research has provided some other summarization techniques
-e.g. Histogram~\cite{hesabi2015data, poosala1999approximate}, Sketch and
-Compression.
-The histogram technique 
 
-research has provided streaming algorithms
-In addition, some streaming algorithms gives the coefficients or characteristics of by summarizing stream. They solve the problems like [table]
-Dud to the characteristics of streaming data and the devices of the limited storage and memory in IoT, Computing approximate result is more suitable for any queries than exact solution~\cite{kejariwal2015real}. 
+% In addition, some streaming algorithms gives the coefficients or characteristics of by summarizing stream. They solve the problems like [table]
+% Dud to the characteristics of streaming data and the devices of the limited storage and memory in IoT,  
+
+In addition, to answer queries over data stream, computing approximate result is
+more suitable for any queries than exact solution~\cite{kejariwal2015real}.
+Previous research has provided some other synopsis constructions for
+summarization. e.g. Histogram~\cite{hesabi2015data, poosala1999approximate} and
+Sketch\todo{reference}
+
+\emph{Histogram} technique gives a distribution of a elements in stream. General
+histogram-based summarization techniques e.g. Equi-width histograms partition
+the domain of element into a set of ranges or buckets of equal length, and
+assign the elements in the stream into these buckets. The distribution of the
+stream would be estimated as the histogram of the frequencies of these
+buckets~\cite{kejariwal2015real, ahmed2019data}.
+
+\emph{Sketches} are used to solve some problems on data stream e.g. estimating
+moments, estimating cardinality or estimating frequent elements.
+
+% example
+%% AMS Sketch
+The Alon-Matias-Szegedy Sketch which was proposed by Alon, Matias and
+Szegedy~\cite{alon1999space} to solve the second frequency moment of data
+stream. It maintains a matrix of $d\times{w}$ size and maps the elements $e$ the
+stream through $d$ hash functions $h_{i}(e)_{i\in \llbracket 1, d \rrbracket}
+\rightarrow$ \{1, 2, ..., $w$\} and $d$ extra 4-wise indepent hahs funtions
+$g_1$, ..., $g_d$ : $\{1...U\}\rightarrow \{-1, 1\}$. Finally, The second
+frequency moments can be estimated according this matrix.
+%% Count-Min Sketch for frequency estimate
+    
+%% FM-Sketch or LRU-LC sketch for cardinality
+
+
+
+
+% introduce compression 
 
 
 
 % Descriptive statistics are brief descriptive coefficients that summarize a given data set,
-
-
-
 % 
 % summarization is different with compression
 % https://link.springer.com/content/pdf/10.1007%2Fs10115-018-1183-0.pdf
 %
 
 
-Some
-stream summarization techniques have been researched and proposed to address
-issues related to high data volume and velocity. 
-
-\begin{comment}
-
-  Summarization is a key data mining concept which involves techniques for finding a compact description of a
-  dataset.
-  
-  Summarization can be viewed as compressing a given set
-of transactions into a smaller set of patterns while retaining the maximum possible information. 
-
-
-\end{comment}
-
+% 
 
 
 
