@@ -22,7 +22,8 @@ description or smaller patterns of original data-set with lowest possible
 Some general stream summarization techniques are able to utilize for data
 reduction:
 %% sampling 
-\paragraph{Sampling} captures a sub-sample of a data stream that represents the
+
+\emph{Sampling} captures a sub-sample of a data stream that represents the
 entire stream. When the data is huge and we cannot save it into working storage,
 we could take a sample from whole data, and estimate the query results base on
 fraction of sample and whole data.  For instance, we can answer the query "What
@@ -97,8 +98,6 @@ used to keep the most recent $n$ elements of stream or all the elements within
 specific time period $t$, e.g. one hour or one day, in given bounded
 memory~\cite{leskovec2014mining}. 
 
-
-
 % In addition, some streaming algorithms gives the coefficients or characteristics of by summarizing stream. They solve the problems like [table]
 % Dud to the characteristics of streaming data and the devices of the limited storage and memory in IoT,  
 
@@ -116,22 +115,44 @@ stream would be estimated as the histogram of the frequencies of these
 buckets~\cite{kejariwal2015real, ahmed2019data}.
 
 \emph{Sketches} are used to solve some problems on data stream e.g. estimating
-moments, estimating cardinality or estimating frequent elements.
+moments, estimating cardinality or estimating frequent elements.  The main idea
+of sketches is adapting random projection technique to time series domain e.g.
+data stream~\cite{ahmed2019data}. Several sketch-based methods are given as
+follow.
 
-% example
-%% AMS Sketch
-The Alon-Matias-Szegedy Sketch which was proposed by Alon, Matias and
-Szegedy~\cite{alon1999space} to solve the second frequency moment of data
-stream. It maintains a matrix of $d\times{w}$ size and maps the elements $e$ the
-stream through $d$ hash functions $h_{i}(e)_{i\in \llbracket 1, d \rrbracket}
-\rightarrow$ \{1, 2, ..., $w$\} and $d$ extra 4-wise indepent hahs funtions
-$g_1$, ..., $g_d$ : $\{1...U\}\rightarrow \{-1, 1\}$. Finally, The second
-frequency moments can be estimated according this matrix.
 %% Count-Min Sketch for frequency estimate
-    
+Count-Min sketch~\cite{cormode2005improved} was invented by Cormode et al. to
+answer the point, range, and inner product queries, and it also can be utilized
+to estimate the quantiles, frequent items, etc~\cite{cormode2005improved}. This
+sketch consists of a 2-dimensional array of counters (matrix) with depth $d=
+\lceil \frac{2}{\epsilon} \rceil$ and width $w= \lceil
+\log\frac{1}{\delta}\rceil$, where $w$ and $d$ are the parameters which control
+the error guarantee~\cite{garofalakis2016data}. When a new elements $e$ in the
+stream is received, it is mapped by $d$ hash function $h_1$, ..., $h_d$ :
+$\{1...m\}\rightarrow \{1, ..., w\}$. This sketch is updated by increasing
+counters $count[i, j]$ in each row $i$ by one, where $j = h_{i}(e)$. It is easy
+to estimate the count $\hat{m_e}$ of element $e$ in stream through $\hat{m_e}$ =
+$\min_j count[i, h_{i}(e)]$~\cite{garofalakis2016data}.
+
+%% AMS Sketch
+Alon-Matias-Szegedy Sketch which was proposed by Alon, Matias and
+Szegedy~\cite{alon1999space} to solve the second frequency moment of data
+stream. It maintains a matrix of $d\times{w}$ size and maps the element $e$ of
+the stream through $d$ hash functions $h_{i}(e)_{i\in \llbracket 1, d \rrbracket}
+\rightarrow \{1, 2, ..., w\}$ and $d$ extra 4-wise independent hash functions
+$g_1$, ..., $g_d$ : $\{1...m\}\rightarrow \{-1, 1\}$. Finally, The second
+frequency moments can be estimated according this matrix.
+
 %% FM-Sketch or LRU-LC sketch for cardinality
-
-
+The Flajolet and Martin sketch (FM-Sketch)~\cite{flajolet1985probabilistic} is a
+probabilistic method to estimate the cardinality of data stream. This method
+applies one hash function $h: \{1...m\}\rightarrow [0,2^{L}-1]$ to hash each
+element of the stream into one bit-string of $L$ length (bit-string is the
+binary representation of hash result). For each bit-string, we denote the number
+of 0's at the end of bit-string by \emph{tail length}. We assume the $R$ is the
+biggest number of the $tail length$ of any element in the stream so far, in this
+way we can estimate the number of distinct elements in stream with
+$2^R$~\cite{flajolet1985probabilistic, garofalakis2016data}. 
 
 
 % introduce compression 
@@ -143,12 +164,6 @@ frequency moments can be estimated according this matrix.
 % summarization is different with compression
 % https://link.springer.com/content/pdf/10.1007%2Fs10115-018-1183-0.pdf
 %
-
-
-% 
-
-
-
 
 \todo{add follow content into Chapter 2}
 Compression is a key technique to reduce the rate of radio 
