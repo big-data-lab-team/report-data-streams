@@ -115,10 +115,10 @@ stream would be estimated as the histogram of the frequencies of these
 buckets~\cite{kejariwal2015real, ahmed2019data}.
 
 \emph{Sketches} are used to solve some problems on data stream e.g. estimating
-moments, estimating cardinality or estimating frequent elements.  The main idea
-of sketches is adapting random projection technique to time series domain e.g.
-data stream~\cite{ahmed2019data}. Several sketch-based methods are given as
-follow.
+moments, estimating cardinality or estimating frequent elements. 
+The main idea of sketches is adapting random projection technique to time series domain e.g. data stream~\cite{ahmed2019data}.
+Several sketch-based
+methods are given as follow.
 
 %% Count-Min Sketch for frequency estimate
 Count-Min sketch~\cite{cormode2005improved} was invented by Cormode et al. to
@@ -154,33 +154,40 @@ biggest number of the $tail length$ of any element in the stream so far, in this
 way we can estimate the number of distinct elements in stream with
 $2^R$~\cite{flajolet1985probabilistic, garofalakis2016data}. 
 
-
 % introduce compression 
 
+Data compression is a technique to represents data using fewer bits to save more
+space, communication cost and fast data transfer. It is also considered as one
+of the summarization technique which can give compact version of the entire
+original data~\cite{hesabi2015data}. Data compression is categorized into:
+\begin{itemize}
+    \item \emph{Lossless} compression methods remove statistical redundancy and
+    the original data can be retrieved through decompression without any
+    information loss~\cite{hesabi2015data}.
+    \item \emph{Lossy} compression methods omit some inessential information of
+    original data, but ensure the reconstructed data has certain accuracy. For
+    lossy compression, there is a trade between reconstruction accuracy and
+    additional gains in terms of compression ratio~\cite{zordan2014performance}.
+\end{itemize}
 
+In our case, the compression technique is the best choice of data summarization
+to reduce the rate of radio transmission, and because it is allowed to loss a
+small among of reconstructed accuracy, we prefer lossy compression method which
+might gives higher compression ratio. In spite of the fact that in several
+applications lossless compression methods are more desirable than lossy
+compression techniques, in the  context of IoT and sensor data streams, the
+measured sensor data  intrinsically involves noise and measurement errors, which
+can  be treated as a configurable tolerance for a lossy compression algorithm. 
 
-% Descriptive statistics are brief descriptive coefficients that summarize a given data set,
-% 
-% summarization is different with compression
-% https://link.springer.com/content/pdf/10.1007%2Fs10115-018-1183-0.pdf
-%
-
-\todo{add follow content into Chapter 2}
-Compression is a key technique to reduce the rate of radio 
-transmission.  While in several applications lossless compression 
-methods are more desirable than lossy compression techniques, in the 
-context of IoT and sensor data streams, the measured sensor data 
-intrinsically involves noise and measurement errors, which can 
-be treated as a configurable tolerance for a lossy compression algorithm. 
-
-Resource-intensive lossy compression algorithms such as the ones based on 
-polynomial interpolation, discrete cosine and Fourier transforms, or 
-auto-regression methods~\cite{lu2010optimized} are not well-suited for 
-connected objects, due to the limited memory available on 
-these systems (typically a few KB), and the energy consumption 
-associated with CPU usage. Instead, compression algorithms need 
-to find a trade-off between reducing network communications and 
-increasing memory and CPU usage. As 
-discussed in~\cite{zordan2014performance}, linear compression methods 
-provide a very good compromise between these two factors, leading to 
-substantial energy reduction.
+Resource-intensive lossy compression algorithms such as the ones based on
+polynomial interpolation, discrete cosine and Fourier transforms, or
+auto-regression methods~\cite{lu2010optimized} are not well-suited for
+connected objects, due to the limited memory available on  these systems
+(typically a few KB), and the energy consumption  associated with CPU usage.
+Instead, compression algorithms need  to find a trade-off between reducing
+network communications and  increasing memory and CPU usage. As  discussed
+in~\cite{zordan2014performance}, linear compression methods  provide a very good
+compromise between these two factors, leading to  substantial energy reduction.
+In this chapter, we will review several lossless compression methods in
+section~\ref{sec:lossless} and lossy compression methods in
+section~\ref{sec:lossy}.
