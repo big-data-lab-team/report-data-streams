@@ -2,3 +2,57 @@
 
 \todo{explain what has been implemented by Motsai On Neblina, in Conclusion
 chapter}
+
+
+\section{Summary}
+
+.... introduction...
+... LTC ...
+... no method for multi-dimension...
+
+In this thesis, we extend LTC compression algorithm to $n$ dimensions and give its formulation. This extension method is norm-independent and can work with the data stream have $n$ attributes. 
+
+
+%   \item Formalize the description of original LTC algorithm
+%   \item Extend LTC to dimension $n$.
+%   \item Propose an algebraic formulation of n-dimensional LTC algorithm.
+%   \item Introduce an norm-independent expression of n-dimensional LTC, according
+%   to the algebraic formulation.
+we extend LTC to n dimension, and 
+formalizes the description initially proposed
+in~\cite{schoellhammer2004lightweight} and presents our norm-independent
+extension to dimension $n$, together with description of our implementation in
+
+extension to n dimension and give his performance in different norm Euclidean and Manhattan  infinity norm
+give implement and test the result through Neblina, compare the compression ratio with different dimension and different norm
+and compare the energy saving
+
+Compare with the Polynomial regression with has best compression ratio in ~\cite{zordan2014performance}.
+
+how every we did measure the energy consumption, just give compression ratio
+
+
+
+
+\section{Limitation}
+
+In LTC with n-dimension the main limitation is the memory usage, in Euclidean norm, with can be considered as the intersection of n-ball.
+It is difficult to compute this. we found that the theory .......
+How every it takes ... time complexity
+We provide a method .... which give $O(n\times (\log{n})^D)$
+
+It is also too complexity and spend time to short interval communication.(the last data point has not been process completely yet when new data coming)
+according to the result in Chapter 4, the method we provide can work for the transmission rate in 200Hz, but if the the interval increase, it might require more memory.
+
+% 我们希望选择一个 方法 不会依赖数据的重复性， 如果在模写情况下，这个数据成一定 固定的模式
+% 那么 其他model可能会提供更多的compression ratio
+% 比如说 LEC S-LEC 字典型压缩算法  会对那些  出现重复几率大，或者重复模式时候 提供更好的效果。
+
+\section{Future work}
+
+尝试 其他算法， 是否可以提高 energy saving， 尝试寻找 更小复杂度 时间空间都是 解决n-ball 的intersection problem
+sometimes, we wanna lossless data, so a frame work which can support a efficent lossless algorithem and lossy algorithm is need. 
+从 s-lec 来看, it could give good compression ratio than other lossless method.
+try to find a method which can support multi-dimension or extend it into n-dimension
+
+check the Slides of before meeting 
