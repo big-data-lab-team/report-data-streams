@@ -36,33 +36,41 @@ objects are often produced multi-dimensional streams, e.g. acceleration data and
 gyroscopic data.
 
 Thus, We re-describe the original LTC and extend LTC to dimension $n$. Moreover,
-LTC n-dimension can work in different norm, but its compression result and costs
+LTC with n-dimension can work in different norm, but its compression result and costs
 are depending on the norm used. In the experiments, we collect 2 biceps curl
 data-set which have different size, and a comparison of compression ratio,
 memory usage and processing time between infinity norm and euclidean norm is
 presented with using these data-set.  
 
-Then we implement the LTC n-dimension algorithm into Neblina to measure the
-compression ratio of LTC n-dimension algorithm and energy consumption
+Then we implement the LTC with n-dimension algorithm into Neblina to measure the
+compression ratio of LTC with n-dimension algorithm and energy consumption
 (compression and transmission) when human is walking or running. From the
-result, through using LTC n-dimension algorithm, Neblina can at least save 10\%
+result, through using LTC with n-dimension algorithm, Neblina can at least save 10\%
 energy when the error bound $\epsilon$ is 48.8g. Additionally, in order to test
-the compression result of LTC n-dimension, we compare the LTC n-dimension
+the compression result of LTC with n-dimension, we compare the LTC with n-dimension
 algorithm with polynomial regression compression algorithm in different
-dimension, and we found that LTC n-dimension outperforms polynomial regression
+dimension, and we found that LTC with n-dimension outperforms polynomial regression
 method in terms of compression ratio, regardless of the dimension or degree of
 regression.
+The LTC with n-dimension has been deployed in Motsai's Neblina during my 4 months internship from Sep. to Dec. 2018, it can be selected the dimension $n$ and the norm (Infinity norm or Euclidean norm) where it works in.
 
 
 % 然而固件上的局限性，使得我们无法完成一些操作，比如，保存全部的数据因为内存空间，运行复杂的算法因为CPU计算能力，长时间的工作 电池的容量，
-% 电力消耗是很重要的问题在IoT中，尤其是电池设备，他们的电池会持续的消耗殆尽 去进行大量计算和传输无限的数据。 在这个论文里，我们主要研究 使用summarization 去减少 传输的数据量从而减少电力消耗。数据压缩which summarization的一种，可以帮助我们把元数据转化为压缩版本，并且保留 全部(lossless)/或一定精度(lossy)的数据信息。 在THesis 中，我们给出了一些常用的压缩算法，并从中，我们选择使用LTC压缩算法which lossy compression but make sure the reconstruct accuracy with $\epsilon$ 进行实验。
-
-% 在实验中，我们使用LTC 压缩Neblina所产生的acceleroter 数据，来自Human activies. 但是original LTC 只是用来压缩 一位数据，然而，很多数据都是n维的 比如说。。。，
-% 所以在这篇Thesis里 我们 重新定义了LTC，并把LTC 拓展到了N维， 并且给出了他的表达时。N-维的LTC 可与被使用在 n-dimension 和 任意的norm
-% 不同的norm或造成不同的结果，我们在论文里给出了 当n dimension LTC 被使用在 euclidean norm 和 infinity norm 时候的结果，给出了 压缩 crul时候的 压缩率。 并把LTC-N implement， 并测试使用它进行 walk 和 running 时候的compression ratio，并与 auto regression 压缩 进行对比
-
-% 我在18年的9月到12月 到Motsai 进行了实习，把LTC n infinity norm and euclidian norm 算法嵌入到了 Neblina 里。并且研究结果发布了论文在。。。。。。。。
-
+% 电力消耗是很重要的问题在IoT中，尤其是电池设备，他们的电池会持续的消耗殆尽 去进行大量计算和传输无限的数据。 在这个论文里，我们主要研究
+% 使用summarization 去减少 传输的数据量从而减少电力消耗。数据压缩which
+% summarization的一种，可以帮助我们把元数据转化为压缩版本，并且保留 全部(lossless)/或一定精度(lossy)的数据信息。 在THesis
+% 中，我们给出了一些常用的压缩算法，并从中，我们选择使用LTC压缩算法which lossy compression but make sure the
+% reconstruct accuracy with $\epsilon$ 进行实验。
+% 
+% 在实验中，我们使用LTC 压缩Neblina所产生的acceleroter 数据，来自Human activies. 但是original LTC 只是用来压缩
+% 一位数据，然而，很多数据都是n维的 比如说。。。， 所以在这篇Thesis里 我们 重新定义了LTC，并把LTC 拓展到了N维，
+% 并且给出了他的表达时。N-维的LTC 可与被使用在 n-dimension 和 任意的norm 不同的norm或造成不同的结果，我们在论文里给出了 当n
+% dimension LTC 被使用在 euclidean norm 和 infinity norm 时候的结果，给出了 压缩 crul时候的 压缩率。
+% 并把LTC-N implement， 并测试使用它进行 walk 和 running 时候的compression ratio，并与 auto
+% regression 压缩 进行对比
+% 
+% 我在18年的9月到12月 到Motsai 进行了实习，把LTC n infinity norm and euclidian norm 算法嵌入到了
+% Neblina 里。并且研究结果发布了论文在。。。。。。。。
 
 
 
@@ -92,13 +100,38 @@ regression.
 
 \section{Limitation}
 
-In LTC with n-dimension the main limitation is the memory usage, in Euclidean norm, with can be considered as the intersection of n-ball.
-It is difficult to compute this. we found that the theory .......
-How every it takes ... time complexity
-We provide a method .... which give $O(n\times (\log{n})^D)$
 
-It is also too complexity and spend time to short interval communication.(the last data point has not been process completely yet when new data coming)
-according to the result in Chapter 4, the method we provide can work for the transmission rate in 200Hz, but if the the interval increase, it might require more memory.
+The main limitation of LTC with n-dimension algorithm is the memory usage. In
+Euclidean norm, LTC with n-dimension can be considered as the intersection of
+n-ball, but it is difficult to check if there is a intersection among n-balls.
+The Helly's theorem is the best algorithm we could find, however this algorithm
+is too complex to use in the connected objects which have limited resource.  We
+provide a method which utilizes plane sweep and bisection to determine if a set
+of n-balls have a public intersection.
+
+This method provided leads a $O(n\times (\log{n})^d)$ complexity, where $n$ is
+the number of data points we seen so far, $d$ is the dimension of the stream,
+but it requires a lot of memory space and processing time. 
+
+From the Section~\ref{sec:experiment2-ltc}, the tolerable latency at 200Hz is
+5-ms (We need to finish the process of current data point before receiving new
+data point). We have to make sure the maximum latency is smaller than tolerable
+latency. Thus, the LTC with n-dimension cannot work in high transmission rate,
+e.g. 500Hz or 1 KHz.  In addition, in order to reduce the memory usage of LTC
+with n-dimension for Euclidean norm, we limit the length of the set of n-balls
+$S$, but it might reduce the compression ratio. Thus, A better algorithm is
+needed to deal with the memory usage and processing time of the intersection
+check in Euclidean norm.
+
+% It is difficult to compute this. we found that the theory ....... How every it
+% takes ... time complexity We provide a method .... which give $O(n\times
+% (\log{n})^D)$
+% 
+% It is also too complexity and spend time to short interval communication.(the
+% last data point has not been process completely yet when new data coming)
+% according to the result in Chapter 4, the method we provide can work for the
+% transmission rate in 200Hz, but if the the interval increase, it might require
+% more memory.
 
 % 我们希望选择一个 方法 不会依赖数据的重复性， 如果在模写情况下，这个数据成一定 固定的模式
 % 那么 其他model可能会提供更多的compression ratio
@@ -106,6 +139,7 @@ according to the result in Chapter 4, the method we provide can work for the tra
 
 \section{Future work}
 
+In the future, 
 尝试 其他算法， 是否可以提高 energy saving， 尝试寻找 更小复杂度 时间空间都是 解决n-ball 的intersection problem
 sometimes, we wanna lossless data, so a frame work which can support a efficent lossless algorithem and lossy algorithm is need. 
 从 s-lec 来看, it could give good compression ratio than other lossless method.
