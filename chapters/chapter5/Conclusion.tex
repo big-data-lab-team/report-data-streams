@@ -36,23 +36,25 @@ objects are often produced multi-dimensional streams, e.g. acceleration data and
 gyroscopic data.
 
 Thus, We re-describe the original LTC and extend LTC to dimension $n$. Moreover,
-LTC with n-dimension can work in different norm, but its compression result and costs
-are depending on the norm used. In the experiments, we collect 2 biceps curl
-data-set which have different size, and a comparison of compression ratio,
+LTC with n-dimension can work in different norm, but its compression result and
+costs are depending on the norm used. In the experiments, we collect 2 biceps
+curl data-set which have different size, and a comparison of compression ratio,
 memory usage and processing time between infinity norm and euclidean norm is
 presented with using these data-set.  
 
 Then we implement the LTC with n-dimension algorithm into Neblina to measure the
 compression ratio of LTC with n-dimension algorithm and energy consumption
 (compression and transmission) when human is walking or running. From the
-result, through using LTC with n-dimension algorithm, Neblina can at least save 10\%
-energy when the error bound $\epsilon$ is 48.8g. Additionally, in order to test
-the compression result of LTC with n-dimension, we compare the LTC with n-dimension
-algorithm with polynomial regression compression algorithm in different
-dimension, and we found that LTC with n-dimension outperforms polynomial regression
-method in terms of compression ratio, regardless of the dimension or degree of
-regression.
-The LTC with n-dimension has been deployed in Motsai's Neblina during my 4 months internship from Sep. to Dec. 2018, it can be selected the dimension $n$ and the norm (Infinity norm or Euclidean norm) where it works in.
+result, through using LTC with n-dimension algorithm, Neblina can at least save
+10\% energy when the error bound $\epsilon$ is 48.8g. Additionally, in order to
+test the compression result of LTC with n-dimension, we compare the LTC with
+n-dimension algorithm with polynomial regression compression algorithm in
+different dimension, and we found that LTC with n-dimension outperforms
+polynomial regression method in terms of compression ratio, regardless of the
+dimension or degree of regression.
+The LTC with n-dimension has been deployed in Motsai's Neblina during my 4
+months internship from September to December 2018, it can be selected the
+dimension $n$ and the norm (Infinity norm or Euclidean norm) where it works in.
 
 
 % 然而固件上的局限性，使得我们无法完成一些操作，比如，保存全部的数据因为内存空间，运行复杂的算法因为CPU计算能力，长时间的工作 电池的容量，
@@ -139,10 +141,10 @@ check in Euclidean norm.
 
 \section{Future work}
 
-In the future, 
-尝试 其他算法， 是否可以提高 energy saving， 尝试寻找 更小复杂度 时间空间都是 解决n-ball 的intersection problem
-sometimes, we wanna lossless data, so a frame work which can support a efficent lossless algorithem and lossy algorithm is need. 
-从 s-lec 来看, it could give good compression ratio than other lossless method.
-try to find a method which can support multi-dimension or extend it into n-dimension
-
-check the Slides of before meeting 
+In the next step, we would like to find algorithms which has lower time and
+space complexity to handle the intersection check. We will review other
+compression algorithms, attempting to achieve more energy saving.  Moreover,
+lossless algorithm is necessary sometimes, typically in e-health application. So
+a framework which can support both efficient lossless and lossy algorithm and
+can work with multi-dimension stream is also one of the research research
+direction in our future work.
