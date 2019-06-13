@@ -1,10 +1,9 @@
 \section{Implementation of LTC n-dimension}
 \label{sec:implementation}
 To implement LTC in n dimensions with the infinity norm, we maintain a cuboid
-representation of $\cap_{l=1}^j{\mathcal{B}_l}$ across the
-iterations of the \texttt{while} loop in
-Algorithm~\ref{algo:general-ltc}. The implementation works with
-constant memory and requires limited CPU time.
+representation of $\cap_{l=1}^j{\mathcal{B}_l}$ across the iterations of the
+\texttt{while} loop in Algorithm~\ref{algo:general-ltc}. The implementation
+works with constant memory and requires limited CPU time.
 
 % With the Euclidean norm, the intersection test is more complex. We keep in
 % memory a growing set $S$ of n-balls and the bounding box $B$ of their
@@ -16,24 +15,26 @@ approximate range of their intersection. We define $B$ as follows:
     B = \bigcap_{l=1}^{j-1} box(\mathcal{B}_l) 
 \end{equation*}
 Where \texttt{box()} is a function that returns the bounding box of an n-ball.
+\todo{fix windows size = 200}
 Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
 Algorithm~\ref{algo:euclidean}.  Firstly, we check the intersection with
 box($\mathcal{B}_j$) and $B$, which shows in Algorithm~\ref{algo:euclidean} line
-9 \TG{wrong line number}. Secondly, for each $\mathcal{B}_i$ in $S$, we check the intersection
-between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 12 in
-Algorithm~\ref{algo:euclidean} \TG{all line numbers seem to be wrong, please reise}). At the same time $\mathcal{B}_i$ will be
-removed if it includes $\mathcal{B}_j$, \english{because smaller n-ball intersects
-$\mathcal{B}_j$ than a bigger n-ball which contains the smaller one (line 15 in
-Algorithm~\ref{algo:euclidean})} \TG{English is not correct}.  Finally, we search a point in intersection of
-all n-balls in $S$, using plane sweep~\cite{shamos1976geometric,
-souvaine2008line} and bisection initialized by the bounds of B. Function
-\texttt{find\_bisection(S, B)} (see
+11, and a maximum length $L_s$ of set of intersecting n-balls $S$ is assigned in
+order to restrict memory usage. Secondly, for each $\mathcal{B}_i$ in $S$, we
+check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14 in
+Algorithm~\ref{algo:euclidean}). At the same time $\mathcal{B}_i$ will be
+removed if it includes $\mathcal{B}_j$, because, once $\mathcal{B}_j$ has
+intersection with n-balls in $S$ then a bigger n-ball which contains the
+$\mathcal{B}_j$ must also have intersection.
+% \english{because smaller n-ball intersects
+% $\mathcal{B}_j$ than a bigger n-ball which contains the smaller one (line 17, 18 in
+% Algorithm~\ref{algo:euclidean})} \TG{English is not correct}.
+Finally, we search a point in intersection of all n-balls in $S$, using plane
+sweep~\cite{shamos1976geometric, souvaine2008line} and bisection initialized by
+the bounds of B. Function \texttt{find\_bisection(S, B)} (see
 Algorithm~\ref{algo:find_bisection_function}) and \texttt{recursive(S, L, R, N,
 $X^n$)} (see Algorithm~\ref{algo:recursive}) show how it works. 
-
-\TG{\#\#This paragraph has overlap with the previous one, writing should be revised
-such that the description of the algorithm is straight and unambiguous.} 
 
 % describe function find_bisection
 In function \texttt{find\_bisection(S, B)}, we selected dimension of n-balls as
@@ -44,21 +45,19 @@ point in the intersection of all n-balls in $S$. It would be returned if we have
 $True$ result from function \texttt{recursive(S, L, R, N, $X^n$)}. $X^n$ is
 initialized and put into function \texttt{recursive(S, L, R, N, $X^n$)}, because
 it is necessary to update the values (see Algorithm~\ref{algo:recursive} line
-28) of $X^n$ during the recursive process. In line 30 of
+26) of $X^n$ during the recursive process. In line 27 of
 Algorithm~\ref{algo:recursive}, it happens in case of $left > right$, which
 means:
 \begin{equation*}
     mid \  \bigcap \  (min\_id \cap max\_id) = \text{\O}
 \end{equation*}
 
-In Algorithm~\ref{algo:euclidean} line 12, It guarantees any two n-balls in $S$
-has intersection. Therefore, any point in the intersection of $min\_id$ and
-$max\_id$, could be used for determining the direction of bisection. In our
+In Algorithm~\ref{algo:euclidean} line 14 and 15, It guarantees any two n-balls
+in $S$ has intersection. Therefore, any point in the intersection of $min\_id$
+and $max\_id$, could be used for determining the direction of bisection. In our
 implement, we select a point in connection of these two n-ball's center, which
 also locates in intersecting object(line/chord when order=2, plane/circle when
 order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
-
-\TG{\#\#Algorithms are confusing: see my comments in the algorithms. Revise description accordingly.}\\
 
 \begin{figure}
   \centering
@@ -74,6 +73,7 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
     \Desc{$S$}{Set of intersecting n-balls}
     \Desc{$B$}{Bounding box of the intersection of n-balls in $S$}
     \Desc{$\mathcal{B}_j$}{New n-ball to check}
+    \Desc{$L_s$}{The maximum length of $S$}
 \EndInput
 \Output
     \Desc{$S$}{Updated set of intersecting n-balls}
@@ -83,7 +83,7 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 \EndOutput
 
 %\If{$\mathcal{B}_j \cap B = \text{\O}$} \Comment{Ball is outside bounding box}
-\If{box($\mathcal{B}_j$) $\cap B = \text{\O}$} \Comment{N-ball is outside bounding box}
+\If{$S$.length $\geqslant L_s \parallel$ box($\mathcal{B}_j$) $\cap B = \text{\O}$} \Comment{N-ball is outside bounding box}
     \State \Return ($S$, $B$, False, Null)
 \EndIf
 \If{$\exists\ \mathcal{B}_i \in S$ s.t. $\mathcal{B}_j \cap \mathcal{B}_i = \text{\O}$}
@@ -110,8 +110,7 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
-    \Desc{$S$}{Set of n-balls} \TG{\#\#I don't think you know that they are intersecting at this point. It should be candidate n-balls.}
-    \BO{yes, you are right}
+    \Desc{$S$}{Set of n-balls}
     \Desc{$B$}{Bounding box of the intersection of n-balls in $S$}
 \EndInput
 \Output
@@ -121,7 +120,7 @@ order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 \State $n$ = dimension of n-balls
 \State $left$ = min\_value($B$, $n$) \Comment{Minimum value of $B$ along $n^{th}$ dimension}
 \State $right$ = max\_value($B$, $n$) \Comment{Maximum value of $B$ along $n^{th}$ dimension}
-\State $X^n$ = Null \TG{\#\#How is X initialized?}
+\State $X^n$ = Null
 \If{recursive(S, left, right, n, $X^n$)}
     \State \Return $X^n$
 \Else
