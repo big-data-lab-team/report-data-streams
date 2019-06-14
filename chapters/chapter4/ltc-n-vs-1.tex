@@ -1,30 +1,32 @@
-\section{LTC with n-dimension with LTC original}
+\section{Evaluation of LTC n-dimension}
+%\section{LTC n-dimension with LTC original}
+\label{sec:ltc-n-dimensions}
 
-\TG{In the title, what do you mean ``with LTC original''? Is it a comparison?}
+% \TG{In the title, what do you mean ``with LTC original''? Is it a comparison?}
 
-We conducted two experiments using Motsai's Neblina 
-module, a system 
-with a Nordic Semiconductor nRF52832 micro-controller, 64~KB of RAM, 
-and Bluetooth Low Energy connectivity. Neblina has a 3D 
-accelerometer, a 3D gyroscope, a 3D magnetometer, and environmental 
-sensors for humidity, temperature and pressure. The platform is 
-equipped with sensor fusion algorithms for 3D orientation tracking and 
-a machine learning engine for complex motion analysis and motion 
-pattern recognition~\cite{sarbishei2016accuracy}. Neblina has a 
-battery of 100mAh; at 200~Hz, its average consumption is 2.52~mA when using 
-accelerometer and gyroscope sensors but without radio 
-transmission, and 3.47~mA with radio transmission, leading to an 
-autonomy of 39.7~h without transmission and 28.8~h with transmission. 
+We conducted two experiments using Motsai's Neblina
+module, a system
+with a Nordic Semiconductor nRF52832 micro-controller, 64~KB of RAM,
+and Bluetooth Low Energy connectivity. Neblina has a 3D
+accelerometer, a 3D gyroscope, a 3D magnetometer, and environmental
+sensors for humidity, temperature and pressure. The platform is
+equipped with sensor fusion algorithms for 3D orientation tracking and
+a machine learning engine for complex motion analysis and motion
+pattern recognition~\cite{sarbishei2016accuracy}. Neblina has a
+battery of 100mAh; at 200~Hz, its average consumption is 2.52~mA when using
+accelerometer and gyroscope sensors but without radio
+transmission, and 3.47~mA with radio transmission, leading to an
+autonomy of 39.7~h without transmission and 28.8~h with transmission.
 
 \subsection{Experiment 1: validation}
-
-We validated the behavior of our LTC extension on a PC using data 
-acquired with Neblina. We collected two 3D accelerometer time-series, a 
-short one and a longer one, acquired on two different subjects 
-performing biceps curl, with a 50~Hz sampling rate (see 
-Figure~\ref{fig:datasets-1}). In both cases, the subject was wearing 
+\todo{windows size is 200}
+We validated the behavior of our LTC extension on a PC using data
+acquired with Neblina. We collected two 3D accelerometer time-series, a
+short one and a longer one, acquired on two different subjects
+performing biceps curl, with a 50~Hz sampling rate (see
+Figure~\ref{fig:datasets-1}). In both cases, the subject was wearing
 Neblina on their wrist. It should be noted that the longest
-time-series also has a higher amplitude, perhaps due to differences between 
+time-series also has a higher amplitude, perhaps due to differences between
 subjects.
 
 \begin{figure*}
@@ -37,8 +39,8 @@ subjects.
 \caption{Short biceps curl$^a$}
 \end{subfigure}
 
-{\footnotesize $^a$ Average 
-of az data is -7.81mg. It was shifted to 0 so that the graphs can all 
+{\footnotesize $^a$ Average
+of az data is -7.81mg. It was shifted to 0 so that the graphs can all
 use the same y scale.}
 
 \begin{subfigure}{\columnwidth}
@@ -53,20 +55,20 @@ use the same y scale.}
 \label{fig:datasets-1}
 \end{figure*}
 
-We compressed the time-series with various values of $\epsilon$, using 
-our 2D (x and y) and 3D (x, y and z) implementations of LTC. On 
-Neblina, the raw uncalibrated accelerometer data corresponds to errors 
-around 20~mg (1~g is 9.8~m/s$^2$). We used a 
-laptop computer with 16~GB of RAM, an Intel i5-3210M CPU @ 2.50GHz 
-$\times$ 4, and Linux Fedora 27. We measured memory consumption using 
-Valgrind's massif 
-tool~\cite{nethercote2006building}, 
-and processing time using \texttt{gettimeofday()} from the GNU C 
-Library. 
+We compressed the time-series with various values of $\epsilon$, using
+our 2D (x and y) and 3D (x, y and z) implementations of LTC. On
+Neblina, the raw uncalibrated accelerometer data corresponds to errors
+around 20~mg (1~g is 9.8~m/s$^2$). We used a
+laptop computer with 16~GB of RAM, an Intel i5-3210M CPU @ 2.50GHz
+$\times$ 4, and Linux Fedora 27. We measured memory consumption using
+Valgrind's massif
+tool~\cite{nethercote2006building},
+and processing time using \texttt{gettimeofday()} from the GNU C
+Library.
 
-Results are reported in Table~\ref{table:results-validation}. 
-As expected, the compression ratio increases with $\epsilon$, and the 
-maximum measured error remains lower than $\epsilon$ in all cases. The 
+Results are reported in Table~\ref{table:results-validation}.
+As expected, the compression ratio increases with $\epsilon$, and the
+maximum measured error remains lower than $\epsilon$ in all cases. The
 maximum is reached most of the time on these time-series.
 
 \paragraph{Infinity vs Euclidean norms}
@@ -195,31 +197,31 @@ average for Euclidean norm).
 
 \subsection{Experiment 2: impact on energy consumption}
 \label{sec:experiment2-ltc}
-We acquired two 3D accelerometer time-series at 200~Hz for two 
-activities: walking and running (see Figure~\ref{fig:datasets-2}). In 
-both cases, the subject was wearing Neblina on their wrist as in 
-Experiment 1. We collected 1,000 data points for each activity, 
+We acquired two 3D accelerometer time-series at 200~Hz for two
+activities: walking and running (see Figure~\ref{fig:datasets-2}). In
+both cases, the subject was wearing Neblina on their wrist as in
+Experiment 1. We collected 1,000 data points for each activity,
 corresponding to 5 seconds of activity.
 
-We measured energy consumption associated with the transmission of 
-these time-series by ``replaying" the time-series after loading them as 
-a byte array in Neblina. We measured the current every 500~ms. We also 
+We measured energy consumption associated with the transmission of
+these time-series by ``replaying" the time-series after loading them as
+a byte array in Neblina. We measured the current every 500~ms. We also
 measured the max and average latency resulting from compression.
 
  Results are reported in Table~\ref{table:results-energy}. For a given
  $\epsilon$ and norm, the compression ratio is larger for walking than
  for running. The ratio of saved energy is relative to the reference
  current of 3.47~mA measured when Neblina transmits data without
- compression. In all cases, activating compression saves energy. The 
- reduction in energy consumption behaves as the compression ratio: it 
- increases with $\epsilon$, it is higher for the infinity norm than for 
- the Euclidean, and it is higher for the walking activity than for 
- running. For a realistic error of $\epsilon$=9.8~mg, the ratio of 
- saved energy with the infinity norm is close to 20\% for the walking 
- activity, which is substantial. Latency is higher for walking 
- than for running, and it is also higher for the Euclidean norm than 
- for the infinity norm. In all cases, the latency remains lower 
- than the 5-ms tolerable latency at 200~Hz, which demonstrates the 
+ compression. In all cases, activating compression saves energy. The
+ reduction in energy consumption behaves as the compression ratio: it
+ increases with $\epsilon$, it is higher for the infinity norm than for
+ the Euclidean, and it is higher for the walking activity than for
+ running. For a realistic error of $\epsilon$=9.8~mg, the ratio of
+ saved energy with the infinity norm is close to 20\% for the walking
+ activity, which is substantial. Latency is higher for walking
+ than for running, and it is also higher for the Euclidean norm than
+ for the infinity norm. In all cases, the latency remains lower
+ than the 5-ms tolerable latency at 200~Hz, which demonstrates the
  feasibility of 3D LTC compression.
 
 \begin{table}
@@ -237,7 +239,7 @@ measured the max and average latency resulting from compression.
    Average (mA)                & 2.64    & 2.79     & 3.02  & 3.10   & 3.02  & 3.13  \\
    Saved energy (\%)           & 23.9    & 19.7     & 13.0  &  10.7  & 13.0  & 9.7   \\
    Max latency ($\mu$s)& 60      & --       & --    & 1530   & --    & --    \\
-   Average latency ($\mu$s) & 31 & --       & --    & 145    & --    & --    \\    
+   Average latency ($\mu$s) & 31 & --       & --    & 145    & --    & --    \\
    \hline
    \end{tabular}
    \caption{Walking}
@@ -257,7 +259,7 @@ measured the max and average latency resulting from compression.
    Average (mA)        & 2.88     & 3.22   & 3.38     & 2.95    & 3.32    & 3.39   \\
    Saved energy (\%)      & 17.0    & 7.2    & 2.5   & 14.9   & 4.3   & 2.2\\
    Max latency ($\mu$s)& 60      & --       & --    & 840   & --    & --    \\
-   Average latency ($\mu$s) & 30 & --       & --    & 64    & --    & --    \\    
+   Average latency ($\mu$s) & 30 & --       & --    & 64    & --    & --    \\
    \hline
    \end{tabular}
    \caption{Running}
@@ -265,8 +267,3 @@ measured the max and average latency resulting from compression.
    \caption{Results from Experiment 2}
    \label{table:results-energy}
 \end{table}
-
-\TG{\#\#In your conclusion chapter, you should explain what has been implemented
-by Motsai on Neblina, this is also a result of your thesis.}
-
-\todo{explain what has been implemented by Motsai On Neblina, in Conclusion chapter}
