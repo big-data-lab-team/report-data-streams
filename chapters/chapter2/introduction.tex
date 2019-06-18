@@ -2,44 +2,45 @@
 
 % introduce Streaming data
 Streaming data has become more and more important since the rise of the Internet
-of Things. Devices in IoT communicate using streaming data which is transmitted
-at high speed, and short intervals and it may never be reviewed if the system
-does not process it immediately or store it. To decrease the number of the data
-transmitted, summarization of stream is useful and effective. Summarization can
-be considered as a process to discover a compressed description or smaller
-patterns of original data-set with lowest possible \emph{information
+of Things. Devices in IoT communicate using streaming data, transmitted
+at high speed and short intervals, which may never be reviewed if the system
+does not process or store it immediately. To decrease the amount of data
+transmitted, stream summarization is useful and effective. Summarization can
+be considered as a process to discover a compressed description of the original data-set with the lowest possible \emph{information
 loss}~\cite{chandola2007summarization}.
 % Summarization is a key data mining concept which involves techniques for finding a compact description of a data-set. Summarization can be viewed as compressing a given set
 % of transactions into a smaller set of patterns while retaining the maximum possible information~\cite{chandola2007summarization}. \todo{change}
-Some general stream summarization techniques are able to utilize for data
-reduction:
+The following stream summarization techniques are often used.
 %% sampling
 
 \emph{Sampling} captures a sub-sample of a data stream that represents the
-entire stream. When the data is huge and we cannot save it into working storage,
-we could take a sample from whole data, and estimate the query results base on
-fraction of sample and whole data. For instance, we can answer the query "What
+entire stream. When the data cannot be saved to working storage,
+we can take a sample of the whole data, and estimate the query results from this sample.
+For instance, we can answer the query ``What
 fraction of the typical user's queries were repeated over the past
-month?"~\cite{leskovec2014mining} by using simple random sampling also know as
-uniform random sampling~\cite{vitter1984faster, Ahrens1985SequentialRS} which
-all data in stream have the same probability to be selected. The common idea is
+month?"~\cite{leskovec2014mining} by using
+uniform random sampling~\cite{vitter1984faster, Ahrens1985SequentialRS}, where
+all data points in  the stream have the same probability to be selected. The common idea is
 to extract the queries from 1/10 of users, each user has 10\% probability be
 selected. In general, we need just to maintain a list of users whose queries
 should be selected, but we might not has enough main memory space. To reduce
 memory usage, the hash function is used instead of keeping list of user. We
 create 10 buckets marked from 0 to 9, and hash each user name of query into one
 of buckets. If the user is hashed to bucket 0, we will select the queries from
-this user.
+this user. \TG{This paragraph is too long, I don't think we need to read details about
+random sampling since you're not going to use it later.}
 
-There are also others sampling methods utilized for different situation e.g.
-Reservoir-based sampling method~\cite{vitter1985random, vitter1985random,
-Aggarwal2007DataS} which sampling $k$ items from a stream of items of unknown
-length is appropriate for picking up fix size of items by using sampling
-technique. And, weighted (non-uniform) sampling~\cite{chaudhuri1999random} and
-weighted random sampling with reservoir~\cite{efraimidis2006weighted} has been
-proposed for sampling non-uniform stream, which means each items in stream are
-weighted and the probability of selection is depended on its
+There are also others sampling methods utilized for different situations, such as the
+Reservoir sampling method~\cite{vitter1985random, vitter1985random,
+Aggarwal2007DataS} that samples a fixed number $k$  of data points with equal probability.
+The weighted (non-uniform) sampling~\cite{chaudhuri1999random} and
+weighted random sampling with reservoir~\cite{efraimidis2006weighted} have been
+proposed to sample non-uniform streams. In these methods, data points are
+weighted and the probability of selection is dependent on this
 weight~\cite{chaudhuri1999random}.
+\TG{You should use ``item'' or ``data point'' consistently}
+
+
 
 In practice, sampling can help save energy on connected objects. For instance,
 when querying a question on stream, we can estimate the result after sampling
@@ -148,28 +149,32 @@ biggest number of the $tail length$ of any element in the stream so far, in this
 way we can estimate the number of distinct elements in stream with
 $2^R$~\cite{flajolet1985probabilistic, garofalakis2016data}.
 
+
+\TG{This section is still too long: we don't know why we have to read the previous 3.5 pages. These pages should be
+summarized in 1-2 paragraphs, with a transition to compression at the end.}
 % introduce compression
 
-Data compression is a technique to represents data using fewer bits to save more
-space, communication cost and fast data transfer. It is also considered as one
-of the summarization technique which can give compact version of the entire
-original data~\cite{hesabi2015data}. Data compression is categorized into:
+Data compression is a technique to reduce the number of bits required to
+represent a data set. It is also considered as a summarization technique
+which can give compact version of the entire original
+data~\cite{hesabi2015data}. Data compression is categorized into
+\emph{lossless} and \emph{lossy} compression:
 \begin{itemize}
     \item \emph{Lossless} compression methods remove statistical redundancy and
     the original data can be retrieved through decompression without any
     information loss~\cite{hesabi2015data}.
-    \item \emph{Lossy} compression methods omit some inessential information of
-    original data, but ensure the reconstructed data has certain accuracy. For
-    lossy compression, there is a trade between reconstruction accuracy and
+    \item \emph{Lossy} compression methods omit some information in the
+    original data, but ensure that the reconstructed data has certain accuracy. For
+    lossy compression, there is a trade-off between reconstruction accuracy and
     additional gains in terms of compression ratio~\cite{zordan2014performance}.
 \end{itemize}
 
 In our case, the compression technique is the best choice of data summarization
-to reduce the rate of radio transmission, and because it is allowed to loss a
-small among of reconstructed accuracy, we prefer lossy compression method which
-might gives higher compression ratio. In spite of the fact that in several
-applications lossless compression methods are more desirable than lossy
-compression techniques, in the context of IoT and sensor data streams, the
+to reduce the rate of radio transmission, and because it is allowed to loose a
+small amount of reconstructed accuracy \TG{Why? See paper intro. You could reuse some of that text here},
+ we prefer lossy compression method which
+might gives higher compression ratio \TG{Sentence is too long, please split}. 
+Indeed, in the context of IoT and sensor data streams, the
 measured sensor data intrinsically involves noise and measurement errors, which
 can be treated as a configurable tolerance for a lossy compression
 algorithm~\cite{li2018multi}.

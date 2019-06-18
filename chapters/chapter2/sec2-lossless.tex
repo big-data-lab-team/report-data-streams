@@ -7,22 +7,25 @@ compression algorithm.  It is a derivative and improvement of
 LZ77~\cite{ziv1977universal} which  compressed data by using previous data as
 dictionary. There is a sliding window and a look-ahead buffer applied in both
 algorithms. Figure~\ref{fig:LZSS} shows the structure of LZSS. In LZ77
-compression algorithm, a match between look-ahead buffer and dictionary is
-encodes by which called \texttt{length-distance pair} (offset, length) where
+compression algorithm, a match between look-ahead buffer and dictionary \english{is
+encodes by which called \texttt{length-distance pair}} (offset, length) where
 offset is the distance from the first char of look-ahead and first char of the
 match alphabet sequence~\cite{ziv1977universal}, e.g. (2, 3). For instance, a
-alphabet sequence "AABCBABCD" shell be encoded to "(0, 0)A(1, 1)B(0, 0)C(2,
+alphabet sequence "AABCBABCD" \english{shell} be encoded to "(0, 0)A(1, 1)B(0, 0)C(2,
 1)A(4, 2)D"  by using LZ77 compression method.
-The problems of LZ77 method are: (1) When there is possible that the length of
+The problems of LZ77 method are: (1) \english{When there is possible} that the length of
 coding result is longer than original match sequence. In last example, the first
 A is encoded to (0, 0)A, but the extra length-distance pair is useless and needs
 more bits to record it. (2) The single literal in coding result and following
 literals might compose a longer match sequence to improve compression result.
 For example, the third A in above example could combine following "BC" to make
-up a longer sequence "ABC". 
+up a longer sequence "ABC" \TG{Please fix quotes}. 
+
+\TG{This is still very confusing to read. I'd suggest to summarize it in 1-2 
+paragraphs in the intro and describe only lossy algorithms in Ch2.}
 
 LZSS solves these problems by defining a parameter \emph{MIN\_LENGTH} to
-guarantee the size of the coding result is not larger than original sequence and
+guarantee that the size of the coding result is not larger than original sequence and
 only output the pair ($n$, $m$), where $n$ indicates the offset, $m$ is the
 length of the matching sequence~\cite{storer1982data}, rather than ($n$, $m$)$C$
 in LZ77, where $C$ is the first character after longest matching sequence. The
