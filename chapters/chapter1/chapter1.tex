@@ -16,41 +16,42 @@
 
 %-----------------------------------------------------------------------------%
 
-\begin{comment} %% structure of Introduction
+%% structure of Introduction
                 
-                |- IoT
-- Constant -----|- WSNs sensors
-                |- streaming data, data analysis
-                |- Embedded system
+%                 |- IoT
+% - Constant -----|- WSNs sensors
+%                 |- streaming data, data analysis
+%                 |- Embedded system
                 
-- Problem  -----|- power consuming, radio transmission is power-hungry
+% - Problem  -----|- power consuming, radio transmission is power-hungry
 
                 
-- goal, motive -|- motivation: try to extend the work time of the Battery-powered devices 
-                |- goal: Reduce rate of transmission of through data summarization
+% - goal, motive -|- motivation: try to extend the work time of the Battery-powered devices 
+%                 |- goal: Reduce rate of transmission of through data summarization
 
-- contribution -|- Formalize the description of original LTC algorithm
-                |- Extend LTC to dimension $n$.
-                |- Propose an algebraic formulation of n-dimensional LTC algorithm.
-                |- Introduce an norm-independent expression of n-dimensional LTC, according 
-                |  to the algebraic formulation.
-                |- Internship and publish
-- outline
-\end{comment}
+% - contribution -|- Formalize the description of original LTC algorithm
+%                 |- Extend LTC to dimension $n$.
+%                 |- Propose an algebraic formulation of n-dimensional LTC algorithm.
+%                 |- Introduce an norm-independent expression of n-dimensional LTC, according 
+%                 |  to the algebraic formulation.
+%                 |- Internship and publish
+% - outline
 
 \section{Context}
 
 % -------------------- context------------------------%
 
-%% -------IoT--------%%
+%% -------IoT--------%%%% --------Embedded system--------%%
 With the recent technological advances of Internet of Things (IoT) applications,
 the number of connected devices will reach 75 billion by 2025
 \footnote{\url{https://www.statista.com/statistics/471264/iot-number-of-connected-devices-worldwide}}.
 So far, the IoT has been involved in many fields such as medical care, military,
 sports and industrial manufacturing~\cite{boudargham2017exhaustive,
-lai2013survey, da2014internet}. In industrial domains, connected objects are
+lai2013survey, da2014internet}. Embedded system in objects provides processing power and the ability of executing specific tasks or applications.
+In industrial domains, connected objects are
 often used for capturing properties such as temperature, and receiving signals or
-data from others \TG{from other what?}. In domestic domains, many household products are expected to
+data from other devices.
+In domestic domains, many household products are expected to
 provide more function which could make human activities more convenient and
 improve the quality of life. For example, people can remotely control household
 equipment with smart electronics and embedded systems.  To deploy IoT-based products
@@ -67,7 +68,7 @@ and services, many IoT technologies have been utilized~\cite{lee2015internet}:
 \end{itemize}
 
 %% -----WSNs----%% 
-The most typical network of connected object are WSNs \TG{Expand acronym}. WSNs consist of
+The most typical network of connected objects are Wireless sensor networks (WSNs). WSNs consist of
 autonomous sensor-equipped devices to monitor and sense the physical or
 environmental variable of our world~\cite{lee2015internet, li2016temporal}. WSNs
 can deployed with RFID systems to obtain more accurate measures, for instance
@@ -87,21 +88,21 @@ only be received in the order, and it is impossible to random access the
 data~\cite{o2002streaming}.
 
 With the rise of data science, the data become more and more important as it
-can provide knowledge and information after filtering and learning. \english{Thus, the
-streaming data produced in IoT also important, but cause \TG{``'cause is a contraction of because and
-cannot be used in written language''} the characteristic of
-streaming data, it is needed to process streaming data timely due to its volume
-and velocity \TG{sentence is too long, confusing}}. We may loose the
+can provide knowledge and information after filtering and learning.
+Data stream is a important way to collect data, enabling data science. The large volume and rapid velocity of data stream make us have to handle or save streaming data timely. We may loose the
 opportunity to process the data at all, if we do not do it in real time.
 This creates algorithmic challenges, related to the restriction of memory
 and computing power in connected objects~\cite{o2002streaming}. Some
 previous research has reviewed problems in streaming data analysis, such as
-finding frequent elements, estimating quantiles or path analysis~\cite{kejariwal2015real}. 
-
-%% --------Embedded system--------%%
-Additionally, embedded system provides connected devices processing power and
-the ability of executing specific tasks or applications, so the real-time
-processing is available. \TG{This paragraph is short and I'm not sure what you want to say here.}
+finding frequent elements, estimating quantiles or path analysis~\cite{kejariwal2015real}.
+% \english{Thus, the
+% streaming data produced in IoT also important, but because of \TG{``'cause is a contraction of because and
+% cannot be used in written language''} the characteristic of
+% streaming data, it is needed to process streaming data timely due to its volume
+% % and velocity \TG{sentence is too long, confusing}}. 
+% Embedded system provides connected devices processing power and
+% the ability of executing specific tasks or applications, so the real-time
+% processing is available.
 
 %-------------- problem description-------------%
 
@@ -111,28 +112,33 @@ several sensing systems are commonly launched in the field to run for days or
 even weeks without being recharged. Typically, such devices use sensors to
 capture properties such as temperature or motion, and stream them to a host
 system over a radio transmission protocol such as Bluetooth Low-Energy (BLE).
-With the increasing computing requirements (e.g. data analysis) in embedded
+With the increasing computing requirements (such as data analysis) in embedded
 systems, connected objects that have small capacity
 battery cannot operate for a long time. To extend the lifetime of objects without
 decreasing computing power, system designers aim to reduce the rate of data
 transmission as much as possible, as radio transmission is a power-hungry
 operation.
 
-\TG{Avoid 'e.g', use 'for instance' or 'such as' instead.}
+There are different type of sensor streams, (1) one dimensional streams, for instance temperature, humidity and pressure. (2) multi-dimensional streams, such as accelerometer, gyroscope and magnetometer. 
+
+
 
 \section{Goal of the thesis}
 
+
+one pharagrah for multi-diention sensor (not widely study in literiture) data vs one dimension data
 
 % ------------------ goal motivation -----------------%
 
 The goal of this thesis is to reduce the rate of data transmission through data
 stream summarization \TG{This one-sentence goal should also mention connected objects and nD vs 1D. This is the most
-important sentence of the introduction}. Summarization can be considered as a transformation of the
+important sentence of the introduction}.
+\BO{more sentence , include all conneted objects and multi-d}
+Summarization can be considered as a transformation of the
 original data to smaller summaries or patterns which contain as much information as
 possible. With data stream summarization, we might reduce the
 rate of transmitted data. For instance, only one data point will be transmitted
-rather than all data points if the cardinality of the stream equals 1, which
-means the streaming data are constant. \TG{You haven't defined ``the cardinality of the stream''}
+rather than all data points, if all the elements in the stream is identical. 
 
 Data compression is one data summarization technique, representing
 the data stream into a compacted version. Many data compression methods have
@@ -165,14 +171,14 @@ analysis and motion pattern recognition~\cite{sarbishei2016accuracy}.
 % ------- outline and contribution(publication)-------%
 
 % LTC summary
-The Lightweight Temporal Compression method
-(LTC~\cite{schoellhammer2004lightweight}) has been designed  specifically for
-energy-constrained systems, initially sensor networks.  It approximates data
-points by a piece-wise linear function that  guarantees an upper bound on the
-reconstruction error, and a reduced  memory footprint in $\mathcal{O}(1)$.
-However, LTC has only been  described for 1D streams, while streams acquired by
-connected objects, such as  acceleration or gyroscopic data, are often
-multi-dimensional. \TG{This is out of place}
+% The Lightweight Temporal Compression method
+% (LTC~\cite{schoellhammer2004lightweight}) has been designed  specifically for
+% energy-constrained systems, initially sensor networks.  It approximates data
+% points by a piece-wise linear function that  guarantees an upper bound on the
+% reconstruction error, and a reduced  memory footprint in $\mathcal{O}(1)$.
+% However, LTC has only been  described for 1D streams, while streams acquired by
+% connected objects, such as  acceleration or gyroscopic data, are often
+% multi-dimensional. \TG{This is out of place}
 
 
 %% contribution 
@@ -197,30 +203,22 @@ our extension on Motsai's Neblina module
 \footnote{\url{https://motsai.com/products/neblina}}, and we test it on 3D
 acceleration streams acquired during human exercises, namely biceps curling,
 walking and running \TG{This sentence is too long, out of place, and grammatically incorrect as it mixes past and present tenses}.
- The contents of Chapter~\ref{chap:ltc-extension} and
-Section~\ref{sec:ltc-n-dimensions} in Chapter~\ref{chap:ltc-extension} are
-included in our paper ``A multi-dimensional extension of the Lightweight
-Temporal Compression method''~\cite{li2018multi}, published in IEEE Big Data
-conference 2018 \TG{You should mention that after you presented the outline}. Our implementation of LTC is available as free software in
+Our implementation of LTC is available as free software in
 \url{https://github.com/big-data-lab-team/stream-summarization} under MIT
 license.
 
+% % define transmitted, received points, compression ratio
+% In this thesis I assume that the stream consists of a sequence of data points
+% received at uneven intervals. The compression algorithm \emph{transmits} fewer
+% points than it receives. The transmitted points might be included in the
+% stream, or computed from stream points. The \emph{compression ratio} is
+% calculated by (1-$\frac{1}{C_R}$) where $C_R$ is the ratio between the number of
+% received points and the number of transmitted points. An application
+% reconstructs the stream from the transmitted points: the \emph{reconstruction
+% error} is the maximum absolute difference between a point of the reconstructed
+% stream, and the corresponding point in the original stream. \TG{I think this should remain in Ch3.}
 
-
-% define transmitted, received points, compression ratio
-In this thesis I assume that the stream consists of a sequence of data points
-received at uneven intervals. The compression algorithm \emph{transmits} fewer
-points than it receives. The transmitted points might be included in the
-stream, or computed from stream points. The \emph{compression ratio} is
-calculated by (1-$\frac{1}{C_R}$) where $C_R$ is the ratio between the number of
-received points and the number of transmitted points. An application
-reconstructs the stream from the transmitted points: the \emph{reconstruction
-error} is the maximum absolute difference between a point of the reconstructed
-stream, and the corresponding point in the original stream. \TG{I think this should remain in Ch3.}
-
-% define energy save
-
-
+% % define energy save
 
 % Outline
 Chapter~\ref{sec:relatedwork} provides some background on stream
@@ -231,6 +229,11 @@ presents our norm-independent extension to dimension $n$ and its
 implementation. Chapter~\ref{chap:expsAndResults} reports on experiments to
 validate our implementation, and evaluates the impact of n-dimensional LTC
 on energy consumption of connected objects.
+ The contents of Chapter~\ref{chap:ltc-extension} and
+Section~\ref{sec:ltc-n-dimensions} in Chapter~\ref{chap:ltc-extension} are
+included in our paper ``A multi-dimensional extension of the Lightweight
+Temporal Compression method''~\cite{li2018multi}, published in IEEE Big Data
+conference 2018.
 
 
 
