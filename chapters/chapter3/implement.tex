@@ -15,7 +15,6 @@ approximate range of their intersection. We define $B$ as follows:
     B = \bigcap_{l=1}^{j-1} box(\mathcal{B}_l) 
 \end{equation*}
 Where \texttt{box()} is a function that returns the bounding box of an n-ball.
-\todo{fix windows size = 200}
 Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
 Algorithm~\ref{algo:euclidean}.  Firstly, we check the intersection with
@@ -58,6 +57,27 @@ and $max\_id$, could be used for determining the direction of bisection. In our
 implement, we select a point in connection of these two n-ball's center, which
 also locates in intersecting object(line/chord when order=2, plane/circle when
 order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
+
+%discuss the time complexity
+According to our implementation for Euclidean norm, if the $L_s$ is undefined
+($L_s$ is infinity), the operations in Algorithm~\ref{algo:euclidean} and
+Algorithm~\ref{algo:find_bisection_function} before the function
+\texttt{recursive()} need $O(n)$ complexity. In the \texttt{recursive()}
+function, the bisection from Line 12 to Line 32 in
+Algorithm~\ref{algo:recursive} needs $O(\log{2\epsilon})$, because the $left$
+and $right$ are initialized from the bounding box $B$, where $|left - right|
+\leqslant 2\epsilon$. Moreover, computing $left$ and $right$ which used for next
+dimension in \texttt{recursive()} function needs $O(n)$. Thereby, When the data
+stream is two-dimensional, the time complexity of LTC n-dimension for Euclidean
+norm is $O(n) + O(\log{2\epsilon})\times O(n)$ = $O(n \times \log{2\epsilon})$,
+where $n$ is the number of the data points we seen so far. In the same way, if
+we process 3-dimensional stream with our algorithm with Euclidean norm, it needs
+extra $O(n \times \log{2\epsilon})$ time in recursion, the total time complexity
+is $O(n) + O(\log{2\epsilon})\times (O(n) + O(\log{2\epsilon})\times O(n))$ =
+$O(n\times(\log{2\epsilon})^{2})$. Finally, our implementation for Euclidean
+norm gives $O(n\times(\log{2\epsilon})^{d-1})$ time complexity for d-dimensional
+data stream.
+
 
 \begin{figure}
   \centering
