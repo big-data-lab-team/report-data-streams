@@ -2,9 +2,6 @@
 
 % \TG{At the end of the introduction, you should mention that the work
 % described in Ch3 and 4 was published and give the reference.}
-
-\TG{??Mention OrpaillCC (you are a co-author). }
-
 %------------------------------------------------------------------------------%
 %IoT, Embedded system, sensors,
 %Motsai(internship coding), Neblina, Big Data, Stream
@@ -216,11 +213,13 @@ The contribution of this thesis is given as follow:
 %   \TG{You should also add contributions for the experimental work: comparison with other solutions, energy measures on Neblina.}
 \end{enumerate}
 
-Our implementation of LTC is available as free software in
+Our implementation of LTC n-dimension is available as free software in
 \url{https://github.com/big-data-lab-team/stream-summarization} under MIT
-license, and our extension of LTC has already been implemented into Motsai's
-Neblina module \footnote{\url{https://motsai.com/products/neblina}} during my
-internship at Motsai from September 2018 to December 2018. 
+license, and it has already been implemented into Motsai's Neblina module
+\footnote{\url{https://motsai.com/products/neblina}} during my internship at
+Motsai from September 2018 to December 2018.  Moreover, the extension of LTC is
+included in a data stream algorithm library named ``OrpailleCC'' which can
+access at \url{https://github.com/big-data-lab-team/OrpailleCC}.
 % In this paper, we extend LTC to dimension $n$. To do so, we propose an 
 % algebraic formulation of the algorithm that also yields a 
 % norm-independent expression of it.
@@ -239,14 +238,14 @@ internship at Motsai from September 2018 to December 2018.
 % % define energy save
 
 % Outline
-Chapter~\ref{sec:relatedwork} provides some background on stream
-summarization, lossless compression and lossy compression methods.
-Chapter~\ref{chap:ltc-extension} formalizes the description of the LTC
-algorithm initially proposed in~\cite{schoellhammer2004lightweight} and
-presents our norm-independent extension to dimension $n$ and its
-implementation. Chapter~\ref{chap:expsAndResults} reports on experiments to
-validate our implementation, and evaluates the impact of n-dimensional LTC
-on energy consumption of connected objects.
+In the rest of this thesis, Chapter~\ref{sec:relatedwork} provides some
+background on stream summarization, lossless compression and lossy compression
+methods. Chapter~\ref{chap:ltc-extension} formalizes the description of the LTC
+algorithm initially proposed in~\cite{schoellhammer2004lightweight} and presents
+our norm-independent extension to dimension $n$ and its implementation.
+Chapter~\ref{chap:expsAndResults} reports on experiments to validate our
+implementation, and evaluates the impact of n-dimensional LTC on energy
+consumption of connected objects.
 
 %% internship and publish
 The contents of Chapter~\ref{chap:ltc-extension} and
@@ -254,8 +253,6 @@ Section~\ref{sec:ltc-n-dimensions} in Chapter~\ref{chap:ltc-extension} are
 included in our paper ``A multi-dimensional extension of the Lightweight
 Temporal Compression method''~\cite{li2018multi}, published in IEEE Big Data
 conference 2018.
-
-\todo{mention OrpaillCC}
 
 % data summarization 可以提取数据特征
 % \url{https://www-users.cs.umn.edu/~kumar001/papers/varun_icdm05-summ.pdf}
