@@ -47,15 +47,15 @@ the number of connected devices will reach 75 billion by 2025
 \footnote{\url{https://www.statista.com/statistics/471264/iot-number-of-connected-devices-worldwide}}.
 So far, the IoT has been involved in many fields such as medical care, military,
 sports and industrial manufacturing~\cite{boudargham2017exhaustive,
-lai2013survey, da2014internet}. Embedded system in objects provides processing power and the ability of executing specific tasks or applications.
-In industrial domains, connected objects are
-often used for capturing properties such as temperature, and receiving signals or
-data from other devices.
-In domestic domains, many household products are expected to
-provide more function which could make human activities more convenient and
-improve the quality of life. For example, people can remotely control household
-equipment with smart electronics and embedded systems.  To deploy IoT-based products
-and services, many IoT technologies have been utilized~\cite{lee2015internet}:
+lai2013survey, da2014internet}. Embedded system in objects provides processing
+power and the ability of executing specific tasks or applications. In industrial
+domains, connected objects are often used for capturing properties such as
+temperature, and receiving signals or data from other devices. In domestic
+domains, many household products are expected to provide more function which
+could make human activities more convenient and improve the quality of life. For
+example, people can remotely control household equipment with smart electronics
+and embedded systems.  To deploy IoT-based products and services, many IoT
+technologies have been utilized~\cite{lee2015internet}:
 \begin{itemize}
     \item Radio frequency identification (RFID): identify objects automatically
     and capture its data using radio waves, a tag and a reader.
@@ -68,13 +68,13 @@ and services, many IoT technologies have been utilized~\cite{lee2015internet}:
 \end{itemize}
 
 %% -----WSNs----%% 
-The most typical network of connected objects are Wireless sensor networks (WSNs). WSNs consist of
-autonomous sensor-equipped devices to monitor and sense the physical or
-environmental variable of our world~\cite{lee2015internet, li2016temporal}. WSNs
-can deployed with RFID systems to obtain more accurate measures, for instance
-temperature, movements and location~\cite{lee2015internet, atzori2010b}. Sensor
-devices are connected by low energy wireless networks such as
-\emph{Bluetooth Low Energy}
+The most typical network of connected objects are Wireless sensor networks
+(WSNs). WSNs consist of autonomous sensor-equipped devices to monitor and sense
+the physical or environmental variable of our world~\cite{lee2015internet,
+li2016temporal}. WSNs can deployed with RFID systems to obtain more accurate
+measures, for instance temperature, movements and
+location~\cite{lee2015internet, atzori2010b}. Sensor devices are connected by
+low energy wireless networks such as \emph{Bluetooth Low Energy}
 (BLE)\footnote{\url{https://web.archive.org/web/20170310111443/https://www.bluetooth.com/what-is-bluetooth-technology/how-it-works/low-energy}}
 and \emph{IEEE 802.15.4}\footnote{\url{http://www.ieee802.org/15/pub/TG4.html}}
 and send the streaming data to sink sensor nodes or heavier clients.
@@ -87,14 +87,27 @@ saved completely~\cite{o2002streaming}. The data point in data stream can
 only be received in the order, and it is impossible to random access the
 data~\cite{o2002streaming}.
 
-With the rise of data science, the data become more and more important as it
-can provide knowledge and information after filtering and learning.
-Data stream is a important way to collect data, enabling data science. The large volume and rapid velocity of data stream make us have to handle or save streaming data timely. We may loose the
-opportunity to process the data at all, if we do not do it in real time.
-This creates algorithmic challenges, related to the restriction of memory
-and computing power in connected objects~\cite{o2002streaming}. Some
-previous research has reviewed problems in streaming data analysis, such as
-finding frequent elements, estimating quantiles or path analysis~\cite{kejariwal2015real}.
+With the rise of data science, the data become more and more important as it can
+provide knowledge and information after filtering and learning. Data stream is a
+important way to collect data, enabling data science. The large volume and rapid
+velocity of data stream make us have to handle or save streaming data timely. We
+may loose the opportunity to process the data at all, if we do not do it in real
+time. This creates algorithmic challenges, related to the restriction of memory
+and computing power in connected objects~\cite{o2002streaming}. Some previous
+research has reviewed problems in streaming data analysis, such as finding
+frequent elements, estimating quantiles or path
+analysis~\cite{kejariwal2015real}.
+
+In general, there are different type of sensor streams, (1) one dimensional
+stream, for instance temperature, humidity and pressure. (2) multi-dimensional
+stream, such as accelerometer, gyroscope and magnetometer. The former is quite
+common in our daily live, and much research has been conducted with
+them~\cite{kulwicki1991humidity, oprea2009temperature, woyessa2016temperature}.
+In contrast the latter often exits in industrial field and has not been widely
+studied in literature.
+
+
+
 % \english{Thus, the
 % streaming data produced in IoT also important, but because of \TG{``'cause is a contraction of because and
 % cannot be used in written language''} the characteristic of
@@ -119,42 +132,49 @@ decreasing computing power, system designers aim to reduce the rate of data
 transmission as much as possible, as radio transmission is a power-hungry
 operation.
 
-There are different type of sensor streams, (1) one dimensional streams, for instance temperature, humidity and pressure. (2) multi-dimensional streams, such as accelerometer, gyroscope and magnetometer. 
-
-
 
 \section{Goal of the thesis}
-
-
-one pharagrah for multi-diention sensor (not widely study in literiture) data vs one dimension data
-
 % ------------------ goal motivation -----------------%
 
-The goal of this thesis is to reduce the rate of data transmission through data
-stream summarization \TG{This one-sentence goal should also mention connected objects and nD vs 1D. This is the most
-important sentence of the introduction}.
-\BO{more sentence , include all conneted objects and multi-d}
-Summarization can be considered as a transformation of the
-original data to smaller summaries or patterns which contain as much information as
-possible. With data stream summarization, we might reduce the
-rate of transmitted data. For instance, only one data point will be transmitted
-rather than all data points, if all the elements in the stream is identical. 
+Reducing the rate of data transmission is a good way to decrease the power
+consumption in connected objects. In this thesis, we intend to find or discover
+a data summarization method which is able to help us to shorten the length of
+the stream transmitted and retain the important information. Furthermore, the
+method have to deal with the limitations of memory and processing power in
+connected objects and the multi-dimensional streams from sensors. In other
+words, this methods must be non-resource-intensive, and it can work for both
+one-dimensional and multi-dimensional streams.
+% The limitations of memory and processing power in connected objects require that the summarization methods must   
+% To decrease energy consumption, a good way is reducing the rate of In thesis, 
+% The goal of this thesis is to reduce the rate of data transmission through data
+% stream summarization \TG{This one-sentence goal should also mention connected objects and nD vs 1D. This is the most
+% important sentence of the introduction}.
+Summarization can be considered as a transformation of the original data to
+smaller summaries or patterns which contain as much information as possible.
+With data stream summarization, we might reduce the rate of transmitted data.
+For instance, only one data point will be transmitted rather than all data
+points, if all the elements in the stream is identical. 
 
-Data compression is one data summarization technique, representing
-the data stream into a compacted version. Many data compression methods have
-been proposed for text compression~\cite{shanmugasundaram2011comparative,
+Data compression is one data summarization technique, representing the data
+stream into a compacted version. Many data compression algorithms have been
+proposed for text compression~\cite{shanmugasundaram2011comparative,
 sayood2017introduction} and image compression~\cite{shum2003survey,
-zaineldin2015image}, but most previous methods are unable to fit into
-connected objects because of their limited computation power and memory.
- In addition, the compression process also costs energy. Thus, we also
-need to compare the energy cost of compression and the saved energy from
-reducing the rate of data transmitted. As more computation requires more
-energy~\cite{pope2018accelerometer}, a
-compression method with low computational complexity is needed. We aim at finding a
-compression method that adapts to data streams and requires low computational and
-time complexity to reduce the size of transmitted data.
+zaineldin2015image}, but most previous algorithms are unable to fit into
+connected objects because of their limited computation power and memory. In
+addition, the compression process also costs energy. Thus, we also need to
+compare the energy cost of compression and the saved energy from reducing the
+rate of data transmitted. As more computation requires more
+energy~\cite{pope2018accelerometer}, a compression algorithm with low
+computational complexity is needed.  Meanwhile, the common way to handle
+multi-dimensional ($n$-dimensional) data stream is compressing each parameters
+respectively, just same as compress $n$ one-dimensional data streams at same
+time. But the parameters in multi-dimensional data point are dependent on each
+other, we have to consider them as a whole and process them together. Overall,
+we aim at finding a compression algorithm that adapts to multi-dimensional data
+streams and requires low computational and time complexity to reduce the size of
+transmitted data.
 
-\TG{You should also mention nD compression vs 1D}
+% \TG{You should also mention nD compression vs 1D}
 
 % ----------------------- Neblina --------------------%
 In our experiments, we test compression methods in Motsai's Neblina module, a
@@ -190,22 +210,20 @@ The contribution of this thesis is given as follow:
   \item Propose an algebraic formulation of n-dimensional LTC algorithm.
   \item Introduce an norm-independent expression of n-dimensional LTC, according
   to the algebraic formulation.
-  \TG{You should also add contributions for the experimental work: comparison with other solutions, energy measures on Neblina.}
+  \item Validate the behavior of LTC n-dimension.
+  \item Measure the impact of LTC n-dimension on energy consumption.
+  \item Compare LTC n-dimension with Polynomial regression compression method.
+%   \TG{You should also add contributions for the experimental work: comparison with other solutions, energy measures on Neblina.}
 \end{enumerate}
 
+Our implementation of LTC is available as free software in
+\url{https://github.com/big-data-lab-team/stream-summarization} under MIT
+license, and our extension of LTC has already been implemented into Motsai's
+Neblina module \footnote{\url{https://motsai.com/products/neblina}} during my
+internship at Motsai from September 2018 to December 2018. 
 % In this paper, we extend LTC to dimension $n$. To do so, we propose an 
 % algebraic formulation of the algorithm that also yields a 
 % norm-independent expression of it.
-
-%% internship and publish
-I did 4 months internship in Motsai from Sep. 2019 to Dec. 2019, and I implement
-our extension on Motsai's Neblina module
-\footnote{\url{https://motsai.com/products/neblina}}, and we test it on 3D
-acceleration streams acquired during human exercises, namely biceps curling,
-walking and running \TG{This sentence is too long, out of place, and grammatically incorrect as it mixes past and present tenses}.
-Our implementation of LTC is available as free software in
-\url{https://github.com/big-data-lab-team/stream-summarization} under MIT
-license.
 
 % % define transmitted, received points, compression ratio
 % In this thesis I assume that the stream consists of a sequence of data points
@@ -229,13 +247,15 @@ presents our norm-independent extension to dimension $n$ and its
 implementation. Chapter~\ref{chap:expsAndResults} reports on experiments to
 validate our implementation, and evaluates the impact of n-dimensional LTC
 on energy consumption of connected objects.
- The contents of Chapter~\ref{chap:ltc-extension} and
+
+%% internship and publish
+The contents of Chapter~\ref{chap:ltc-extension} and
 Section~\ref{sec:ltc-n-dimensions} in Chapter~\ref{chap:ltc-extension} are
 included in our paper ``A multi-dimensional extension of the Lightweight
 Temporal Compression method''~\cite{li2018multi}, published in IEEE Big Data
 conference 2018.
 
-
+\todo{mention OrpaillCC}
 
 % data summarization 可以提取数据特征
 % \url{https://www-users.cs.umn.edu/~kumar001/papers/varun_icdm05-summ.pdf}
