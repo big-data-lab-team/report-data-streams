@@ -4,6 +4,7 @@ cuthesis.pdf
 *.gz
 ltc.pdf
 *.pdf
+!LTC-*.pdf
 *.out
 *.bbl
 *.blg

@@ -3,13 +3,14 @@
 % \TG{You should say here that you will use lossy compression and in particular
 % LTC in the future.}
 
-In this thesis, we only focus on the lossy compression method, because \english{the
-measure from sensor devices and the accurate value are not always same} \TG{I don't understand what you mean}, and
-sometimes, we prefer to sacrifice certain accuracy of reconstructed data for a
-better compression ratio. In our case, the Neblina has limited memory, and in
-order to save more energy, we prefer a compression method with low computational
-complexity \english{so that decreasing the energy cost of compression process}. LTC takes
-O($n$) time and O(1) space for compressing $n$ data
+In this thesis, we only focus on the lossy compression method, because  the
+measured sensor data intrinsically involves noise and measurement errors, which
+can be treated as a configurable tolerance for a lossy compression algorithm.
+Meanwhile, we sometimes prefer to sacrifice certain accuracy of reconstructed
+data for a better compression ratio. In our case, the Neblina has limited
+memory, and in order to save more energy, we prefer a compression method with
+low computational complexity so that energy cost of compression process is not
+high. LTC takes O($n$) time and O(1) space for compressing $n$ data
 points~\cite{schoellhammer2004lightweight}. Its good compression ratio and very
 little energy cost fully meet our needs. So we will mainly discuss LTC in
 Chapter~\ref{chap:ltc-extension} and Chapter~\ref{chap:expsAndResults}.
@@ -47,18 +48,25 @@ have the same size, it looks very sketchy.}
     \centering
     \begin{subfigure}{\columnwidth}
         \centering
-        \includegraphics[width=.8\columnwidth]{figures/LTC-a.png}
-        \caption{}
+        \includegraphics[height=6.2cm, width=.8\columnwidth]{figures/LTC-a.pdf}
+        \caption{Create \emph{high line} and \emph{low line}}
         \label{fig:ltc-review-a}
     \end{subfigure}
     \centering
     \begin{subfigure}{\columnwidth}
         \centering
-        \includegraphics[width=.8\columnwidth]{figures/LTC-b.png}
-        \caption{}
+        \includegraphics[height=6.2cm, width=.8\columnwidth]{figures/LTC-b.pdf}
+        \caption{Update \emph{high line} and \emph{low line}}
         \label{fig:ltc-review-b}
     \end{subfigure}
-    \caption{Lightweight temporal compression example, extracted from~\cite{zordan2014performance}}
+    \centering
+    \begin{subfigure}{\columnwidth}
+        \centering
+        \includegraphics[height=6.2cm, width=.8\columnwidth]{figures/LTC-c.pdf}
+        \caption{Transmit data point}
+        \label{fig:ltc-review-c}
+    \end{subfigure}
+    \caption{Lightweight temporal compression example}
     \label{fig:ltc-review}
 \end{figure}
 
@@ -98,12 +106,12 @@ segments" with a top-down recursive segmentation algorithm which has smaller
 computational cost than PLAMLis~\cite{pham2008enhance, zordan2014performance}.
 Assume $W$ data points $x_i$ in time window, the segment $S_{(1, W)}$ with end
 points $x_1$ and $x_W$ is created, then checking whether the maximum error is
-within error tolerance $\epsilon$ determines stopping the recursive or not. If
+within error tolerance $\epsilon$ determines stopping the recursion or not. If
 the maximum error is bigger than $\epsilon$, the segment is split into two
 shorter segments $S_{(1, k)}$ and $S_{(k, W)}$ in data point $x_k$, $1<k<W$.
-Applying this procedure recursively on each segment until the maximum error of
+This procedure is applied recursively on each segment until the maximum error of
 all segments is within the error tolerance~\cite{pham2008enhance,
-zordan2014performance} \TG{This sentence has no verb}. 
+zordan2014performance}.
 
 \subsection{Polynomial Regression}
 \label{sec:polynomial}
@@ -176,8 +184,8 @@ X_t = \sum_{i=1}^{p}a_{i}X_{t-i} + Z_t + \sum_{i=1}^{q}\beta_{i}Z_{t-i}
 \end{equation}
 \noindent The equation is reproduced from~\cite{chatfield2016analysis}. 
 $a_1, ..., a_p$ and $\beta_1, ..., \beta_q$ are parameters of AR model and MA
-model respectively, $Z_{t-q}, ...,Z_{t}$ are white noise (usually \english{understand} as
-residuals of the previous forecasts, $Z_t = X_t -
+model respectively, $Z_{t-q}, ...,Z_{t}$ are white noise (is usually understood
+as residuals of the previous forecasts, $Z_t = X_t -
 X_{t-1}$)~\cite{chatfield2016analysis}.
 
 Similar to the ARMA model, A-ARMA is also composed of
@@ -200,9 +208,8 @@ The first $W$ data points are used to initialize the ARMA model, and to compare
 the RMSE between the original and predicted subsequent $S$ data by moving
 sliding window $S$ length each time. If the RMSE is larger than $th_{err}$, the
 saved ARMA model is remodeled with the current samples in sliding
-window~\cite{lu2010optimized}.
-In the decompression process, the stream data are predicted based on the
-parameters transmitted.
+window~\cite{lu2010optimized}. In the decompression process, the stream data are
+predicted based on the parameters transmitted.
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -297,10 +304,14 @@ predicted data, then for each prediction cycle, MA-AR works as follows:
 The main idea of this algorithm is continuous estimation of the AR parameters.
 AR model is redefined only according to last coming sample, so the computational
 cost is minimized and the parameters of model can be computed through least
-squares minimization~\cite{zordan2012compress}. 
+squares minimization~\cite{zordan2012compress}.
 
-\TG{You should start a new sub-section here, or add the next paragraph to the conclusion 
-section. Also, you should refer to this comparison in your thesis defense presentation.}
+\todo{add MV in chap2, and add the figure of comparison}
+\todo{add the comparison in defense slides}
+
+\subsection{Comparison of compression algorithms}
+% \TG{You should start a new sub-section here, or add the next paragraph to the conclusion 
+% section. Also, you should refer to this comparison in your thesis defense presentation.}
 In~\cite{zordan2014performance}, authors compare the performance of mentioned
 compression methods. They analyzed the performance in terms of compression ratio
 and energy consumption in compression process on MAAR (p={2, 4}), Polynomial
