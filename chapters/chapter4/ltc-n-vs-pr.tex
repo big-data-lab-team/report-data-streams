@@ -70,10 +70,6 @@ running data sets. Figure~\ref{fig:poly-regression-3-degree} and
 Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data. In the
 compression process, we need to keep in memory all the data between two
 transmissions and update regression models each time a new data point arrives.
-So, using polynomial regression method needs more memory and processing time
-than n-dimensional LTC for infinity norm, but for Euclidean norm, we need to
-also record n-balls between two transmissions and execute intersection checking. 
-\TG{so does polynomial regression also use more memory and processing than LTC for Euclidean norm?}
 
 \begin{figure*}
 \centering
@@ -129,9 +125,7 @@ need M*(N+1) coefficients and extra time-stamp to record when the coefficients
 are transmitted. In our case, coefficients are recorded as single-precision
 floating-point numbers which would use 4 bytes per each. The total number of
 bytes needed to represent the original data is (N+1)*M*4+4 (4 bytes for
-recording Time-stamp). Polynomial regression uses more processing time \TG{more
-than what?} to calculate coefficients and build model when each new data point
-comes. 
+recording Time-stamp).
 
 From Table~\ref{table:CR-compare-walking} and Table
 ~\ref{table:CR-compare-running}, we observe that increasing the dimension $n$ is
@@ -141,7 +135,7 @@ regression method on different dimensions, even though regression method
 represents original data with fewer segments (curve segments). It is because
 polynomial regression method needs more bytes to transmit the coefficients while
 LTC n-dimension just transmits a data point each time.
-\TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
+% \TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
 Besides, similarly to Experiment 2 in Section~\ref{sec:experiment2-ltc}, the
 compression ratio is higher for the infinity norm than for the Euclidean and is
 higher for the walking than for running. For given degree of polynomial
@@ -153,7 +147,19 @@ set for Infinity norm.  In Table~\ref{table:CR-compare-running}, the 5-degree
 regression method has higher compression ratio then 3-degree regression for both
 norm when dimension equals 1 and for infinity norm when dimension equals 2.
 
+Polynomial regression method needs a lot of memory to save all the data points
+between two transmission and long processing time to calculate coefficients and
+build model when each new data point comes. Because we implemented polynomial
+regression method and LTC n-dimension in different platform, the comparison of
+memory usage and processing time between them cannot be measured.
 
+% So, using polynomial regression method needs more memory and processing time
+% than n-dimensional LTC for infinity norm, but for Euclidean norm, we need to
+% also record n-balls between two transmissions and execute intersection checking. 
+% \TG{so does polynomial regression also use more memory and processing than LTC for Euclidean norm?}
+%  Polynomial regression uses more processing time \TG{more
+% than what?} to calculate coefficients and build model when each new data point
+% comes. 
 
 \begin{table}
 \begin{tabular}{|l|l|l|l|l|l|l|l|}

@@ -16,30 +16,34 @@ The following stream summarization techniques are often used.
 \emph{Sampling} captures a sub-sample of a data stream that represents the
 entire stream. When the data cannot be saved to working storage,
 we can take a sample of the whole data, and estimate the query results from this sample.
-For instance, we can answer the query ``What
-fraction of the typical user's queries were repeated over the past
-month?"~\cite{leskovec2014mining} by using
-uniform random sampling~\cite{vitter1984faster, Ahrens1985SequentialRS}, where
-all data points in  the stream have the same probability to be selected. The common idea is
-to extract the queries from 1/10 of users, each user has 10\% probability be
-selected. In general, we need just to maintain a list of users whose queries
-should be selected, but we might not has enough main memory space. To reduce
-memory usage, the hash function is used instead of keeping list of user. We
-create 10 buckets marked from 0 to 9, and hash each user name of query into one
-of buckets. If the user is hashed to bucket 0, we will select the queries from
-this user. \TG{This paragraph is too long, I don't think we need to read details about
-random sampling since you're not going to use it later.}
 
-There are also others sampling methods utilized for different situations, such as the
-Reservoir sampling method~\cite{vitter1985random, vitter1985random,
-Aggarwal2007DataS} that samples a fixed number $k$  of data points with equal probability.
-The weighted (non-uniform) sampling~\cite{chaudhuri1999random} and
-weighted random sampling with reservoir~\cite{efraimidis2006weighted} have been
-proposed to sample non-uniform streams. In these methods, data points are
-weighted and the probability of selection is dependent on this
-weight~\cite{chaudhuri1999random}.
-\TG{You should use ``item'' or ``data point'' consistently}
+The most common sampling method is uniform random
+sampling~\cite{vitter1984faster, Ahrens1985SequentialRS} which supposes all
+items in the stream have the same probability to be selected. The idea is to
+extract a part of stream and estimate the query answer according to the
+proportion of stream selected and entire stream. There are also others sampling
+methods utilized for different situations, such as the Reservoir sampling
+method~\cite{vitter1985random, vitter1985random, Aggarwal2007DataS} that samples
+a fixed number $k$  of items with equal probability. The weighted (non-uniform)
+sampling~\cite{chaudhuri1999random} and weighted random sampling with
+reservoir~\cite{efraimidis2006weighted} have been proposed to sample non-uniform
+streams. In these methods, items are weighted and the probability of selection
+is dependent on this weight~\cite{chaudhuri1999random}.
 
+% For instance, we can answer the query ``What
+% fraction of the typical user's queries were repeated over the past
+% month?"~\cite{leskovec2014mining} by using
+% uniform random sampling~\cite{vitter1984faster, Ahrens1985SequentialRS}, where
+% all items in  the stream have the same probability to be selected. The common idea is
+% to extract the queries from 1/10 of users, each user has 10\% probability be
+% selected. In general, we need just to maintain a list of users whose queries
+% should be selected, but we might not has enough main memory space. To reduce
+% memory usage, the hash function is used instead of keeping list of user. We
+% create 10 buckets marked from 0 to 9, and hash each user name of query into one
+% of buckets. If the user is hashed to bucket 0, we will select the queries from
+% this user.
+% \TG{This paragraph is too long, I don't think we need to read details about
+% random sampling since you're not going to use it later.}
 
 
 In practice, sampling can help save energy on connected objects. For instance,
