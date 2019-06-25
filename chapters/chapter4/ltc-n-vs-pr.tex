@@ -90,7 +90,7 @@ transmissions and update regression models each time a new data point arrives.
 \caption{Regression degree=3 with Euclidean norm}
 \end{subfigure}
 
-\caption{Reconstructed data by using 5-degree Regression compression method}
+\caption{Reconstructed data by using 3-degree Regression compression method}
 \label{fig:poly-regression-3-degree}
 \end{figure*}
 
@@ -124,18 +124,32 @@ In our implementation, for a regression model with N-degree and M-parameters we
 need M*(N+1) coefficients and extra time-stamp to record when the coefficients
 are transmitted. In our case, coefficients are recorded as single-precision
 floating-point numbers which would use 4 bytes per each. The total number of
-bytes needed to represent the original data is (N+1)*M*4+4 (4 bytes for
-recording Time-stamp).
+bytes needed to represent the original data is $(N+1)\times M\times 4+4$ (4
+bytes for recording Time-stamp).
 
-From Table~\ref{table:CR-compare-walking} and Table
-~\ref{table:CR-compare-running}, we observe that increasing the dimension $n$ is
-detrimental to compression ratio with both n-dimensional LTC and Polynomial
-Regression. Moreover, LTC n-dimension gives better compression ratio than
-regression method on different dimensions, even though regression method
+From Table~\ref{table:CR-compare-walking} and
+Table~\ref{table:CR-compare-running}, we observe that increasing the dimension
+$n$ is detrimental to compression ratio with both n-dimensional LTC and
+Polynomial Regression. Moreover, LTC n-dimension gives better compression ratio
+than regression method on different dimensions, even though regression method
 represents original data with fewer segments (curve segments). It is because
-polynomial regression method needs more bytes to transmit the coefficients while
-LTC n-dimension just transmits a data point each time.
-\TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
+polynomial regression method requires more bytes to transmit the coefficients
+while LTC n-dimension just transmits a data point each time. In other words, we
+need to represent each regression curves with $(N+1)\times M\times 4+4$ bytes,
+but each straight line can be defined by two data points with $2\times(M\times
+2+4)$ bytes (2 bytes for each parameter). Assume Polynomial regression and LTC
+n-dimension needs $G_P$ curves and $G_L$ lines respectively to represent
+original data set. Then we have to transmit $((N+1)\times M\times 4+4)\times
+G_P$ bytes by using polynomial regression, and $2\times(M\times 2+4) \times
+(G_L-1)$ bytes ($G_L-1$ data points) by using LTC n-dimension because LTC
+n-dimension generates connected straight lines.
+In our case, the polynomial regression method uses more bytes to represent
+original stream than LTC n-dimension. In reality, the compression ratio of these
+two methods depends on the data set, the polynomial regression method would give
+us higher compression ratio than LTC n-dimension, if the regression model really
+fits our data set.
+ 
+% \TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
 Besides, similarly to Experiment 2 in Section~\ref{sec:experiment2-ltc}, the
 compression ratio is higher for the infinity norm than for the Euclidean and is
 higher for the walking than for running. For given degree of polynomial
@@ -162,6 +176,8 @@ memory usage and processing time between them cannot be measured.
 % comes. 
 
 \begin{table}
+\begin{subfigure}{\columnwidth}
+\centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
            & \multicolumn{2}{c|}{LTC n-dimension} & \multicolumn{2}{c|}{Regression degree = 3} & \multicolumn{3}{l|}{Regression degree = 5}\\ \hline
@@ -172,10 +188,10 @@ Dimension & Infinity   & Euclidean   & Infinity    & Euclidean     & Infinity   
 \end{tabular}
 \caption{Comparison of compression ratios on Walking data set}
 \label{table:CR-compare-walking}
-\end{table}
-
-
-\begin{table}
+\end{subfigure}
+\\
+\begin{subfigure}{\columnwidth}
+\centering
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
 \hline
            & \multicolumn{2}{c|}{LTC n-dimension} & \multicolumn{2}{c|}{Regression degree = 3} & \multicolumn{3}{l|}{Regression degree = 5}          \\ \hline
@@ -186,4 +202,6 @@ Dimension & Infinity   & Euclidean   & Infinity            & Euclidean          
 \end{tabular}
 \caption{Comparison of compression ratios on Running data set}
 \label{table:CR-compare-running}
+\end{subfigure}
+\caption{Results of Comparison}
 \end{table}
