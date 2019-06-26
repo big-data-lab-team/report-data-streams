@@ -10,13 +10,15 @@
 \newcommand{\english}[1]{\uwave{#1}}  % Language errors
 \newcommand{\BO}[1]{{\color{ForestGreen}#1}}
 
+
 \include{acronym}
 
 \begin{document}
-\printglossary[type=\acronymtype]
 
 \include{pages/abstract}
 \include{pages/acknowledgements}
+
+\printnoidxglossaries
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Body of Thesis goes here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,6 +28,7 @@
 \include{chapters/chapter3/chapter3}
 \include{chapters/chapter4/chapter4}
 \include{chapters/chapter5/Conclusion}
+
 
 %You can edit your citation style by changing the name in \bibliographystyle{plain} --> \bibliographystyle{new style name}
 \bibliographystyle{plain}
