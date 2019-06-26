@@ -1,26 +1,26 @@
 \section{Preliminary comments}
 
-We note that the formulation of LTC  in~\cite{schoellhammer2004lightweight}
-relies on the intersection of  \emph{convex cones} in dimension $n+1$. For
-$n=1$, it corresponds to  the intersection of triangles, which can efficiently
-be computed by  maintaining boundary lines, as detailed
-previously Section~\ref{sec:ltc}. In higher dimension, however, cone intersections are
-not so straightforward to compute, due  to the fact that the intersection
-between cones may not be a cone.
+We note that the formulation of \acrshort{iot}
+in~\cite{schoellhammer2004lightweight} relies on the intersection of
+\emph{convex cones} in dimension $n+1$. For $n=1$, it corresponds to the
+intersection of triangles, which can efficiently be computed by maintaining
+boundary lines, as detailed previously Section~\ref{sec:ltc}. In higher
+dimension, however, cone intersections are not so straightforward to compute,
+due to the fact that the intersection between cones may not be a cone.
 
-To address this issue, we formulate LTC as an intersection test between
-\emph{n-balls}, that is, segments for $n=1$, disks for
-$n=2$, etc. N-balls are defined from the \emph{norm} used in
-the vector space of data points. For $n=1$, the choice of the norm does
-not really matter, as all p-norms and the infinity norm are identical.
-In dimension $n$, however, norm selection will be critical.
+To address this issue, we formulate \acrshort{iot} as an intersection test
+between \emph{n-balls}, that is, segments for $n=1$, disks for $n=2$, etc.
+N-balls are defined from the \emph{norm} used in the vector space of data
+points. For $n=1$, the choice of the norm does not really matter, as all p-norms
+and the infinity norm are identical. In dimension $n$, however, norm selection
+will be critical.
 
 \section{Algebraic formulation of LTC}
 
 \subsection{Definitions}
 
 %% notation
-Above all, we give the notation of LTC in the
+Above all, we give the notation of \acrshort{ltc} in the
 following: The algorithm receives a stream of data points $x_i$ at times $t_i$
 ($i \in \mathbb{N}$), and it transmits a stream of data points $\xi_i$ at times
 $\tau_i$ ($i \in \mathbb{N}$). To simplify the notations, we assume that:
@@ -42,19 +42,19 @@ This definition is such that $y^k_j$ is the $j^{th}$ data point received
 after the $k^{th}$ transmission and $u^k_j$ is the corresponding time-stamp.
 Figure~\ref{fig:ltc-notation} illustrates the notations and algorithm.
 
-Using these notations and details in Section~\ref{sec:ltc}, the original LTC
-algorithm can be written as in Algorithm~\ref{algo:ltc-notation}. For
-readability, we assume that access to data points is blocking, i.e., the program
-will wait until the points are available. We also assume that the content of
-variable \texttt{tr} is transmitted after each assignment of this variable.
-Function \texttt{line}, omitted for brevity, returns the ordinate at abscissa
-$x$ (1st argument) of the line defined by the points in its 2nd and 3rd
+Using these notations and details in Section~\ref{sec:ltc}, the original
+\acrshort{ltc} algorithm can be written as in Algorithm~\ref{algo:ltc-notation}.
+For readability, we assume that access to data points is blocking, i.e., the
+program will wait until the points are available. We also assume that the
+content of variable \texttt{tr} is transmitted after each assignment of this
+variable. Function \texttt{line}, omitted for brevity, returns the ordinate at
+abscissa $x$ (1st argument) of the line defined by the points in its 2nd and 3rd
 arguments.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\columnwidth]{./figures/ltc.pdf}
-\caption{Illustration of the LTC algorithm. Blue 
+\caption{Illustration of the \acrshort{ltc} algorithm. Blue 
 dots are received points, red dots are transmitted points. Dashed lines 
 represent the high and low lines when a point is 
 transmitted.\vspace*{-0.3cm}}
@@ -89,7 +89,7 @@ transmitted.\vspace*{-0.3cm}}
     \EndIf
 \EndWhile
 \end{algorithmic}
-\caption{Original LTC algorithm, adapted from~\cite{schoellhammer2004lightweight}.}
+\caption{Original \acrshort{ltc} algorithm, adapted from~\cite{schoellhammer2004lightweight}.}
 \label{algo:ltc-notation}
 \end{algorithm}
 
@@ -111,21 +111,21 @@ and radius $\frac{v_1}{v_j}\epsilon$:
 Note that $v_1$ is defined as soon as one point is received after the last
 transmission.
 
-\subsection{LTC property}
+\subsection{\acrshort{ltc} property}
 \label{sec:ltc-property}
 
-We define the \emph{LTC property} as follows:
+We define the \emph{\acrshort{ltc} property} as follows:
 \begin{equation}
 \exists z \in \mathbb{R}^n, \ \forall j \in \llbracket 1, m \rrbracket, \norm{\frac{v_j}{v_1}z-z_j} \leq
 \epsilon.
 \end{equation}
-The original LTC algorithm ensures that the LTC property is
-verified between each transmissions. Indeed, all the data points
-$z$ such that $(v_1, z)$ is between the high line and the low line
-verify the property. Line 13 in Algorithm~\ref{algo:ltc-notation} guarantees that
-such a point exists.
+The original \acrshort{ltc} algorithm ensures that the \acrshort{ltc} property
+is verified between each transmissions. Indeed, all the data points $z$ such
+that $(v_1, z)$ is between the high line and the low line verify the property.
+Line 13 in Algorithm~\ref{algo:ltc-notation} guarantees that such a point
+exists.
 
-The LTC property can be re-written as follows:
+The \acrshort{ltc} property can be re-written as follows:
 \begin{equation}
 \exists z \in \mathbb{R}^n, \ \forall j \in \llbracket 1, m \rrbracket, \norm{z-\frac{v_1}{v_j}z_j} \leq
 \frac{v_1}{v_j}\epsilon
@@ -140,9 +140,9 @@ of n-balls of strictly decreasing radius, since $v_j > v_1$.
 
 \section{Algorithm}
 
-The LTC algorithm generalized to dimension $n$ tests that the LTC  property in
-Equation~\ref{eq:ltc-property} is verified after each reception of a data
-point. It is written in Algorithm~\ref{algo:general-ltc}.
+The \acrshort{ltc} algorithm generalized to dimension $n$ tests that the
+\acrshort{ltc} property in Equation~\ref{eq:ltc-property} is verified after each
+reception of a data point. It is written in Algorithm~\ref{algo:general-ltc}.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
@@ -172,10 +172,10 @@ point. It is written in Algorithm~\ref{algo:general-ltc}.
 
 \section{Intersections of n-balls}
 
-Although Algorithm~\ref{algo:general-ltc} looks simple, one should not
-overlook the fact that there is no good general algorithm to test
-whether a set of n-balls intersect. The best general algorithm we could find
-so far relies on Helly's theorem which is formulated as follows~\cite{helly1923mengen}:
+Although Algorithm~\ref{algo:general-ltc} looks simple, one should not overlook
+the fact that there is no good general algorithm to test whether a set of
+n-balls intersect. The best general algorithm we could find so far relies on
+Helly's theorem which is formulated as follows~\cite{helly1923mengen}:
 \begin{theorem}
 Let $\left\{ X_i \right\}_{i \in \llbracket 1, m \rrbracket}$ be a collection of
 convex subsets of $\mathbb{R}^n$. If the intersection of every $n+1$ subsets is
@@ -211,22 +211,22 @@ Euclidean norm (see Figure~\ref{fig:norm-comparison-2D}). In 3D, this ratio
 would be $\frac{6}{\pi}$. Unsurprisingly, the infinity norm is more tolerant
 than the Euclidean norm.
 
-It should also be noted that using the infinity norm in $\mathbb{R}^n$ 
-boils down to the use of the 1D LTC algorithm independently in each 
-dimension, since a data point will be transmitted as soon as the linear 
-approximation doesn't hold in any of the dimensions. For the Euclidean 
-norm, however, the multidimensional and multiple unidimensional 
-versions are different: the multiple unidimensional version 
-behaves as the infinity norm, but the multidimensional version is more 
-stringent, leading to a reduced compression rate and error.
+It should also be noted that using the infinity norm in $\mathbb{R}^n$ boils
+down to the use of the 1D LTC algorithm independently in each dimension, since
+a data point will be transmitted as soon as the linear approximation doesn't
+hold in any of the dimensions. For the Euclidean norm, however, the
+multidimensional and multiple unidimensional versions are different: the
+multiple unidimensional version behaves as the infinity norm, but the
+multidimensional version is more stringent, leading to a reduced compression
+rate and error.
 
 To choose between the multidimensional implementation and multiple
-unidimensional ones, we recommend to check whether the desired  error bound is
+unidimensional ones, we recommend to check whether the desired error bound is
 expressed independently for every sensor, or as an aggregate error between them.
 The multidimensional version is more appropriate for multidimensional sensors,
-for instance 3D  accelerometers or 3D gyroscopes, and the multiple
-unidimensional  version is more suitable for multiple independent sensors, for
-instance a temperature and a pressure sensor.
+for instance 3D accelerometers or 3D gyroscopes, and the multiple unidimensional
+version is more suitable for multiple independent sensors, for instance a
+temperature and a pressure sensor.
 
 %~ For instance, in case of a 3D accelerometer, if the error 
 %~ is expressed simply as 

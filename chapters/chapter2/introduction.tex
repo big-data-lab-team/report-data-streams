@@ -1,13 +1,14 @@
 \section{Introduction}
 
 % introduce Streaming data
-Streaming data has become more and more important since the rise of the Internet
-of Things. Devices in IoT communicate using streaming data, transmitted at high
-speed and short intervals, which may never be reviewed if the system does not
-process or store it immediately. To decrease the amount of data transmitted,
-stream summarization is useful and effective. Summarization can be considered as
-a process to discover a compressed description of the original data-set with the
-lowest possible \emph{information loss}~\cite{chandola2007summarization}.
+Streaming data has become more and more important since the rise of the
+\acrlong{iot}. Devices in \acrshort{iot} communicate using streaming data,
+transmitted at high speed and short intervals, which may never be reviewed if
+the system does not process or store it immediately. To decrease the amount of
+data transmitted, stream summarization is useful and effective. Summarization
+can be considered as a process to discover a compressed description of the
+original data-set with the lowest possible \emph{information
+loss}~\cite{chandola2007summarization}.
 % Summarization is a key data mining concept which involves techniques for finding a compact description of a data-set. Summarization can be viewed as compressing a given set
 % of transactions into a smaller set of patterns while retaining the maximum possible information~\cite{chandola2007summarization}. \todo{change}
 
@@ -28,11 +29,10 @@ Previous research has provided some synopsis constructions for summarization.
 \emph{Histogram} techniques~\cite{kejariwal2015real, ahmed2019data} which give a
 distribution of a items in stream. \emph{Sketch} techniques are able to solve
 some specific problem, such as, the number of distinct items in stream can be
-estimated by using Flajolet and Martin sketch
-(FM-Sketch)~\cite{flajolet1985probabilistic, garofalakis2016data}, the second
-frequency moment of stream is able to be solved through Alon-Matias-Szegedy
-Sketch (AMS Sketch)~\cite{alon1999space}, and Count-Min
-sketch~\cite{cormode2005improved, garofalakis2016data} can be used to calculate
+estimated by using \acrfull{fm-sketch}~\cite{flajolet1985probabilistic,
+garofalakis2016data}, the second frequency moment of stream is able to be solved
+through \acrfull{ams-sketch}~\cite{alon1999space}, and Count-Min
+Sketch~\cite{cormode2005improved, garofalakis2016data} can be used to calculate
 the quantiles and frequent items in stream roughly. Moreover, many summarization
 methods applies \emph{Sliding window}~\cite{datar2002maintaining} technique
 which maintain a window that moves with new data coming. it ensures that the
@@ -77,29 +77,27 @@ would be used to compress new data point into a bit sequences.  Many existing
 literature has been devoted to the study of lossless compression. Huffman
 coding~\cite{huffman1952method} and arithmetic
 coding~\cite{langdon1984introduction} are the primary and classical entropy
-coding methods. The Lossless Entropy Compression (LEC)
-algorithm~\cite{marcelloni2008simple} is a approximated version of
-exponential-Golomb code~\cite{teuhola1978compression}. In
-~\cite{marcelloni2008simple}, LEC is utilized for compressing temperature and
-humidity streams by using a very small dictionary whose size is determined by
-the number of bits after analog-to-digital converter
-(ADC)~\cite{marcelloni2008simple,marcelloni2009efficient}. The Sequential
-Lossless Entropy Compression (S-LEC)~\cite{li2016temporal} algorithm is an
-extension and improvement of LEC algorithm. It exploits the positional
-relationship of groups of adjacent residues, in order to increase the
-compression ratio. In dictionary-based lossless compression algorithms,
-Lempel-Ziv-77 (LZ77)~\cite{ziv1977universal} and Lempel-Ziv-78
-(LZ78)~\cite{ziv1978compression} are the well-known algorithms, where LZ77
-maintains a sliding window as dictionary during compression. There are several
-variations of LZ77 and LZ78, for instance, Lempel-Ziv-Welch
-(LZW)~\cite{sadler2006data}, Lempel-Ziv-Storer-Szymanski
-(LZSS)~\cite{storer1982data}, Lempel-Ziv-Oberhumer (LZO)~\cite{lzocite} etc. In
-order to suit these algorithms to connected objects and data streams, many
-algorithms improved are proposed, such as
-Accelerometer-Lempel-Ziv-Storer-Szymanski
-(Accelerometer-LZSS)~\cite{pope2018accelerometer} which combines LZSS and
-Huffman coding to compress accelerometer data, and Sensor Lempel-Ziv-Welch
-(Sensor LZW)~\cite{sadler2006data} algorithm which adapts LZW to sensor nodes.
+coding methods. \acrfull{lec} algorithm~\cite{marcelloni2008simple} is a
+approximated version of exponential-Golomb code~\cite{teuhola1978compression}.
+In ~\cite{marcelloni2008simple}, \acrshort{lec} is utilized for compressing
+temperature and humidity streams by using a very small dictionary whose size is
+determined by the number of bits after
+\acrfull{adc}~\cite{marcelloni2008simple,marcelloni2009efficient}. The
+\acrfull{s-lec}~\cite{li2016temporal} algorithm is an extension and improvement
+of \acrshort{lec} algorithm. It exploits the positional relationship of groups
+of adjacent residues, in order to increase the compression ratio. In
+dictionary-based lossless compression algorithms,
+\acrfull{lz77}~\cite{ziv1977universal} and
+\acrfull{lz78}~\cite{ziv1978compression} are the well-known algorithms, where
+\acrshort{lz77} maintains a sliding window as dictionary during compression.
+There are several variations of \acrshort{lz77} and \acrshort{lz78}, for
+instance, \acrfull{lzw}~\cite{sadler2006data},
+\acrfull{lzss}~\cite{storer1982data}, \acrfull{lzo}~\cite{lzocite} etc. In order
+to suit these algorithms to connected objects and data streams, many algorithms
+improved are proposed, such as \acrfull{a-lzss}~\cite{pope2018accelerometer}
+which combines \acrshort{lzss} and Huffman coding to compress accelerometer
+data, and \acrfull{s-lzw}~\cite{sadler2006data} algorithm which adapts
+\acrshort{lzw} to sensor nodes.
 
 Moreover, lossy compression methods might are suitable for sensor data streams
 than lossless methods, because measured sensor data intrinsically involves noise
