@@ -1,10 +1,10 @@
-\section{LTC n-dimension compare with Regression}
+\section{Comparison with Polynomial Regression}
 
 From the previous experiments, we know that LTC has good performance on  walking
 and running accelerometer data sets. However as we have seen, the running data
 set (Figure~\ref{fig:datasets-2}) looks like it is made of many high-degree
 polynomials. We wonder whether high-degree regression compression method
-performs better with our accelerometer data sets. In this paragraph, we
+performs better with our accelerometer data sets. In this section, we
 implement the Polynomial Regression compression method mentioned
 in~\ref{sec:polynomial} and we compare it with LTC in different dimensions.
 
@@ -69,7 +69,8 @@ result.
 
 We use the implemented polynomial regression method on the previous walking and
 running data sets. Figure~\ref{fig:poly-regression-3-degree} and
-Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data. In the
+Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data \TG{Why do you show this for PR and not for LTC?
+If you still want to show it, you should at least put the figures on the same y scale as figure 6}. In the
 compression process, we need to keep in memory all the data between two
 transmissions and update regression models each time a new data point arrives.
 
@@ -121,34 +122,34 @@ transmissions and update regression models each time a new data point arrives.
 \label{fig:poly-regression-5-degree}
 \end{figure*}
 
-\subsection{Results of Comparison}
-In our implementation, for a regression model with N-degree and M-parameters, we
+\subsection{Results}
+In our implementation, for a regression model with N-degree and M-parameters we
 need M*(N+1) coefficients and extra time-stamp to record when the coefficients
 are transmitted. In our case, coefficients are recorded as single-precision
 floating-point numbers which would use 4 bytes per each. The total number of
 bytes needed to represent the original data is $(N+1)\times M\times 4+4$ (4
-bytes for recording Time-stamp).
+bytes for recording time-stamp) 
+\TG{This paragraph is out of place. I think it can be removed, your
+discussion in the paragraphs below is enough.}.
 
 From Table~\ref{table:CR-compare-walking} and
-Table~\ref{table:CR-compare-running}, we observe that increasing the dimension
-$n$ is detrimental to compression ratio with both n-dimensional LTC and
-Polynomial Regression. Moreover, LTC n-dimension gives a better compression
-ratio than the regression method on different dimensions, even though the
-regression method represents original data with fewer segments (curve segments).
-It is because the polynomial regression method requires more bytes to transmit
-the coefficients while LTC n-dimension just transmits a data point each time. In
-other words, we need to represent each regression curves with $(N+1)\times
-M\times 4+4$ bytes, but each straight line can be defined by two data points
-with $2\times(M\times 2+4)$ bytes (2 bytes for each parameter). Assume
-Polynomial regression and LTC n-dimension needs $G_P$ curves and $G_L$ lines
-respectively to represent the original data set. Then we have to transmit
+Table~\ref{table:CR-compare-running}, we observe that LTC n-dimension gives
+better compression ratio than regression method on different dimensions, even
+though regression method represents original data with fewer segments (curve
+segments). It is because polynomial regression method requires more bytes to
+transmit the coefficients while LTC n-dimension just transmits a data point each
+time. In other words, we need to represent each regression curves with
+$(N+1)\times M\times 4+4$ bytes, but each straight line can be defined by two
+data points with $2\times(M\times 2+4)$ bytes (2 bytes for each parameter).
+Assume Polynomial regression and LTC n-dimension needs $G_P$ curves and $G_L$
+lines respectively to represent original data set. Then we have to transmit
 $((N+1)\times M\times 4+4)\times G_P$ bytes by using polynomial regression, and
 $2\times(M\times 2+4) \times (G_L-1)$ bytes ($G_L-1$ data points) by using LTC
 n-dimension because LTC n-dimension generates connected straight lines. In our
 case, the polynomial regression method uses more bytes to represent original
 stream than LTC n-dimension. In reality, the compression ratio of these two
 methods depends on the data set, the polynomial regression method would give us
-a higher compression ratio than LTC n-dimension, if the regression model really
+higher compression ratio than LTC n-dimension, if the regression model really
 fits our data set.
  
 % \TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
@@ -166,9 +167,9 @@ equals 1 and for infinity norm when dimension equals 2.
 
 Polynomial regression method needs a lot of memory to save all the data points
 between two transmission and long processing time to calculate coefficients and
-build a model when each new data point comes. Because we implemented the
-polynomial regression method and LTC n-dimension in different platforms, the
-comparison of memory usage and processing time between them cannot be measured.
+build model when each new data point comes. Because we implemented polynomial
+regression method and LTC n-dimension in different platforms, the comparison of
+memory usage and processing time between them cannot be measured.
 
 % So, using polynomial regression method needs more memory and processing time
 % than n-dimensional LTC for infinity norm, but for Euclidean norm, we need to
