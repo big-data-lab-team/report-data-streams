@@ -17,14 +17,13 @@ approximate range of their intersection. We define $B$ as follows:
 Where \texttt{box()} is a function that returns the bounding box of an n-ball.
 Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
-Algorithm~\ref{algo:euclidean}. Firstly, we check the intersection with
-box($\mathcal{B}_j$) and $B$, which shows in Algorithm~\ref{algo:euclidean} line
-11, and a maximum length $L_s$ of set of intersecting n-balls $S$ is assigned in
-order to restrict memory usage. Secondly, for each $\mathcal{B}_i$ in $S$, we
-check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14 in
-Algorithm~\ref{algo:euclidean}). At the same time $\mathcal{B}_i$ will be
-removed if it includes $\mathcal{B}_j$, because, once $\mathcal{B}_j$ has
-intersection with n-balls in $S$ then a bigger n-ball which contains the
+Algorithm~\ref{algo:euclidean}. Firstly, we check the intersection between
+box($\mathcal{B}_j$) and $B$ (Algorithm~\ref{algo:euclidean}, line
+11). To restrict memory usage, $B$ only covers a set $S$ of n-balls were the size of $S$ is limited to
+$L_s$. Secondly, for each $\mathcal{B}_i$ in $S$, we
+check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14). In addition $\mathcal{B}_i$ will be
+removed if it includes $\mathcal{B}_j$, because if $\mathcal{B}_j$ has
+intersection with n-balls in $S$ then a bigger n-ball which contains
 $\mathcal{B}_j$ must also have intersection.
 % \english{because smaller n-ball intersects
 % $\mathcal{B}_j$ than a bigger n-ball which contains the smaller one (line 17, 18 in
@@ -51,11 +50,11 @@ means:
     mid \  \bigcap \  (min\_id \cap max\_id) = \text{\O}
 \end{equation*}
 
-In Algorithm~\ref{algo:euclidean} line 14 and 15, It guarantees any two n-balls
+In Algorithm~\ref{algo:euclidean} line 14 and 15, it is guaranteed that any two n-balls
 in $S$ has intersection. Therefore, any point in the intersection of $min\_id$
 and $max\_id$, could be used for determining the direction of bisection. In our
-implement, we select a point in connection of these two n-ball's center, which
-also locates in intersecting object(line/chord when order=2, plane/circle when
+implementation, we select a point in connection of these two n-ball's center, which
+also locates in intersecting object (line/chord when order=2, plane/circle when
 order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
 
 %discuss the time complexity
@@ -63,11 +62,11 @@ According to our implementation for Euclidean norm, if the $L_s$ is undefined
 ($L_s$ is infinity), the operations in Algorithm~\ref{algo:euclidean} and
 Algorithm~\ref{algo:find_bisection_function} before the function
 \texttt{recursive()} need $O(n)$ complexity. In the \texttt{recursive()}
-function, the bisection from Line 12 to Line 32 in
+function, the bisection from line 12 to line 32 in
 Algorithm~\ref{algo:recursive} needs $O(\log{2\epsilon})$, because the $left$
 and $right$ are initialized from the bounding box $B$, where $|left - right|
 \leqslant 2\epsilon$. Moreover, computing $left$ and $right$ which used for next
-dimension in \texttt{recursive()} function needs $O(n)$. Thereby, When the data
+dimension in \texttt{recursive()} function needs $O(n)$. Thereby, when the data
 stream is two-dimensional, the time complexity of LTC n-dimension for Euclidean
 norm is $O(n) + O(\log{2\epsilon})\times O(n)$ = $O(n \times \log{2\epsilon})$,
 where $n$ is the number of the data points we seen so far. In the same way, if

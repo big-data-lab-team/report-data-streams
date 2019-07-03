@@ -1,14 +1,14 @@
 \section{Preliminary comments}
 
-We note that the formulation of \acrshort{iot}
+We note that the formulation of \acrshort{ltc}
 in~\cite{schoellhammer2004lightweight} relies on the intersection of
 \emph{convex cones} in dimension $n+1$. For $n=1$, it corresponds to the
 intersection of triangles, which can efficiently be computed by maintaining
-boundary lines, as detailed previously Section~\ref{sec:ltc}. In higher
+boundary lines, as detailed in Section~\ref{sec:ltc}. In higher
 dimension, however, cone intersections are not so straightforward to compute,
 due to the fact that the intersection between cones may not be a cone.
 
-To address this issue, we formulate \acrshort{iot} as an intersection test
+To address this issue, we formulate \acrshort{ltc} as an intersection test
 between \emph{n-balls}, that is, segments for $n=1$, disks for $n=2$, etc.
 N-balls are defined from the \emph{norm} used in the vector space of data
 points. For $n=1$, the choice of the norm does not really matter, as all p-norms
@@ -20,8 +20,7 @@ will be critical.
 \subsection{Definitions}
 
 %% notation
-Above all, we give the notation of \acrshort{ltc} in the
-following: The algorithm receives a stream of data points $x_i$ at times $t_i$
+The algorithm receives a stream of data points $x_i$ at times $t_i$
 ($i \in \mathbb{N}$), and it transmits a stream of data points $\xi_i$ at times
 $\tau_i$ ($i \in \mathbb{N}$). To simplify the notations, we assume that:
 \begin{equation}
@@ -137,9 +136,6 @@ that is:
 \end{equation}
 Note that $(\mathcal{B}_j)_{j \in \llbracket 1, m \rrbracket}$ is a sequence
 of n-balls of strictly decreasing radius, since $v_j > v_1$.
-
-\section{Algorithm}
-
 The \acrshort{ltc} algorithm generalized to dimension $n$ tests that the
 \acrshort{ltc} property in Equation~\ref{eq:ltc-property} is verified after each
 reception of a data point. It is written in Algorithm~\ref{algo:general-ltc}.
