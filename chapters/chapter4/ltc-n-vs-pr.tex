@@ -20,7 +20,8 @@ regression compression method on each accelerometer parameter. There are three
 polynomial functions between independent variables $t$ (time-stamp) and
 dependent variables $a.x$, $a.y$ or $a.z$ (e.g. $t \sim a.x$). In other words,
 it means that three regression models shall be transmitted to represent a curve
-in 3D space. For tolerance checking, we use infinity norm and Euclidean norm.
+in 3D space. For tolerance checking, we use the infinity norm and Euclidean
+norm.
 
 As we mentioned in Section~\ref{sec:polynomial}, $M_{j}^{k}$ means the $j^{th}$
 polynomial regression model after $k^{th}$ transmission, but to apply this
@@ -33,7 +34,8 @@ parameters $x$, $y$ and $z$ are calculated, and each time a new point arrives
 they will be recalculated. The function \texttt{max\_residue()} returns the
 maximum error between predicted data and original data. If the maximum residue
 is larger than $\epsilon$, then the last regression model that meets error
-tolerance and the time-stamp of last data are transmitted as compression result.
+tolerance and the time-stamp of the last data are transmitted as the compression
+result.
 \begin{algorithm}
 \begin{algorithmic}[1]
 \Input
@@ -65,7 +67,7 @@ tolerance and the time-stamp of last data are transmitted as compression result.
 \label{algo:n-polynomial}
 \end{algorithm}
 
-We use the implemented polynomial regression method on previous walking and
+We use the implemented polynomial regression method on the previous walking and
 running data sets. Figure~\ref{fig:poly-regression-3-degree} and
 Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data. In the
 compression process, we need to keep in memory all the data between two
@@ -120,7 +122,7 @@ transmissions and update regression models each time a new data point arrives.
 \end{figure*}
 
 \subsection{Results of Comparison}
-In our implementation, for a regression model with N-degree and M-parameters we
+In our implementation, for a regression model with N-degree and M-parameters, we
 need M*(N+1) coefficients and extra time-stamp to record when the coefficients
 are transmitted. In our case, coefficients are recorded as single-precision
 floating-point numbers which would use 4 bytes per each. The total number of
@@ -130,42 +132,43 @@ bytes for recording Time-stamp).
 From Table~\ref{table:CR-compare-walking} and
 Table~\ref{table:CR-compare-running}, we observe that increasing the dimension
 $n$ is detrimental to compression ratio with both n-dimensional LTC and
-Polynomial Regression. Moreover, LTC n-dimension gives better compression ratio
-than regression method on different dimensions, even though regression method
-represents original data with fewer segments (curve segments). It is because
-polynomial regression method requires more bytes to transmit the coefficients
-while LTC n-dimension just transmits a data point each time. In other words, we
-need to represent each regression curves with $(N+1)\times M\times 4+4$ bytes,
-but each straight line can be defined by two data points with $2\times(M\times
-2+4)$ bytes (2 bytes for each parameter). Assume Polynomial regression and LTC
-n-dimension needs $G_P$ curves and $G_L$ lines respectively to represent
-original data set. Then we have to transmit $((N+1)\times M\times 4+4)\times
-G_P$ bytes by using polynomial regression, and $2\times(M\times 2+4) \times
-(G_L-1)$ bytes ($G_L-1$ data points) by using LTC n-dimension because LTC
-n-dimension generates connected straight lines.
-In our case, the polynomial regression method uses more bytes to represent
-original stream than LTC n-dimension. In reality, the compression ratio of these
-two methods depends on the data set, the polynomial regression method would give
-us higher compression ratio than LTC n-dimension, if the regression model really
+Polynomial Regression. Moreover, LTC n-dimension gives a better compression
+ratio than the regression method on different dimensions, even though the
+regression method represents original data with fewer segments (curve segments).
+It is because the polynomial regression method requires more bytes to transmit
+the coefficients while LTC n-dimension just transmits a data point each time. In
+other words, we need to represent each regression curves with $(N+1)\times
+M\times 4+4$ bytes, but each straight line can be defined by two data points
+with $2\times(M\times 2+4)$ bytes (2 bytes for each parameter). Assume
+Polynomial regression and LTC n-dimension needs $G_P$ curves and $G_L$ lines
+respectively to represent the original data set. Then we have to transmit
+$((N+1)\times M\times 4+4)\times G_P$ bytes by using polynomial regression, and
+$2\times(M\times 2+4) \times (G_L-1)$ bytes ($G_L-1$ data points) by using LTC
+n-dimension because LTC n-dimension generates connected straight lines. In our
+case, the polynomial regression method uses more bytes to represent original
+stream than LTC n-dimension. In reality, the compression ratio of these two
+methods depends on the data set, the polynomial regression method would give us
+a higher compression ratio than LTC n-dimension, if the regression model really
 fits our data set.
  
 % \TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
 Besides, similarly to Experiment 2 in Section~\ref{sec:experiment2-ltc}, the
 compression ratio is higher for the infinity norm than for the Euclidean and is
-higher for the walking than for running. For given degree of polynomial
-regression method, the higher degree results in smaller compression ratio for
-walking and running in general, but the variations are slight. However, in
-Table~\ref{table:CR-compare-walking}, when dimension is 2 and 3, the 5-degree
-regression compresses more data then 3-degree regression method in walking data
-set for Infinity norm.  In Table~\ref{table:CR-compare-running}, the 5-degree
-regression method has higher compression ratio then 3-degree regression for both
-norm when dimension equals 1 and for infinity norm when dimension equals 2.
+higher for the walking data set than for running data set. For the given degree
+of polynomial regression method, the higher degree results in a smaller
+compression ratio for walking and running in general, but the variations are
+slight. However, in Table~\ref{table:CR-compare-walking}, when the dimension is
+2 and 3, the 5-degree regression compresses more data than the 3-degree
+regression method in walking data set for Infinity norm. In
+Table~\ref{table:CR-compare-running}, the 5-degree regression method has a
+higher compression ratio than 3-degree regression for both norms when dimension
+equals 1 and for infinity norm when dimension equals 2.
 
 Polynomial regression method needs a lot of memory to save all the data points
 between two transmission and long processing time to calculate coefficients and
-build model when each new data point comes. Because we implemented polynomial
-regression method and LTC n-dimension in different platform, the comparison of
-memory usage and processing time between them cannot be measured.
+build a model when each new data point comes. Because we implemented the
+polynomial regression method and LTC n-dimension in different platforms, the
+comparison of memory usage and processing time between them cannot be measured.
 
 % So, using polynomial regression method needs more memory and processing time
 % than n-dimensional LTC for infinity norm, but for Euclidean norm, we need to
