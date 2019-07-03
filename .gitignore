@@ -11,3 +11,6 @@ ltc.pdf
 *.lof
 *.lot
 *.toc
+*.acn
+*.glo
+*.ist

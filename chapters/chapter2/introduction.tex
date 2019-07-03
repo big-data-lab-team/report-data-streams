@@ -1,197 +1,118 @@
 \section{Introduction}
 
 % introduce Streaming data
-Streaming data has become more and more important since the rise of the Internet
-of Things. Devices in IoT communicate using streaming data, transmitted
-at high speed and short intervals, which may never be reviewed if the system
-does not process or store it immediately. To decrease the amount of data
-transmitted, stream summarization is useful and effective. Summarization can
-be considered as a process to discover a compressed description of the original data-set with the lowest possible \emph{information
+Streaming data has become more and more important since the rise of the
+\acrlong{iot}. Devices in \acrshort{iot} communicate using streaming data,
+transmitted at high speed and short intervals, which may never be reviewed if
+the system does not process or store it immediately. To decrease the amount of
+data transmitted, stream summarization is useful and effective. Summarization
+can be considered as a process to discover a compressed description of the
+original data-set with the lowest possible \emph{information
 loss}~\cite{chandola2007summarization}.
 % Summarization is a key data mining concept which involves techniques for finding a compact description of a data-set. Summarization can be viewed as compressing a given set
 % of transactions into a smaller set of patterns while retaining the maximum possible information~\cite{chandola2007summarization}. \todo{change}
-The following stream summarization techniques are often used.
-%% sampling
 
-\emph{Sampling} captures a sub-sample of a data stream that represents the
-entire stream. When the data cannot be saved to working storage,
-we can take a sample of the whole data, and estimate the query results from this sample.
+Some stream summarization techniques are used for data reduction, for instance,
+\emph{Sampling} techniques, including uniform random
+sampling~\cite{vitter1984faster, Ahrens1985SequentialRS}, Reservoir
+sampling~\cite{vitter1985random, Aggarwal2007DataS} and weighted
+sampling~\cite{chaudhuri1999random, efraimidis2006weighted}, capture a
+sub-sample of the data stream to represents the entire stream; \emph{Filtering}
+techniques help us helps us to omit the items in the stream. Bloom
+filter~\cite{bloom1970space} and Cuckoo filter~\cite{fan2014cuckoo} are
+well-known methods and have been applied in many fields. we are able to obtain
+the information or data that we are interested int and answer the query which
+requires the specific part of the entire data stream by using filtering. In
+addition, to  answer queries over a data stream, computing approximate result is
+more suitable for any queries than the exact solution~\cite{kejariwal2015real}.
+Previous research has provided some synopsis constructions for summarization.
+\emph{Histogram} techniques~\cite{kejariwal2015real, ahmed2019data} that give a
+distribution of items in the stream. \emph{Sketch} techniques are able to solve
+some specific problem, such as the number of distinct items in a stream can be
+estimated by using \acrfull{fm-sketch}~\cite{flajolet1985probabilistic,
+garofalakis2016data}, the second frequency moment of a stream is able to be solved
+through \acrfull{ams-sketch}~\cite{alon1999space}, and Count-Min
+Sketch~\cite{cormode2005improved, garofalakis2016data} can be used to calculate
+the quantiles and frequent items in a stream roughly. Moreover, many summarization
+methods apply \emph{Sliding window}~\cite{datar2002maintaining} technique
+which maintains a window that moves with new data coming. it ensures that the
+methods always use fresh data for analysis and statistics by keeping the most
+recent items of the stream or all items within a specific time period in given bound
+memory~\cite{leskovec2014mining}. However, many summarization techniques only
+focus on specific problems and might eliminate most or partial data
+information. In some case, the integrity of data information and accuracy of
+query answers are required, thus we need a summarization technique which can
+both reduce the size of the stream and keep integral data information. Data compression
+is such a technique that meets the above conditions.
 
-The most common sampling method is uniform random
-sampling~\cite{vitter1984faster, Ahrens1985SequentialRS} which supposes all
-items in the stream have the same probability to be selected. The idea is to
-extract a part of stream and estimate the query answer according to the
-proportion of stream selected and entire stream. There are also others sampling
-methods utilized for different situations, such as the Reservoir sampling
-method~\cite{vitter1985random, vitter1985random, Aggarwal2007DataS} that samples
-a fixed number $k$  of items with equal probability. The weighted (non-uniform)
-sampling~\cite{chaudhuri1999random} and weighted random sampling with
-reservoir~\cite{efraimidis2006weighted} have been proposed to sample non-uniform
-streams. In these methods, items are weighted and the probability of selection
-is dependent on this weight~\cite{chaudhuri1999random}.
-
-% For instance, we can answer the query ``What
-% fraction of the typical user's queries were repeated over the past
-% month?"~\cite{leskovec2014mining} by using
-% uniform random sampling~\cite{vitter1984faster, Ahrens1985SequentialRS}, where
-% all items in  the stream have the same probability to be selected. The common idea is
-% to extract the queries from 1/10 of users, each user has 10\% probability be
-% selected. In general, we need just to maintain a list of users whose queries
-% should be selected, but we might not has enough main memory space. To reduce
-% memory usage, the hash function is used instead of keeping list of user. We
-% create 10 buckets marked from 0 to 9, and hash each user name of query into one
-% of buckets. If the user is hashed to bucket 0, we will select the queries from
-% this user.
-% \TG{This paragraph is too long, I don't think we need to read details about
-% random sampling since you're not going to use it later.}
-
-
-In practice, sampling can help save energy on connected objects. For instance,
-when querying a question on stream, we can estimate the result after sampling
-from whole stream. We need less communication with objects, because we need only
-apart of whole stream to estimate result.
-%% pros and cons
-\todo{pros and cons, might be}
-
-%% filtering
-\emph{Filtering} helps us to omit the elements in the stream.
-In~\cite{leskovec2014mining}, a example is given for spam filtering. We would
-like to filter the stream and only focus on the non-spam email addresses. Same
-with sampling, the list of email addresses is too large to be stored in limited
-memory. A solution to archive filtering without too much memory is using the
-filter technique known as Bloom filtering~\cite{bloom1970space} which eliminate
-most of the elements that do not meet the filtering
-criteria~\cite{leskovec2014mining}. Assume we have list $S$ of non-spam emails,
-Bloom filtering generates an array of $k$ bits by hashing each email address in
-$S$ into the bit-array with $k$ hash functions ($h_1$, ..., $h_k$ : $\{1...m\}
-\rightarrow \{1...n\}$). Each email address in $S$ is hashed by all hash
-function and the corresponding bits in array are changed to 1 based on hash
-results. After initialization, the bit-array can be utilized for filtering. For
-each new coming streaming data $D$, we get a set of bits according to those $k$
-hash functions and initialized bit-array. The streaming data $D$ will be ignored
-if any one hash result matches 0's in the bit-array~\cite{leskovec2014mining}.
-However, in bloom filter, false positives are possible but not false
-negatives~\cite{ahmed2019data}. It means the email addresses that are not in $S$
-might pass the filter too, but if a email address is blocked by filter, then it
-always be true that the address does not belong to $S$~\cite{ahmed2019data}.
-
-Stream filtering is able to obtain the information or data that we are
-interested and is able to answer the query which requires the specific part of
-entire data stream. For example, some connected sensor objects send longitude
-and latitude stream data to client side, but we just need the data from specific
-locations (longitudes and latitudes).
-
-
-% \todo{uniform the Objects, where the summarization process in, connected objects
-% (offline) or client side (online)}
-%% sliding window
-Due to the resource constrains of connected objects, it is not possible to save
-all streaming data into memory or storage. However, Some time-based queries are
-needed, e.g. All of the web requests in last 5 minutes.
-
-\emph{Sliding window} is introduced by Datar et
-al.~\cite{datar2002maintaining} maintains a window that moves with new data
-coming to ensures the analysis and statistics using fresh data. It is also often
-used to keep the most recent $n$ elements of stream or all the elements within
-specific time period $t$, e.g. one hour or one day, in given bounded
-memory~\cite{leskovec2014mining}.
-
-% In addition, some streaming algorithms gives the coefficients or characteristics of by summarizing stream. They solve the problems like [table]
-% Dud to the characteristics of streaming data and the devices of the limited storage and memory in IoT,
-
-In addition, to answer queries over data stream, computing approximate result is
-more suitable for any queries than exact solution~\cite{kejariwal2015real}.
-Previous research has provided some other synopsis constructions for
-summarization. e.g. Histogram~\cite{hesabi2015data, poosala1999approximate} and
-Sketch~\cite{flajolet1985probabilistic, alon1999space,
-cormode2005improved,shan2016lru}
-
-\emph{Histogram} technique gives a distribution of a elements in stream. General
-histogram-based summarization techniques e.g. Equi-width histograms partition
-the domain of element into a set of ranges or buckets of equal length, and
-assign the elements in the stream into these buckets. The distribution of the
-stream would be estimated as the histogram of the frequencies of these
-buckets~\cite{kejariwal2015real, ahmed2019data}.
-
-\emph{Sketches} are used to solve some problems on data stream e.g. estimating
-moments, estimating cardinality or estimating frequent elements. The main idea
-of sketches is adapting random projection technique to time series domain e.g.
-data stream~\cite{ahmed2019data}. Several sketch-based methods are given as
-follow.
-
-%% Count-Min Sketch for frequency estimate
-Count-Min sketch~\cite{cormode2005improved} was invented by Cormode et al. to
-answer the point, range, and inner product queries, and it also can be utilized
-to estimate the quantiles, frequent items, etc~\cite{cormode2005improved}. This
-sketch consists of a 2-dimensional array of counters (matrix) with depth $d=
-\lceil \frac{2}{\epsilon} \rceil$ and width $w= \lceil
-\log\frac{1}{\delta}\rceil$, where $w$ and $d$ are the parameters which control
-the error guarantee~\cite{garofalakis2016data}. When a new elements $e$ in the
-stream is received, it is mapped by $d$ hash function $h_1$, ..., $h_d$ :
-$\{1...m\}\rightarrow \{1, ..., w\}$. This sketch is updated by increasing
-counters $count[i, j]$ in each row $i$ by one, where $j = h_{i}(e)$. It is easy
-to estimate the count $\hat{m_e}$ of element $e$ in stream through $\hat{m_e}$ =
-$\min_j count[i, h_{i}(e)]$~\cite{garofalakis2016data}.
-
-%% AMS Sketch
-Alon-Matias-Szegedy Sketch which was proposed by Alon, Matias and
-Szegedy~\cite{alon1999space} to solve the second frequency moment of data
-stream. It maintains a matrix of $d\times{w}$ size and maps the element $e$ of
-the stream through $d$ hash functions $h_{i}(e)_{i\in \llbracket 1, d
-\rrbracket} \rightarrow \{1, 2, ..., w\}$ and $d$ extra 4-wise independent hash
-functions $g_1$, ..., $g_d$ : $\{1...m\}\rightarrow \{-1, 1\}$. Finally, The
-second frequency moments can be estimated according this matrix.
-
-%% FM-Sketch or LRU-LC sketch for cardinality
-The Flajolet and Martin sketch (FM-Sketch)~\cite{flajolet1985probabilistic} is a
-probabilistic method to estimate the cardinality of data stream. This method
-applies one hash function $h: \{1...m\}\rightarrow [0,2^{L}-1]$ to hash each
-element of the stream into one bit-string of $L$ length (bit-string is the
-binary representation of hash result). For each bit-string, we denote the number
-of 0's at the end of bit-string by \emph{tail length}. We assume the $R$ is the
-biggest number of the $tail length$ of any element in the stream so far, in this
-way we can estimate the number of distinct elements in stream with
-$2^R$~\cite{flajolet1985probabilistic, garofalakis2016data}.
-
-
-\TG{This section is still too long: we don't know why we have to read the previous 3.5 pages. These pages should be
-summarized in 1-2 paragraphs, with a transition to compression at the end.}
+% \todo{a transition to compression}
+% \TG{This section is still too long: we don't know why we have to read the previous 3.5 pages. These pages should be
+% summarized in 1-2 paragraphs, with a transition to compression at the end.}
 % introduce compression
 
 Data compression is a technique to reduce the number of bits required to
 represent a data set. It is also considered as a summarization technique
-which can give compact version of the entire original
+that can give a compact version of the entire original
 data~\cite{hesabi2015data}. Data compression is categorized into
 \emph{lossless} and \emph{lossy} compression:
 \begin{itemize}
     \item \emph{Lossless} compression methods remove statistical redundancy and
     the original data can be retrieved through decompression without any
     information loss~\cite{hesabi2015data}.
-    \item \emph{Lossy} compression methods omit some information in the
-    original data, but ensure that the reconstructed data has certain accuracy. For
-    lossy compression, there is a trade-off between reconstruction accuracy and
+    \item \emph{Lossy} compression methods omit some information in the original
+    data, but ensure that the reconstructed data has certain accuracy. For lossy
+    compression, there is a trade-off between reconstruction accuracy and
     additional gains in terms of compression ratio~\cite{zordan2014performance}.
 \end{itemize}
 
 In our case, the compression technique is the best choice of data summarization
-to reduce the rate of radio transmission, and because it is allowed to loose a
-small amount of reconstructed accuracy \TG{Why? See paper intro. You could reuse some of that text here},
- we prefer lossy compression method which
-might gives higher compression ratio \TG{Sentence is too long, please split}. 
-Indeed, in the context of IoT and sensor data streams, the
-measured sensor data intrinsically involves noise and measurement errors, which
-can be treated as a configurable tolerance for a lossy compression
-algorithm~\cite{li2018multi}.
+to reduce the rate of radio transmission, because losing any data points in the
+data stream is not allowed during transmission. We can obtain the original data
+stream through the decompression process. 
+
+Most of the lossless compression methods belong to entropy coding or dictionary
+coder, the main idea of them is the ``statistical model'' or ``dictionary''
+generated according to input data. The ``statistical model'' or ``dictionary''
+would be used to compress new data point into a bit sequences. Much existing
+literature has been devoted to the study of lossless compression. Huffman
+coding~\cite{huffman1952method} and arithmetic
+coding~\cite{langdon1984introduction} are the primary and classical entropy
+coding methods. \acrfull{lec} algorithm~\cite{marcelloni2008simple} is a
+approximated version of exponential-Golomb code~\cite{teuhola1978compression}.
+In ~\cite{marcelloni2008simple}, \acrshort{lec} is utilized for compressing
+temperature and humidity streams by using a very small dictionary whose size is
+determined by the number of bits after
+\acrfull{adc}~\cite{marcelloni2008simple,marcelloni2009efficient}. The
+\acrfull{s-lec}~\cite{li2016temporal} algorithm is an extension and improvement
+of \acrshort{lec} algorithm. It exploits the positional relationship of groups
+of adjacent residues, in order to increase the compression ratio. In
+dictionary-based lossless compression algorithms,
+\acrfull{lz77}~\cite{ziv1977universal} and
+\acrfull{lz78}~\cite{ziv1978compression} are well-known algorithms, where
+\acrshort{lz77} maintains a sliding window as a dictionary during compression.
+There are several variations of \acrshort{lz77} and \acrshort{lz78}, for
+instance, \acrfull{lzw}~\cite{sadler2006data},
+\acrfull{lzss}~\cite{storer1982data}, \acrfull{lzo}~\cite{lzocite} etc. In order
+to suit these algorithms to connected objects and data streams, many algorithms
+improved are proposed, such as \acrfull{a-lzss}~\cite{pope2018accelerometer}
+which combines \acrshort{lzss} and Huffman coding to compress accelerometer
+data, and \acrfull{s-lzw}~\cite{sadler2006data} algorithm which adapts
+\acrshort{lzw} to sensor nodes.
+
+Moreover, lossy compression methods might are suitable for sensor data streams
+than lossless methods, because measured sensor data intrinsically involves noise
+and measurement errors, which can be treated as a configurable tolerance for a
+lossy compression algorithm~\cite{li2018multi}. Thus, In this thesis, we only
+focus on lossy compression methods.
 
 Resource-intensive lossy compression algorithms such as the ones based on
 polynomial interpolation, discrete cosine and Fourier transforms, or
-auto-regression methods~\cite{lu2010optimized} are not well-suited for
-connected objects, due to the limited memory available on these systems
-(typically a few KB), and the energy consumption associated with CPU
-usage~\cite{li2018multi}. Instead, compression algorithms need to find a
-trade-off between reducing network communications and increasing memory and CPU
-usage. As discussed in~\cite{zordan2014performance}, linear compression methods
-provide a very good compromise between these two factors, leading to
-substantial energy reduction~\cite{li2018multi}. In this chapter, we will
-review several lossless compression methods in section~\ref{sec:lossless} and
-lossy compression methods in section~\ref{sec:lossy}.
+auto-regression methods~\cite{lu2010optimized} are not well-suited for connected
+objects, due to the limited memory available on these systems (typically a few
+KB), and the energy consumption associated with CPU usage~\cite{li2018multi}.
+Instead, compression algorithms need to find a trade-off between reducing
+network communications and increasing memory and CPU usage. As discussed
+in~\cite{zordan2014performance}, linear compression methods provide a very good
+compromise between these two factors, leading to substantial energy
+reduction~\cite{li2018multi}. In this chapter, we will review several lossy
+compression methods in Section~\ref{sec:lossy}.
