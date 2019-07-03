@@ -5,7 +5,7 @@ in~\cite{schoellhammer2004lightweight} relies on the intersection of
 \emph{convex cones} in dimension $n+1$. For $n=1$, it corresponds to the
 intersection of triangles, which can efficiently be computed by maintaining
 boundary lines, as detailed previously Section~\ref{sec:ltc}. In higher
-dimension, however, cone intersections are not so straightforward to compute,
+dimensions, however, cone intersections are not so straightforward to compute,
 due to the fact that the intersection between cones may not be a cone.
 
 To address this issue, we formulate \acrshort{iot} as an intersection test
@@ -195,7 +195,8 @@ The intersection tests can then be done in constant time. However,
 updating the representation of the intersection may be costly
 depending on the norm used. For the infinity norm, the representation
 is a rectangular cuboid which is straightforward to update by
-intersection with an n-ball.
+intersecting with an n-ball.
+% intersection with an n-ball.
 For the Euclidean norm, the representation is an arbitrary volume,
 which is more costly to maintain.
 

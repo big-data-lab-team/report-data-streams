@@ -19,13 +19,13 @@ Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
 Algorithm~\ref{algo:euclidean}. Firstly, we check the intersection with
 box($\mathcal{B}_j$) and $B$, which shows in Algorithm~\ref{algo:euclidean} line
-11, and a maximum length $L_s$ of set of intersecting n-balls $S$ is assigned in
-order to restrict memory usage. Secondly, for each $\mathcal{B}_i$ in $S$, we
-check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14 in
-Algorithm~\ref{algo:euclidean}). At the same time $\mathcal{B}_i$ will be
-removed if it includes $\mathcal{B}_j$, because, once $\mathcal{B}_j$ has
-intersection with n-balls in $S$ then a bigger n-ball which contains the
-$\mathcal{B}_j$ must also have intersection.
+11, and a maximum length $L_s$ of the set of intersecting n-balls $S$ is
+assigned in order to restrict memory usage. Secondly, for each $\mathcal{B}_i$
+in $S$, we check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$
+(line 14 in Algorithm~\ref{algo:euclidean}). At the same time, $\mathcal{B}_i$
+will be removed if it includes $\mathcal{B}_j$, because once $\mathcal{B}_j$ has
+an intersection with n-balls in $S$, then a bigger n-ball which contains the
+$\mathcal{B}_j$ must have an intersection with them too.
 % \english{because smaller n-ball intersects
 % $\mathcal{B}_j$ than a bigger n-ball which contains the smaller one (line 17, 18 in
 % Algorithm~\ref{algo:euclidean})} \TG{English is not correct}.
@@ -52,11 +52,12 @@ means:
 \end{equation*}
 
 In Algorithm~\ref{algo:euclidean} line 14 and 15, It guarantees any two n-balls
-in $S$ has intersection. Therefore, any point in the intersection of $min\_id$
-and $max\_id$, could be used for determining the direction of bisection. In our
-implement, we select a point in connection of these two n-ball's center, which
-also locates in intersecting object(line/chord when order=2, plane/circle when
-order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
+in $S$ has an intersection. Therefore, any point in the intersection of
+$min\_id$ and $max\_id$, could be used for determining the direction of
+bisection. In our implementation, we select a point in connection of these two
+n-ball's center, which also locates in intersecting object(line/chord when
+order=2, plane/circle when order=3). Figure~\ref{fig:compare_point} shows the
+point we selected in 2D.
 
 %discuss the time complexity
 According to our implementation for Euclidean norm, if the $L_s$ is undefined
