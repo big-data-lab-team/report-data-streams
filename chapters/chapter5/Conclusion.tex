@@ -27,14 +27,18 @@ compression method and predicts data by a piece-wise linear function of time,
 but it guarantees that the reconstruct accuracy in $\epsilon$ ($\epsilon$ is the
 error bound we assigned). 
 
-However, the original \acrshort{ltc} was only available for 1D
-streaming data. Thus, we provided \english{a definite form to describe the original
-\acrshort{ltc}} and extend \acrshort{ltc} to dimension $n$. Moreover, LTC
-n-dimension can work with different norms, but its compression result and costs
-depend on the norm used. In the experiments, we collected 2 biceps curl data-sets
-which have different sizes, \english{and a comparison of compression ratio, memory usage
-and processing time between infinity norm and Euclidean norm is presented with
-using these data-sets} \TG{sentence is too long}.
+However, the original \acrshort{ltc} was only available for 1D streaming data.
+Thus, we formalize the description of original \acrshort{ltc} and extend
+\acrshort{ltc} to dimension $n$. Moreover, LTC n-dimension can work with
+different norms, but its compression result and costs depend on the norm used.
+In the experiments, we collected 2 biceps curl data-sets which have different
+sizes. By using these data sets, we validate the performance of LTC n-dimension
+for Infinity and Euclidean norms in terms of compression ratio, memory usage,
+and processing time.
+% \english{and a comparison of compression ratio, memory usage
+% and processing time between infinity norm and Euclidean norm is presented with
+% using these data-sets} 
+\todo{sentence is too long}.
 
 Then we implemented the LTC n-dimension algorithm into Neblina to measure the
 compression ratio of LTC n-dimension algorithm and energy consumption
@@ -43,11 +47,12 @@ result, through using LTC n-dimension algorithm, Neblina can at least save 10\%
 energy when the error bound $\epsilon$ is 48.8g. Additionally, in order to test
 the compression result of LTC n-dimension, we compared the LTC n-dimension
 algorithm with polynomial regression compression algorithm in different
-dimension, and we found that LTC n-dimension for Infinity norm \TG{for Euclidean too} outperforms
-polynomial regression method in terms of compression ratio, regardless of the
-dimension or degree of regression. The LTC n-dimension has been deployed in Motsai's Neblina during my 4
-months internship from September to December 2018, \english{it can be selected the
-dimension $n$ and the norm (Infinity norm or Euclidean norm)}.
+dimension, and we found that LTC n-dimension for Infinity and Euclidean norms
+outperform polynomial regression method in terms of compression ratio,
+regardless of the dimension or degree of regression. The LTC n-dimension has
+been deployed in Motsai's Neblina during my 4 months internship from September
+to December 2018, it can work for n-dimensional streams and it can also be used
+in Infinity and Euclidean norms.
 
 \section{Limitations}
 
