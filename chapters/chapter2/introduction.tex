@@ -20,30 +20,41 @@ sampling~\cite{chaudhuri1999random, efraimidis2006weighted}, capture a
 sub-sample of the data stream to represents the entire stream. \emph{Filtering}
 techniques reduce the number of items in the stream: Bloom
 filter~\cite{bloom1970space} and Cuckoo filter~\cite{fan2014cuckoo} are
-well-known methods and have been applied in many fields. \english{we are able to obtain
-the information or data that we are interested int and answer the query which
-requires the specific part of the entire data stream by using filtering. \TG{sentence looks out of place}} In
-addition, to  answer queries over a data stream, computing approximate result is
-more suitable for any queries than the exact solution~\cite{kejariwal2015real}.
-Previous research has provided some synopsis constructions for summarization.
-\emph{Histogram} techniques~\cite{kejariwal2015real, ahmed2019data} that give a
-distribution of items in the stream. \english{\emph{Sketch} techniques are able to solve
-some specific problem, such as the number of distinct items in a stream can be
-estimated by using \acrfull{fm-sketch}}~\cite{flajolet1985probabilistic,
-garofalakis2016data}, the second frequency moment of a stream is able to be solved
-through \acrfull{ams-sketch}~\cite{alon1999space}, and Count-Min
-Sketch~\cite{cormode2005improved, garofalakis2016data} can be used to calculate
-the quantiles and frequent items in a stream roughly \TG{This sentence is way too long}. Moreover, many summarization
-methods apply \emph{Sliding window}~\cite{datar2002maintaining} technique
-which maintains a window that moves with new data coming. It ensures that the
-methods always use fresh data for analysis and statistics by keeping the most
-recent items of the stream or all items within a specific time period in given bound
+well-known methods and have been applied in many fields. 
+% \english{we are able to obtain
+% the information or data that we are interested in and answer the query which
+% requires the specific part of the entire data stream by using filtering.
+% \TG{sentence looks out of place}}
+In addition, to  answer queries over a data stream, computing approximate result
+is more suitable for any queries than the exact
+solution~\cite{kejariwal2015real}. Previous research has provided some synopsis
+constructions for summarization. \emph{Histogram}
+techniques~\cite{kejariwal2015real, ahmed2019data} that give a distribution of
+items in the stream. \emph{Sketch} techniques are able to solve some specific
+problem, for instance, \acrfull{fm-sketch}~\cite{flajolet1985probabilistic,
+garofalakis2016data} can solve the problem of finding the number of distinct
+elements, \acrfull{ams-sketch}~\cite{alon1999space} is able to estimate the
+second frequency moment, and Count-Min Sketch~\cite{cormode2005improved,
+garofalakis2016data} can calculate the quantiles and find frequent items.
+\todo{Sketch sentence too long}
+% for instance, the number of distinct items in a stream can be estimated by
+% using \acrfull{fm-sketch}~\cite{flajolet1985probabilistic, garofalakis2016data},
+% the second frequency moment of a stream is able to be solved through
+% \acrfull{ams-sketch}~\cite{alon1999space}, and Count-Min
+% Sketch~\cite{cormode2005improved, garofalakis2016data} can be used to calculate
+% the quantiles and frequent items in a stream roughly \TG{This sentence is way
+% too long}. 
+Moreover, many summarization methods apply \emph{Sliding
+window}~\cite{datar2002maintaining} technique which maintains a window that
+moves with new data coming. It ensures that the methods always use fresh data
+for analysis and statistics by keeping the most recent items of the stream or
+all items within a specific time period in given bound
 memory~\cite{leskovec2014mining}. However, many summarization techniques only
-focus on specific problems and might eliminate most or partial data
-information. In some case, the integrity of data information and accuracy of
-query answers are required, thus we need a summarization technique which can
-both reduce the size of the stream and keep integral data information. Data compression
-is such a technique that meets the above conditions.
+focus on specific problems and might eliminate most or partial data information.
+In some case, the integrity of data information and accuracy of query answers
+are required, thus we need a summarization technique which can both reduce the
+size of the stream and keep integral data information. Data compression is such
+a technique that meets the above conditions.
 
 % \todo{a transition to compression}
 % \TG{This section is still too long: we don't know why we have to read the previous 3.5 pages. These pages should be
@@ -66,15 +77,17 @@ data~\cite{hesabi2015data}. Data compression is categorized into
 \end{itemize}
 
 In our case, the compression technique is the best choice of data summarization
-to reduce the rate of radio transmission, because losing any data points in the
-data stream is not allowed during transmission \TG{what do you mean ``is not allowed''?}. We can obtain the original data
-stream through the decompression process. 
+to reduce the rate of radio transmission, because losing any data points after
+reducing data stream is undesired, and compression guarantees the integrity of
+data stream. In other words, we can obtain the original data stream through the
+decompression process, thus no data points will be lost.
 
-Most of the lossless compression methods belong to entropy or dictionary coding. Their main idea 
-is the ``statistical model'' or ``dictionary''
-generated according to input data \TG{Be more explicit: a statistical model isn't an idea.}.
-The ``statistical model'' or ``dictionary''
-are used to compress new data points into  bit sequences. Huffman
+Most of the lossless compression methods belong to entropy or dictionary coding.
+Their main idea is to represent the new data points based on the ``statistical
+model'' or ``dictionary'', generated according to the data points we have seen.
+\todo{Be more explicit: a statistical model isn't an idea.}.
+In general, the ``statistical model'' and ``dictionary'' help us to map the data
+points into bit sequences, thus compressing the data set. Huffman
 coding~\cite{huffman1952method} and arithmetic
 coding~\cite{langdon1984introduction} are the primary and classical entropy
 coding methods. \acrfull{lec} algorithm~\cite{marcelloni2008simple} is a
@@ -87,19 +100,19 @@ determined by the number of bits after
 of \acrshort{lec} algorithm. It exploits the positional relationship of groups
 of adjacent residues, in order to increase the compression ratio.
 
-In
-dictionary-based lossless compression algorithms,
+In dictionary-based lossless compression algorithms,
 \acrfull{lz77}~\cite{ziv1977universal} and
 \acrfull{lz78}~\cite{ziv1978compression} are well-known algorithms, where
 \acrshort{lz77} maintains a sliding window as a dictionary during compression.
 There are several variations of \acrshort{lz77} and \acrshort{lz78}, for
 instance, \acrfull{lzw}~\cite{sadler2006data},
 \acrfull{lzss}~\cite{storer1982data}, \acrfull{lzo}~\cite{lzocite} etc. In order
-to suit these algorithms to connected objects and data streams, many improvements
-were proposed, such as \acrfull{a-lzss}~\cite{pope2018accelerometer}
-which combines \acrshort{lzss} and Huffman coding to compress accelerometer
-data, and \acrfull{s-lzw}~\cite{sadler2006data}, an algorithm which adapts
-\acrshort{lzw} to sensor nodes.
+to suit these algorithms to connected objects and data streams, many
+improvements were proposed, such as
+\acrfull{a-lzss}~\cite{pope2018accelerometer} which combines \acrshort{lzss} and
+Huffman coding to compress accelerometer data, and
+\acrfull{s-lzw}~\cite{sadler2006data}, an algorithm which adapts \acrshort{lzw}
+to sensor nodes.
 
 Lossy compression methods are particularly suitable for sensor data
 streams, because measured sensor data intrinsically involves noise and

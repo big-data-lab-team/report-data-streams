@@ -10,11 +10,8 @@ Meanwhile, we sometimes prefer to sacrifice certain accuracy of reconstructed
 data for a better compression ratio. In our case, Neblina has limited memory,
 and in order to save more energy, we prefer a compression method with low
 computational complexity so that the energy cost of the compression process is
-not high. \acrshort{ltc} \TG{LTC still hasn't been defined} takes O($n$) time and O(1) space for compressing $n$
-data points~\cite{schoellhammer2004lightweight}. Its good compression ratio and
-very little energy cost fully meet our needs. So we will mainly discuss
-\acrshort{ltc} in Chapter~\ref{chap:ltc-extension} and
-Chapter~\ref{chap:expsAndResults}. \TG{I would mention the use of LTC in the conclusion of the chapter.}
+not high. In this section, we list several lossy compression methods for
+streaming data.
 \subsection{Lightweight Temporal Compression Algorithm}
 \label{sec:ltc}
 
@@ -37,8 +34,8 @@ are $(t_i, lp_i)$, where $hp_i$ and $lp_i$ are the value of high line and low
 line at corresponding time $t_i$.
 The point $(t_{i-1}, \frac{hp_{(i-1)}+lp_{(i-1)}}{2})$ shall be transmitted if
 the received point meets the condition:
-$x_i+\epsilon < lp_{i}$ or $x_i-\epsilon > hp_{i}$. A reproduced example is
-presented in Figure~\ref{fig:ltc-review} \TG{say in the figure caption where the example is reproduced from}. From Figure~\ref{fig:ltc-review-b},
+$x_i+\epsilon < lp_{i}$ or $x_i-\epsilon > hp_{i}$. A example is
+presented in Figure~\ref{fig:ltc-review}. From Figure~\ref{fig:ltc-review-b},
 high line and low line are created and updated when we receive point at time
 $t_2$ and $t_3$, but the condition $x_4+\epsilon < lp_{4}$ is met when point
 $(t_4, x_4)$ come and we transmit point $(t_3, \frac{hp_{3}+lp_{3}}{2})$.
@@ -78,55 +75,57 @@ with Minimum number of Line Segments Algorithm}
 
 Similar to \acrshort{ltc}, \acrfull{plamlis}~\cite{liu2007energy} represents the
 original stream through a sequence of line segments. The main idea of this
-algorithm is to represent the stream data over a time window using a minimum
-number of segments so that the amount of data transferred is reduced.
-\acrshort{plamlis} gives a greedy algorithm solution. Assume the input stream
-data points $X=\{x_1, ..., x_W\}$ are received over a time window of size $W$.
-Firstly, for each data points $x_i$, $i \in \{1, ..., W\}$, a longest segment
-$S_{i}$ from point $x_i$ to point $x_j$ ($j>i$) is built within the error bound.
-Thereby for the data points in the window, a sequence of longest segments $S =
-{S_1, ..., S_W}$ is obtained. Secondly, to pick the minimum number of subsets of
-S for representing original stream $X$, a greedy algorithm is used to select the
-segment $S_k$ ($k \in \llbracket1, W\rrbracket$) which covers the largest number
-of data points $x_i$ in $X$ at each time, then remove it from $S$ and add it
-into a \texttt{result sequence} until all data points in $X$ are
-covered~\cite{liu2007energy}. The result sequence is the result of
-compression~\cite{zordan2012compress, zordan2014performance}.
+algorithm is to find the minimum number of line segments to approximate the time
+series so that the amount of data transferred is reduced. Therefore, compressing
+stream is considered to be the problem ``to represent stream data over a time
+window using a minimum number of segments''. \acrshort{plamlis} gives a greedy
+algorithm solution. Assume the input stream data points $X=\{x_1, ..., x_W\}$
+are received over a time window of size $W$. Firstly, for each data points
+$x_i$, $i \in \{1, ..., W\}$, a longest segment $S_{i}$ from point $x_i$ to
+point $x_j$ ($j>i$) is built within the error bound. Thereby for the data points
+in the window, a sequence of longest segments $S = {S_1, ..., S_W}$ is obtained.
+Secondly, to pick the minimum number of subsets of S for representing original
+stream $X$, a greedy algorithm is used to select the segment $S_k$ ($k \in
+\llbracket1, W\rrbracket$) which covers the largest number of data points $x_i$
+in $X$ at each time, then remove it from $S$ and add it into a \texttt{result
+sequence} until all data points in $X$ are covered~\cite{liu2007energy}. The
+result sequence is the result of compression~\cite{zordan2012compress,
+zordan2014performance}.
 
 
 \subsection{Enhanced Piece-wise Linear Approximation with Minimum number of Line
 Segments Algorithm}
 
+\todo{is it the same problem as before? If yes, you should say so.} 
 \acrfull{e-plamlis}~\cite{pham2008enhance} solves the problem ``to represent
-stream data over a time window through using minimum number of segments" \TG{is it the same problem as before? If yes, 
-you should say so.} with a
+stream data over a time window through using minimum number of segments" with a
 top-down recursive segmentation algorithm which has a smaller computational cost
 than \acrshort{plamlis}~\cite{pham2008enhance, zordan2014performance}. Assume
-$W$ data points $x_i$ in the time window, \english{the segment $S_{(1, W)}$ with end
-points $x_1$ and $x_W$ is created, then checking whether the maximum error is
-within error tolerance $\epsilon$ determines to stop the recursion or not}. If
-the maximum error is bigger than $\epsilon$, the segment is split into two
-shorter segments $S_{(1, k)}$ and $S_{(k, W)}$ in data point $x_k$, $1<k<W$.
-This procedure is applied recursively on each segment until the maximum error of
-all segments is within the error tolerance~\cite{pham2008enhance,
-zordan2014performance}.
+$W$ data points $x_i$ in the time window, the segment $S_{(1, W)}$ with end
+points $x_1$ and $x_W$ is created, then we have to check whether the maximum
+error is within error tolerance $\epsilon$. If the maximum error is bigger than
+$\epsilon$, the segment is split into two shorter segments $S_{(1, k)}$ and
+$S_{(k, W)}$ in data point $x_k$, $1<k<W$. This procedure is applied recursively
+on each segment until the maximum error of all segments is within the error
+tolerance~\cite{pham2008enhance, zordan2014performance}.
 
 \subsection{Polynomial Regression}
 \label{sec:polynomial}
 
 Different from piece-wise linear approximations, Polynomial
 Regression~\cite{zordan2014performance} gives a higher order $p \geqslant1$
-approximation of the data points by using standard regression methods based on least squares
-fitting~\cite{phillips2003interpolation}. The approximation is a sequence of
-curves (order = $p$) rather than linear segments. The algorithm starts with
-collecting $p+1$ samples $\{x_1, ..., x_{p+1} \}$ to obtain the coefficients of
-first $p$-order polynomial function. Upon receiving one sample $x_{p+1+i}$ at
-each time, where $x_{p+1+i}$ indicates the $(p+1+i)_{th}$ sample ($i>0$) in this
-approximation cycle, the best-fitting polynomial coefficients are re-computed
-with $\{ x_1, ..., x_{p+1+i}\}$ and the algorithm checks whether the new
-polynomial approximates the data points within the desired error tolerance. If
-not, the coefficients of the previous regression are transmitted and a new
-approximation starts at the current sample~\cite{zordan2014performance}.
+approximation of the data points by using standard regression methods based on
+least squares fitting~\cite{phillips2003interpolation}. The approximation is a
+sequence of curves (order = $p$) rather than linear segments. The algorithm
+starts with collecting $p+1$ samples $\{x_1, ..., x_{p+1} \}$ to obtain the
+coefficients of first $p$-order polynomial function. Upon receiving one sample
+$x_{p+1+i}$ at each time, where $x_{p+1+i}$ indicates the $(p+1+i)_{th}$ sample
+($i>0$) in this approximation cycle, the best-fitting polynomial coefficients
+are re-computed with $\{ x_1, ..., x_{p+1+i}\}$ and the algorithm checks whether
+the new polynomial approximates the data points within the desired error
+tolerance. If not, the coefficients of the previous regression are transmitted
+and a new approximation starts at the current
+sample~\cite{zordan2014performance}.
 
 During the compression process, all the points between transmissions need to be
 kept in memory, and the least squares fitting required larger computational cost
@@ -286,20 +285,22 @@ can be computed through least squares minimization~\cite{zordan2012compress}.
 \label{sec:comparision-lossy}
 % \TG{You should start a new sub-section here, or add the next paragraph to the conclusion
 % section. Also, you should refer to this comparison in your thesis defense presentation.}
+\todo{give value?}
 In~\cite{zordan2014performance}, authors compare the performance of mentioned
 compression methods. They analyzed the performance in terms of compression ratio
 and energy consumption in the compression process for \acrshort{ma-ar} (p={2,
 4}), Polynomial Regression (p={2, 4}), \acrshort{plamlis}, \acrshort{e-plamlis}
-and \acrshort{ltc}. Regarding compression ratio, all the methods perform
-badly for small datasets, but as the dataset size
-increases, the compression ratio increases until it reaches an asymptote \TG{give value?}. In
-their experiment, polynomial regression gives the best compression ratio, and
-\acrshort{plamlis} is the second best, next, \acrshort{ltc} and
-\acrshort{e-plamlis} have the same performance when the length of data is large.
-Finally, \acrshort{ma-ar} method has the worst compression ratio. In terms of
-energy consumption for compression, Polynomial Regression requires the most
-processing energy, \acrshort{ma-ar} and \acrshort{plamlis} also need significant
-processing energy. \acrshort{ltc} uses less energy for compression, because
-\acrshort{ltc} only compares the high point and low point with the data point
-received, and the computational complexity of each comparison process is
+and \acrshort{ltc}. Regarding compression ratio, all the methods perform badly
+for small datasets, but as the dataset size increases, the compression ratios of
+these methods increase until reaching their respective asymptote.
+In their experiment, polynomial regression gives the best compression ratio
+around 98\%; and \acrshort{plamlis} which reaches 96\% compression ratio is the
+second best; next, \acrshort{ltc} and \acrshort{e-plamlis} have the same
+performance, providing 94\% compression ratio, when the length of data is large;
+finally, \acrshort{ma-ar} method has the worst compression ratio at 90\%. In
+terms of energy consumption for compression, Polynomial Regression requires the
+most processing energy, \acrshort{ma-ar} and \acrshort{plamlis} also need
+significant processing energy. \acrshort{ltc} uses less energy for compression,
+because \acrshort{ltc} only compares the high point and low point with the data
+point received, and the computational complexity of each comparison process is
 constant.
