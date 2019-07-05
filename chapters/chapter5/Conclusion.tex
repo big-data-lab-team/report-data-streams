@@ -4,89 +4,83 @@
 \section{Summary}
 
 
-IoT has been widely popularized in recent years and generates a huge amount of
-streaming data. However, the limitations of hardware create challenges. For
-instance, connected devices lack enough memory to store all the streaming data,
-the micro-controller has trouble with methods that have high computational
-complexity, and the battery-based devices cannot have a long lifetime without
-recharging or changing the battery. Energy consumption is an urgent problem in
-IoT, especially in battery-powered devices, a large amount of computing and the
-transmission will drain the battery quickly.
+IoT has been widely popularized in recent years and generates large amounts of
+streaming data. However, hardware limitations of connected devices create challenges:
+connected devices lack enough memory to store streaming data,
+micro-controllers can hardly run methods that have high computational
+complexity, and battery-based devices are limited in lifetime. Energy consumption is an urgent problem in
+IoT, especially in battery-powered devices, as computing and network
+transmission drain the battery quickly.
 
-In this thesis, we aimed to find a summarization method which can be fitted in
-connected objects and can process multi-dimensional streams to reduce the number
-of data transmitted. In that case, we can save energy during transmission,
-thereby extending the work time of devices.
+In this thesis, we aimed to find a summarization method which can be fitted
+in connected objects and can process multi-dimensional streams to reduce
+the number of data transmitted. Data compression is one of the techniques
+in data summarization, representing original data by a compact version and
+keeping all information (lossless compression) or retaining information at
+certain accuracy (lossy compression). We introduced a few general
+compression methods in this thesis and we finally selected the
+\acrfull{ltc} algorithm. \acrshort{ltc} is a lossy compression method that
+approximates data streams by a piece-wise linear function of time. It
+guarantees that the reconstruction error remains lower than a user-assigned
+error bound $\epsilon$. 
 
-Data compression is one of the techniques in data summarization, representing
-original data by a compact version and keeping all information (lossless
-compression) or retaining the information in certain accuracy. We introduce a
-few general compression methods in this thesis and we finally select the
-\acrfull{ltc} algorithm for our experiments. \acrshort{ltc} is a lossy
-compression method and predicts data by a piece-wise linear function of time,
-but it guarantees that the reconstruct accuracy in $\epsilon$ ($\epsilon$ is the
-error bound we assigned). 
+However, the original \acrshort{ltc} method was only available for 1D data
+streams. Thus, we provided a formulation of \acrshort{ltc} in dimension
+$n$, and the corresponding implementation. LTC can work with different
+norms in dimension $n$, but its compression result and costs depend on the
+norm used. In the experiments, we collected 2 biceps curl data-sets of
+different sizes, \english{and a comparison of compression ratio, memory
+usage and processing time between infinity norm and Euclidean norm is
+presented with using these data-sets} \TG{sentence is incorrect and too
+long}.
 
-However, the original \acrshort{ltc} was only available for 1D streaming data.
-Thus, we formalize the description of original \acrshort{ltc} and extend
-\acrshort{ltc} to dimension $n$. Moreover, LTC n-dimension can work with
-different norms, but its compression result and costs depend on the norm used.
-In the experiments, we collected 2 biceps curl data-sets which have different
-sizes. By using these data sets, we validate the performance of LTC n-dimension
-for Infinity and Euclidean norms in terms of compression ratio, memory usage,
-and processing time.
-% \english{and a comparison of compression ratio, memory usage
-% and processing time between infinity norm and Euclidean norm is presented with
-% using these data-sets} 
-\todo{sentence is too long}.
-
-Then we implemented the LTC n-dimension algorithm into Neblina to measure the
-compression ratio of LTC n-dimension algorithm and energy consumption
-(compression and transmission) when human is walking or running. From the
-result, through using LTC n-dimension algorithm, Neblina can at least save 10\%
-energy when the error bound $\epsilon$ is 48.8g. Additionally, in order to test
-the compression result of LTC n-dimension, we compared the LTC n-dimension
-algorithm with polynomial regression compression algorithm in different
-dimension, and we found that LTC n-dimension for Infinity and Euclidean norms
-outperform polynomial regression method in terms of compression ratio,
-regardless of the dimension or degree of regression. The LTC n-dimension has
-been deployed in Motsai's Neblina during my 4 months internship from September
-to December 2018, it can work for n-dimensional streams and it can also be used
-in Infinity and Euclidean norms.
+Then, we implemented the LTC n-dimension algorithm into Neblina, the
+connected device platform developed by our Motsai partner, to measure the
+compression ratio and energy consumption of LTC in dimension $n$, on a
+dataset of human walk and run. Results showed that with our n-dimensional
+implementation of \acrshort{ltc}, Neblina can save at least 10\% of energy
+when the error bound $\epsilon$ is 48.8g \TG{mg?}. Additionally, we compared
+\acrshort{ltc} in dimension $n$ to polynomial regression in different
+dimensions. We found that LTC in dimension $n$ for Infinity norm \TG{for
+Euclidean too} outperforms polynomial regression method in terms of
+compression ratio, regardless of the dimension or degree of regression. Our
+extension of \acrshort{ltc} in dimension $n$ has been deployed in Motsai's
+Neblina during my 4-month internship from September to December 2018.
 
 \section{Limitations}
 
 
-The main limitation of the LTC n-dimension algorithm is memory usage. In
-Euclidean norm, LTC n-dimension can be considered as the intersection of
-n-balls, but it is difficult to check whether there is an intersection among
-n-balls. The Helly's theorem is the best algorithm we could find,
-however, this algorithm is too complex to use in the connected objects which
-have limited resource.  We provide a method that utilizes plane sweep and
-bisection to determine if a set of n-balls have a public intersection.
+The main limitation of our current \acrshort{ltc} implementation in
+dimension $n$ is memory usage. Our formulation of \acrshort{ltc} in
+dimension $n$ boils down to an intersection test between n-balls, however,
+with the Euclidean norm this test is difficult. The Helly's theorem is the
+best algorithm we could find for this purpose, but it is still too complex
+for resource-constrained environments.  We provided a method that utilizes
+plane sweep and bisection to determine if a set of n-balls intersect.
 
-Our method has a $O(n\times (\log{2\epsilon})^{d-1})$ complexity,
+Our method has a $O(n\times (\log{2\epsilon})^{d-1})$ \TG{time?} complexity,
 where $n$ is the number of data points we have seen so far, $\epsilon$ is the
 error tolerance and $d$ is the dimension of the stream, but it requires a lot of
-memory space and processing time. 
+memory space and processing time \TG{you should be more accurate than ``a lot''. You should also say 
+that you bound $n$ to 200 (?) in practice}. 
 
 From Section~\ref{sec:experiment2-ltc}, the tolerable latency at 200Hz is
-5-ms, the process of current data point must be finished before receiving new
-data point. We have to make sure the maximum latency is smaller than tolerable
-latency. Thus, the LTC n-dimension cannot work in a high transmission rate, such
-as 800Hz. In addition, in order to reduce the memory usage of LTC n-dimension
-for the Euclidean norm, we limit the length of the set of n-balls $S$, but it
-might reduce the compression ratio. Thus, a better algorithm is needed to deal
-with the memory usage and processing time of the intersection check in the
+5-ms, the process of current data point must be finished before receiving
+new data point. We have to make sure the maximum latency is smaller than
+tolerable latency. Thus, the LTC n-dimension cannot work in a high transmission rate,
+such as 800Hz \TG{Refactor the previous sentences, they are vague and unclear.
+Are you trying to say that your method works at 200Hz but wouldn't work at
+800Hz?}. A better algorithm would be needed to deal
+with the memory usage and processing time of the intersection test with the
 Euclidean norm.
 
 
 \section{Future work}
 
-In the next step, we would like to find algorithms that have lower time and
+In our future work, we would like to find algorithms that have lower time and
 space complexity to handle the intersection check. We will review other
-compression algorithms, attempting to achieve more energy savings. Moreover, the
-lossless algorithm is necessary sometimes, typically in e-health applications.
-So a framework which can support both efficient lossless and lossy algorithm and
-can work with the multi-dimension stream is also one of the research direction
-in our future work.
+compression algorithms, attempting to achieve more energy savings. Moreover, 
+lossless algorithms are necessary sometimes, typically in e-health applications. 
+A framework which can support both efficient lossless and lossy algorithm and
+can work with the multi-dimension stream is also one of the research
+direction in our future work.
