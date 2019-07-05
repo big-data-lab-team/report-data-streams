@@ -1,29 +1,33 @@
 \begin{abstract}
-The advantage of embedded systems and wireless technologies led to the rise of
-\acrshort{iot}, especially the \acrfull{wsn}. \acrshort{wsn} consist of various
+The rise of embedded systems and wireless technologies led to the emergence of the
+\acrshort{iot}, especially \acrfull{wsn}. \acrshort{wsn} consist of various
 sensor-equipped devices connected by a wireless network such as \acrfull{ble}.
-In general, the connected devices in \acrshort{wsn} have very limited resources
+In general, connected devices in \acrshort{wsn} have very limited resources
 such as memory, processing capabilities, and energy. Power consumption is a
-critical problem targeting connected objects, it affects the lifetime of the
-connected objects which are commonly expected to work for a long time. Data
-summarization is the key for energy-constrained connected devices, where
+critical problem targeting connected objects, as it greatly affects their lifetime 
+and usability. Data
+summarization is key for energy-constrained connected devices, as
 transmitting fewer data can reduce energy usage during transmission. Data
-compression which is one of the summarization technique can both compress the
-data stream and keep the data information. Many compression methods have been
-proposed in previous research. However, most of them either not applicable to
-connected objects because of memory limitation or only handle one-dimensional
-streams, while data acquired in connected objects are often multi-dimensional.
+compression, in particular, can compress the
+data stream \TG{data streams should be mentioned before, when you introduce WSNs. You could also 
+introduce multi-dimensional streams. The sentences before could be contracted} while 
+preserving information to a great extent.
+ Many compression methods have been
+proposed in previous research. However, most of them are either not applicable to
+connected objects, due to resource limitation, or only handle one-dimensional
+streams while data acquired in connected objects are often multi-dimensional.
 \acrfull{ltc} is among the lossy stream compression methods that provide the
 highest compression rate for the lowest CPU and memory consumption.
-In this paper, we investigate the extension of LTC to higher dimensions. First,
+In this thesis, we investigate the extension of LTC to multi-dimensional streams. First,
 we provide a formulation of the algorithm in an arbitrary vectorial space of
 dimension $n$.  Then, we implement the algorithm for the infinity and Euclidean
-norms,  in spaces of dimension 2D+t and 3D+t. We evaluate our implementation on
-3D acceleration streams of human activities.  Results show that the 3D
+norms, in spaces of dimension 2D+t and 3D+t. We evaluate our implementation on
+3D acceleration streams of human activities, on Neblina, the connected device \TG{use a better word}
+developed by our partner Motsai.  Results show that the 3D
 implementation of \acrshort{ltc} can save up to 20\% in energy consumption for
 low-paced activities, with a memory usage of about 100~B. Finally, we compare
-our extension methods with the 3-degree and 5-degree polynomial regression
-compression method in different dimensions. As a result, by using our data set,
+our method with polynomial regression
+compression methods in different dimensions. As a result, by using our data set,
 the extension of LTC gives a higher compression ratio than the polynomial
-regression method.
+regression method \TG{for a lower memory and CPU consumption}.
 \end{abstract}
