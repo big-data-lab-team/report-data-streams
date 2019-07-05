@@ -68,69 +68,19 @@ result.
 \end{algorithm}
 
 We use the implemented polynomial regression method on the previous walking and
-running data sets. Figure~\ref{fig:poly-regression-3-degree} and
-Figure~\ref{fig:poly-regression-5-degree} shows the reconstructed data \TG{Why do you show this for PR and not for LTC?
-If you still want to show it, you should at least put the figures on the same y scale as figure 6}. In the
-compression process, we need to keep in memory all the data between two
-transmissions and update regression models each time a new data point arrives.
-
-\begin{figure*}
-\centering
-\begin{subfigure}{\columnwidth}
-\centering
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-x.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-y.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-in-z.pdf}
-\caption{Regression degree=3 with Infinity norm}
-\end{subfigure}
-
-\centering
-\begin{subfigure}{\columnwidth}
-\centering
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-x.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-y.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p3-Eu-z.pdf}
-\caption{Regression degree=3 with Euclidean norm}
-\end{subfigure}
-
-\caption{Reconstructed data by using 3-degree Regression compression method}
-\label{fig:poly-regression-3-degree}
-\end{figure*}
-
-%-------------------------------------------------------%
-
-\begin{figure*}
-\centering
-\begin{subfigure}{\columnwidth}
-\centering
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-x.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-y.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-in-z.pdf}
-\caption{Regression degree=5 with Infinity norm}
-\end{subfigure}
-
-\centering
-\begin{subfigure}{\columnwidth}
-\centering
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-x.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-y.pdf}
-\includegraphics[width=0.3\columnwidth]{figures/regression-p5-Eu-z.pdf}
-\caption{Regression degree=5 with Euclidean norm}
-\end{subfigure}
-
-\caption{Reconstructed data by using 5-degree Regression compression method}
-\label{fig:poly-regression-5-degree}
-\end{figure*}
+running data sets. In the compression process, we need to keep in memory all the
+data between two transmissions and update regression models each time a new data
+point arrives.
 
 \subsection{Results}
-In our implementation, for a regression model with N-degree and M-parameters we
-need M*(N+1) coefficients and extra time-stamp to record when the coefficients
-are transmitted. In our case, coefficients are recorded as single-precision
-floating-point numbers which would use 4 bytes per each. The total number of
-bytes needed to represent the original data is $(N+1)\times M\times 4+4$ (4
-bytes for recording time-stamp) 
-\TG{This paragraph is out of place. I think it can be removed, your
-discussion in the paragraphs below is enough.}.
+% In our implementation, for a regression model with N-degree and M-parameters we
+% need M*(N+1) coefficients and extra time-stamp to record when the coefficients
+% are transmitted. In our case, coefficients are recorded as single-precision
+% floating-point numbers which would use 4 bytes per each. The total number of
+% bytes needed to represent the original data is $(N+1)\times M\times 4+4$ (4
+% bytes for recording time-stamp) 
+% \TG{This paragraph is out of place. I think it can be removed, your
+% discussion in the paragraphs below is enough.}.
 
 From Table~\ref{table:CR-compare-walking} and
 Table~\ref{table:CR-compare-running}, we observe that LTC n-dimension gives
@@ -152,7 +102,7 @@ methods depends on the data set, the polynomial regression method would give us
 higher compression ratio than LTC n-dimension, if the regression model really
 fits our data set.
  
-% \TG{\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
+%  {\#\#This is very surprising, as a straight line is a particular case of polynomial of degree 3 or 5.} 
 Besides, similarly to Experiment 2 in Section~\ref{sec:experiment2-ltc}, the
 compression ratio is higher for the infinity norm than for the Euclidean and is
 higher for the walking data set than for running data set. For the given degree
