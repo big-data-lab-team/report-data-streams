@@ -8,7 +8,7 @@ sensor-equipped devices use sensors to capture properties, such as temperature
 or accelerometer, and send 1D or nD data stream to a host system. Power
 consumption is a critical problem targeting connected objects that have to work
 for a long time without being recharged, as it greatly affects their lifetime
-and usability. 
+and usability.
 Data summarization is key for energy-constrained connected devices, as
 transmitting fewer data can reduce energy usage during transmission. Data
 compression, in particular, can compress the data stream while preserving
@@ -28,9 +28,10 @@ infinity and Euclidean norms, in spaces of dimension 2D+t and 3D+t. We evaluate
 our implementation on 3D acceleration streams of human activities, on Neblina, a
 module integrating multiple sensors developed by our partner Motsai.  Results
 show that the 3D implementation of \acrshort{ltc} can save up to 20\% in energy
-consumption for low-paced activities, with a memory usage of about 100~B. 
+consumption for low-paced activities, with a memory usage of about 100~B.
 Finally, we compare our method with polynomial regression compression methods in
 different dimensions. As a result, by using our data set, the extension of LTC
-gives a higher compression ratio than the polynomial regression method and
-\TG{??for a lower memory and CPU consumption}.
+gives a higher compression ratio than the polynomial regression method, while it
+consumes less memory and CPU than the polynomial regression method during
+compression process.
 \end{abstract}
