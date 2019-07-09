@@ -25,26 +25,23 @@ guarantees that the reconstruction error remains lower than a user-assigned
 error bound $\epsilon$. 
 
 However, the original \acrshort{ltc} method was only available for 1D data
-streams. Thus, we provided a formulation of \acrshort{ltc} in dimension
-$n$, and the corresponding implementation. LTC can work with different
-norms in dimension $n$, but its compression result and costs depend on the
-norm used. In the experiments, we collected 2 biceps curl data-sets of
-different sizes, \english{and a comparison of compression ratio, memory
-usage and processing time between infinity norm and Euclidean norm is
-presented with using these data-sets} \TG{sentence is incorrect and too
-long}.
+streams. Thus, we provided a formulation of \acrshort{ltc} in dimension $n$, and
+the corresponding implementation. LTC can work with different norms in dimension
+$n$, but its compression result and costs depend on the norm used. In the
+experiments, we collected 2 biceps curl data-sets of different sizes. By using
+these data sets, we validate the performance of LTC n-dimension for Infinity and
+Euclidean norms in respect of compression ratio, memory and processing time
 
-Then, we implemented the LTC n-dimension algorithm into Neblina, the
-connected device platform developed by our Motsai partner, to measure the
-compression ratio and energy consumption of LTC in dimension $n$, on a
-dataset of human walk and run. Results showed that with our n-dimensional
-implementation of \acrshort{ltc}, Neblina can save at least 10\% of energy
-when the error bound $\epsilon$ is 48.8g \TG{mg?}. Additionally, we compared
-\acrshort{ltc} in dimension $n$ to polynomial regression in different
-dimensions. We found that LTC in dimension $n$ for Infinity norm \TG{for
-Euclidean too} outperforms polynomial regression method in terms of
-compression ratio, regardless of the dimension or degree of regression. Our
-extension of \acrshort{ltc} in dimension $n$ has been deployed in Motsai's
+Then, we implemented the LTC n-dimension algorithm into Neblina, the connected
+device platform developed by our Motsai partner, to measure the compression
+ratio and energy consumption of LTC in dimension $n$, on a dataset of human walk
+and run. Results showed that with our n-dimensional implementation of
+\acrshort{ltc}, Neblina can save at least 10\% of energy when the error bound
+$\epsilon$ is 48.8 mg. Additionally, we compared \acrshort{ltc} in dimension $n$
+to polynomial regression in different dimensions. We found that LTC in dimension
+$n$ for Infinity and Euclidean norms outperform polynomial regression method in
+terms of compression ratio, regardless of the dimension or degree of regression.
+Our extension of \acrshort{ltc} in dimension $n$ has been deployed in Motsai's
 Neblina during my 4-month internship from September to December 2018.
 
 \section{Limitations}
@@ -55,22 +52,31 @@ dimension $n$ is memory usage. Our formulation of \acrshort{ltc} in
 dimension $n$ boils down to an intersection test between n-balls, however,
 with the Euclidean norm this test is difficult. The Helly's theorem is the
 best algorithm we could find for this purpose, but it is still too complex
-for resource-constrained environments.  We provided a method that utilizes
+for resource-constrained environments. We provided a method that utilizes
 plane sweep and bisection to determine if a set of n-balls intersect.
 
-Our method has a $O(n\times (\log{2\epsilon})^{d-1})$ \TG{time?} complexity,
-where $n$ is the number of data points we have seen so far, $\epsilon$ is the
-error tolerance and $d$ is the dimension of the stream, but it requires a lot of
-memory space and processing time \TG{you should be more accurate than ``a lot''. You should also say 
-that you bound $n$ to 200 (?) in practice}. 
+Our method has a $O(n\times (\log{2\epsilon})^{d-1})$ time complexity, where $n$
+is the number of data points we have seen so far since the last transmission,
+$\epsilon$ is the error tolerance and $d$ is the dimension of the stream, but it
+requires extra memory to save n-balls between two transmissions. Even though we
+bound $n$ to 200, it still costs 4.6 KB to compress the long bicep curl data set
+in our first experiment (see Table~\ref{tabl:results-validation-d}).
+% \TG{you should be more accurate than ``a lot''. You should also say 
+% that you bound $n$ to 200 (?) in practice}. 
 
-From Section~\ref{sec:experiment2-ltc}, the tolerable latency at 200Hz is
-5-ms, the process of current data point must be finished before receiving
-new data point. We have to make sure the maximum latency is smaller than
-tolerable latency. Thus, the LTC n-dimension cannot work in a high transmission rate,
-such as 800Hz \TG{Refactor the previous sentences, they are vague and unclear.
-Are you trying to say that your method works at 200Hz but wouldn't work at
-800Hz?}. A better algorithm would be needed to deal
+In addition, compressing data in connected devices causes transmission latency
+since it needs processing time. In our case, we have to make sure the maximum
+latency is smaller than the sampling rate of sensors, because the process of
+current data point must be finished before receiving new data point. For
+instance, in Section~\ref{sec:experiment2-ltc}, the sampling rate of
+accelerometer sensor is 200 Hz which means a new data point comes each 5-ms,
+thus the maximum latency must lower than 5-ms. From
+Table~\ref{table:results-energy}, when sampling rate is 200Hz, the latency with
+our method is lower than the 5-ms tolerable latency. But LTC n-dimension for
+Euclidean norm cannot work in high sampling rate, such as 800Hz, corresponding
+1.25-ms tolerable latency.
+
+A better algorithm would be needed to deal
 with the memory usage and processing time of the intersection test with the
 Euclidean norm.
 
