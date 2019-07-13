@@ -30,7 +30,7 @@ contains $\mathcal{B}_j$ must also have intersection.
 % Algorithm~\ref{algo:euclidean})} \TG{English is not correct}.
 Finally, we search a point in intersection of all n-balls in $S$, using plane
 sweep~\cite{shamos1976geometric, souvaine2008line} and bisection initialized by
-the bounds of B. Function \texttt{find\_bisection(S, B)} (see
+the bounds of $B$. Function \texttt{find\_bisection(S, B)} (see
 Algorithm~\ref{algo:find_bisection_function}) and \texttt{recursive(S, L, R, N,
 $X^n$)} (see Algorithm~\ref{algo:recursive}) show how it works. 
 
@@ -158,7 +158,6 @@ data stream.
    \Desc{$L$}{Min value used in bisection}
    \Desc{$R$}{Max value used in bisection}
    \Desc{$N$}{The $N^{th}$ dimension, $N \in \{1...n\}$}
-   \TG{??Why not just use $n$?}
    \Desc{$X^n$}{N-dimensional point which records point of intersection, $X^n$ = $(x_1,...,x_n)$} 
    %\TG{\#\#If you know the point already, what are you looking for?}
 \EndInput

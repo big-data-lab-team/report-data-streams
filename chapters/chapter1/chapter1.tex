@@ -183,8 +183,6 @@ reduced memory footprint in $\mathcal{O}(1)$. However, LTC has only been
 described for 1D streams, therefore, in this paper, we extend LTC to dimension
 $n$.
 
-% \TG{You should also mention nD compression vs 1D}
-
 % ----------------------- Neblina --------------------%
 In our experiments, we test compression methods in Motsai's Neblina module, a
 system with a Nordic Semiconductor nRF52832 micro-controller, 64~KB of RAM, and
@@ -251,19 +249,14 @@ methods. Chapter~\ref{chap:ltc-extension} formalizes the description of the
 in~\cite{schoellhammer2004lightweight} and presents our norm-independent
 extension to dimension $n$ and its implementation.
 Chapter~\ref{chap:expsAndResults} reports on experiments to validate our
-implementation, and evaluates the impact of n-dimensional \acrshort{ltc} on
-energy consumption of connected objects.
+implementation, evaluates the impact of n-dimensional \acrshort{ltc} on
+energy consumption of connected objects, and compares n-dimensional
+\acrshort{ltc} with polynomial regression compression method.
 
-%% internship and publish
+%% publish
 The contents of Chapter~\ref{chap:ltc-extension} and
 Section~\ref{sec:ltc-n-dimensions} in Chapter~\ref{chap:expsAndResults} are
 included in our paper ``A multi-dimensional extension of the Lightweight
 Temporal Compression method''~\cite{li2018multi}, published in the 3rd
 Workshop on Real-time and Stream Analytics in Big Data \& Stream Data
 Management, co-located with the IEEE Big Data conference 2018.
-
-% data summarization 可以提取数据特征
-% \url{https://www-users.cs.umn.edu/~kumar001/papers/varun_icdm05-summ.pdf}
-
-% So some previous research has discussed various stream analytic
-% problems, such as estimating cardinality, frequency moments and clustering.

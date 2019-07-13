@@ -95,8 +95,7 @@ zordan2014performance}.
 
 \subsection{Enhanced Piece-wise Linear Approximation with Minimum number of Line
 Segments Algorithm}
-
-\todo{is it the same problem as before? If yes, you should say so.} 
+% \todo{is it the same problem as before? If yes, you should say so.} 
 \acrfull{e-plamlis}~\cite{pham2008enhance} solves the problem ``to represent
 stream data over a time window through using minimum number of segments" with a
 top-down recursive segmentation algorithm which has a smaller computational cost
@@ -278,24 +277,22 @@ parameters. \acrshort{ar} model is redefined only according to the last coming
 sample, so the computational cost is minimized and the parameters of the model
 can be computed through least squares minimization~\cite{zordan2012compress}.
 
-% \todo{add MV in chap2, and add the figure of comparison}
-\todo{add the comparison in defense slides}
-
 \subsection{Comparison of compression algorithms}
 \label{sec:comparision-lossy}
 % \TG{You should start a new sub-section here, or add the next paragraph to the conclusion
 % section. Also, you should refer to this comparison in your thesis defense presentation.}
-\todo{give value?}
+% \todo{give value?}
 In~\cite{zordan2014performance}, authors compare the performance of mentioned
 compression methods. They analyzed the performance in terms of compression ratio
 and energy consumption in the compression process for \acrshort{ma-ar} (p={2,
 4}), Polynomial Regression (p={2, 4}), \acrshort{plamlis}, \acrshort{e-plamlis}
 and \acrshort{ltc}. Regarding compression ratio, all the methods perform badly
-for small datasets, but as the dataset size increases, the compression ratios of
-these methods increase until reaching their respective asymptote.
+for small data sets, but as the data set size increases, the compression ratios
+of these methods increase until reaching their asymptote at 98\%, 96\%, 94\%,
+and 90\% respectively.
 In their experiment, polynomial regression gives the best compression ratio
 around 98\%; and \acrshort{plamlis} which reaches 96\% compression ratio is the
-second best; next, \acrshort{ltc} and \acrshort{e-plamlis} have the same
+second-best; next, \acrshort{ltc} and \acrshort{e-plamlis} have the same
 performance, providing 94\% compression ratio, when the length of data is large;
 finally, \acrshort{ma-ar} method has the worst compression ratio at 90\%. In
 terms of energy consumption for compression, Polynomial Regression requires the
