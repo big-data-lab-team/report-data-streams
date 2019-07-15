@@ -4,13 +4,13 @@
 % of the previous chapter. You also need to explain why you are doing this:
 % why do we need a multi-dimensional implementation, why you chose LTC, etc}
 
-In this chapter, general lossless and lossy compression methods were
-presented. The \acrshort{ltc} compression method fully meets our
-requirements because of its low computational and space complexity.
+In this chapter, general lossless and lossy compression methods were presented.
+The \acrshort{ltc} compression method fully meets our requirements because of
+its low computational $\mathcal{O}(n)$ and space complexity $\mathcal{O}(1)$.
 However, a problem is that \acrshort{ltc} compression method has only been
-described for 1D streams, while streams acquired by connected objects, such
-as acceleration or gyroscopic data, are often
-multi-dimensional~\cite{li2018multi}. In the next chapter, we extend
-\acrshort{ltc} to dimension $n$ and give implementation and a
-norm-independent expression of it. In Chapter~\ref{chap:expsAndResults}, we
-test LTC n-dimension method on 3D acceleration streams. 
+described for 1D streams, while streams acquired by connected objects, such as
+acceleration or gyroscopic data, are often multi-dimensional~\cite{li2018multi}.
+In the next chapter, we extend \acrshort{ltc} to dimension $n$ and give
+implementation and a norm-independent expression of it. In
+Chapter~\ref{chap:expsAndResults}, we test LTC n-dimension method on 3D
+acceleration streams.  

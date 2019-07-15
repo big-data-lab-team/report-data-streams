@@ -18,19 +18,19 @@ Where \texttt{box()} is a function that returns the bounding box of an n-ball.
 Then, when a new point arrives, we consider the associated n-ball
 $\mathcal{B}_j$ and our intersection test works as in
 Algorithm~\ref{algo:euclidean}. Firstly, we check the intersection between
-box($\mathcal{B}_j$) and $B$ (Algorithm~\ref{algo:euclidean}, line
-11). To restrict memory usage, $B$ only covers a set $S$ of n-balls were the size of $S$ is limited to
-$L_s$. Secondly, for each $\mathcal{B}_i$ in $S$, we
-check the intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14). In addition $\mathcal{B}_i$ will be
-removed if it includes $\mathcal{B}_j$, because if $\mathcal{B}_j$ has
-intersection with n-balls in $S$ then a bigger n-ball which contains
-$\mathcal{B}_j$ must also have intersection.
+box($\mathcal{B}_j$) and $B$ (Algorithm~\ref{algo:euclidean}, line 11). To
+restrict memory usage, $B$ only covers a set $S$ of n-balls were the size of $S$
+is limited to $L_s$. Secondly, for each $\mathcal{B}_i$ in $S$, we check the
+intersection between $\mathcal{B}_i$ and $\mathcal{B}_j$ (line 14). In addition
+$\mathcal{B}_i$ will be removed if it includes $\mathcal{B}_j$, because if
+$\mathcal{B}_j$ has intersection with n-balls in $S$ then a bigger n-ball which
+contains $\mathcal{B}_j$ must also have intersection.
 % \english{because smaller n-ball intersects
 % $\mathcal{B}_j$ than a bigger n-ball which contains the smaller one (line 17, 18 in
 % Algorithm~\ref{algo:euclidean})} \TG{English is not correct}.
 Finally, we search a point in intersection of all n-balls in $S$, using plane
 sweep~\cite{shamos1976geometric, souvaine2008line} and bisection initialized by
-the bounds of B. Function \texttt{find\_bisection(S, B)} (see
+the bounds of $B$. Function \texttt{find\_bisection(S, B)} (see
 Algorithm~\ref{algo:find_bisection_function}) and \texttt{recursive(S, L, R, N,
 $X^n$)} (see Algorithm~\ref{algo:recursive}) show how it works. 
 
@@ -50,12 +50,13 @@ means:
     mid \  \bigcap \  (min\_id \cap max\_id) = \text{\O}
 \end{equation*}
 
-In Algorithm~\ref{algo:euclidean} line 14 and 15, it is guaranteed that any two n-balls
-in $S$ has intersection. Therefore, any point in the intersection of $min\_id$
-and $max\_id$, could be used for determining the direction of bisection. In our
-implementation, we select a point in connection of these two n-ball's center, which
-also locates in intersecting object (line/chord when order=2, plane/circle when
-order=3). Figure~\ref{fig:compare_point} shows the point we selected in 2D.
+In Algorithm~\ref{algo:euclidean} line 14 and 15, it is guaranteed that any two
+n-balls in $S$ has intersection. Therefore, any point in the intersection of
+$min\_id$ and $max\_id$, could be used for determining the direction of
+bisection. In our implementation, we select a point in connection of these two
+n-ball's center, which also locates in intersecting object (line/chord when
+order=2, plane/circle when order=3). Figure~\ref{fig:compare_point} shows the
+point we selected in 2D.
 
 %discuss the time complexity
 According to our implementation for Euclidean norm, if the $L_s$ is undefined
@@ -126,7 +127,7 @@ data stream.
 \end{algorithm}
 
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \begin{algorithmic}[1]
 \Input
     \Desc{$S$}{Set of n-balls}
@@ -157,7 +158,6 @@ data stream.
    \Desc{$L$}{Min value used in bisection}
    \Desc{$R$}{Max value used in bisection}
    \Desc{$N$}{The $N^{th}$ dimension, $N \in \{1...n\}$}
-   \TG{??Why not just use $n$?}
    \Desc{$X^n$}{N-dimensional point which records point of intersection, $X^n$ = $(x_1,...,x_n)$} 
    %\TG{\#\#If you know the point already, what are you looking for?}
 \EndInput

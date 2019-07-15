@@ -95,7 +95,7 @@ probability for the signal to deviate from a straight line
 approximation is higher in 3D than it is in 2D. Besides, resource
 consumption is higher in 3D than in 2D: for the infinity norm, 3D
 consumes 1.4 times more memory than 2D (1.8 times on average for
-Euclidean norm), and processing time is 1.35 longer (1.34 on
+Euclidean norm), and the processing time is 1.35 longer (1.34 on
 average for Euclidean norm).
 
 \begin{table}
@@ -162,6 +162,7 @@ average for Euclidean norm).
     Processing time (ms)           & 7.87        & 7.22       & 41.29    & 39.04   \\ \hline
     \end{tabular}
     \caption{Long biceps curl (3D)}
+    \label{tabl:results-validation-d}
     \end{subfigure}
     \caption{Results from Experiment 1}
     \label{table:results-validation}
@@ -183,7 +184,7 @@ average for Euclidean norm).
 \includegraphics[width=0.3\columnwidth]{./figures/running-1000-z.pdf}
 \caption{Running}
 \end{subfigure}
-\caption{Time series used in Experiment 2 \vspace*{-0.3cm}}
+\caption{Time-series used in Experiment 2 \vspace*{-0.3cm}}
 \label{fig:datasets-2}
 \end{figure*}
 
@@ -206,21 +207,21 @@ these time-series by ``replaying" the time-series after loading them as
 a byte array in Neblina. We measured the current every 500~ms. We also
 measured the max and average latency resulting from compression.
 
- Results are reported in Table~\ref{table:results-energy}. For a given
- $\epsilon$ and norm, the compression ratio is larger for walking than
- for running. The ratio of saved energy is relative to the reference
- current of 3.47~mA measured when Neblina transmits data without
- compression. In all cases, activating compression saves energy. The
- reduction in energy consumption behaves as the compression ratio: it
- increases with $\epsilon$, it is higher for the infinity norm than for
- the Euclidean, and it is higher for the walking activity than for
- running. For a realistic error of $\epsilon$=9.8~mg, the ratio of
- saved energy with the infinity norm is close to 20\% for the walking
- activity, which is substantial. Latency is higher for walking
- than for running, and it is also higher for the Euclidean norm than
- for the infinity norm. In all cases, the latency remains lower
- than the 5-ms tolerable latency at 200~Hz, which demonstrates the
- feasibility of 3D LTC compression.
+Results are reported in Table~\ref{table:results-energy}. For a given
+$\epsilon$ and norm, the compression ratio is larger for walking than
+for running. The ratio of saved energy is relative to the reference
+current of 3.47~mA measured when Neblina transmits data without
+compression. In all cases, activating compression saves energy. The
+reduction in energy consumption behaves as the compression ratio: it
+increases with $\epsilon$, it is higher for the infinity norm than for
+the Euclidean, and it is higher for the walking activity than for
+running. For a realistic error of $\epsilon$=9.8~mg, the ratio of
+saved energy with the infinity norm is close to 20\% for the walking
+activity, which is substantial. Latency is higher for walking
+than for running, and it is also higher for the Euclidean norm than
+for the infinity norm. In all cases, the latency remains lower
+than the 5-ms tolerable latency at 200~Hz, which demonstrates the
+feasibility of 3D LTC compression.
 
 \begin{table}
    \begin{subfigure}{\columnwidth}
