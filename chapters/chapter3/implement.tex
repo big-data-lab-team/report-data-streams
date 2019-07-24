@@ -167,7 +167,7 @@ data stream.
 \If{$N$ == 1}
     \State $X^n.x_N$ = $\frac{L+R}{2}$; $\ $\Return True
 \EndIf
-\While{$L \leqslant R$ }
+\While{$L < R$ }
     \State $mid$ = $\frac{L+R}{2}$; $\ surface$ = $\{x_{N}...x_{n}\}$
     \State $left$ = -$\infty$; $\ right$ = +$\infty$
     \ForAll{$\mathcal{B}_i \in S$}
