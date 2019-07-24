@@ -185,9 +185,9 @@ data stream.
         \State $X^n.x_N$ = $mid$; $\ $
         \Return recursive($S$, $left$, $right$, $N-1$, $X^n$)
     \ElsIf{$\ \forall\ P$ (Point) $\in (min\_id \cap max\_id)$ s.t. $P.x_N < mid$}
-        \State $right$ = $mid$
+        \State $R$ = $mid$
     \Else
-        \State $left$ = $mid$
+        \State $L$ = $mid$
     \EndIf
 \EndWhile
 \State \Return False
