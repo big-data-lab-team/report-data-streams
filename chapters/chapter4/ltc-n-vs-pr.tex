@@ -115,11 +115,12 @@ Table~\ref{table:CR-compare-running}, the 5-degree regression method has a
 higher compression ratio than 3-degree regression for both norms when dimension
 equals 1 and for infinity norm when dimension equals 2.
 
-Polynomial regression method needs a lot of memory to save all the data points
-between two transmission and long processing time to calculate coefficients and
-build model when each new data point comes. Because we implemented polynomial
-regression method and LTC n-dimension in different platforms, the comparison of
-memory usage and processing time between them cannot be measured.
+Polynomial regression method needs $O(n)$ memory to save all the data points
+between two transmissions and long processing time, $O(d^2 n)$ for
+$d$-dimensional data stream, to calculate coefficients and build model when each
+new data point comes. Because we implemented polynomial regression method and
+LTC n-dimension in different platforms, the comparison of memory usage and
+processing time between them cannot be measured.
 
 % So, using polynomial regression method needs more memory and processing time
 % than n-dimensional LTC for infinity norm, but for Euclidean norm, we need to
