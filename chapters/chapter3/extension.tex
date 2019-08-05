@@ -126,6 +126,7 @@ exists.
 
 The \acrshort{ltc} property can be re-written as follows:
 \begin{equation}
+\label{eq:ltc-property-detail}
 \exists z \in \mathbb{R}^n, \ \forall j \in \llbracket 1, m \rrbracket, \norm{z-\frac{v_1}{v_j}z_j} \leq
 \frac{v_1}{v_j}\epsilon
 \end{equation}
@@ -187,35 +188,37 @@ objects.
 The only feasible algorithm that we found is norm-specific. It
 maintains a representation of the intersection
 $\bigcap_{j=1}^{m}{\mathcal{B}_j}$ that is updated at every iteration.
-The intersection tests can then be done in constant time. However,
-updating the representation of the intersection may be costly
-depending on the norm used. For the infinity norm, the representation
-is a rectangular cuboid which is straightforward to update by
-intersecting with an n-ball.
-% intersection with an n-ball.
-For the Euclidean norm, the representation is an arbitrary volume,
-which is more costly to maintain.
+The intersection tests can then be done in constant time. 
+According to Equation~\eqref{eq:ltc-property-detail} and
+Equation~\eqref{eq:ltc-property}, the n-dimensional LTC algorithm can be used in
+all norms, such as Manhattan norm, Euclidean norm and Infinity norm.  However,
+updating the representation of the intersection may be costly depending on the
+norm used.  For the Infinity norm and Manhattan norm, the representation is a
+rectangular cuboid (horizontal or tilted) which is straightforward to update by
+intersecting with an n-ball. For the Euclidean norm, the representation is an
+arbitrary volume, which is more costly to maintain.
 
 \section{Effect of the norm}
 \label{sec:effect-norm}
 
-As mentioned before, norm selection in $\mathbb{R}^n$ has a critical impact on
-the compression error and ratio. To appreciate this effect, let us compare the
-infinity norm and the Euclidean norm in dimension 2. By comparing the unit disk
-to a square of side 2, we obtain that the compression ratio of a random stream
-would be $\frac{4}{\pi}$ times larger with the infinity norm than with the
-Euclidean norm (see Figure~\ref{fig:norm-comparison-2D}). In 3D, this ratio
-would be $\frac{6}{\pi}$. Unsurprisingly, the infinity norm is more tolerant
-than the Euclidean norm.
+As mentioned before, norm selection in $\mathbb{R}^n$ results in different
+representations of intersection and has a critical impact on the compression
+error and ratio. To appreciate this effect, let us compare the Infinity norm and
+the Euclidean norm in dimension 2. By comparing the unit disk to a square of
+side 2, we obtain that the compression ratio of a random stream would be
+$\frac{4}{\pi}$ times larger with the infinity norm than with the Euclidean norm
+(see Figure~\ref{fig:norm-comparison-2D}). In 3D, this ratio would be
+$\frac{6}{\pi}$. Unsurprisingly, the infinity norm is more tolerant than the
+Euclidean norm.
 
 It should also be noted that using the infinity norm in $\mathbb{R}^n$ boils
-down to the use of the 1D LTC algorithm independently in each dimension, since
-a data point will be transmitted as soon as the linear approximation doesn't
-hold in any of the dimensions. For the Euclidean norm, however, the
-multidimensional and multiple unidimensional versions are different: the
-multiple unidimensional version behaves as the infinity norm, but the
-multidimensional version is more stringent, leading to a reduced compression
-rate and error.
+down to the use of the 1D LTC algorithm independently in each dimension, since a
+data point will be transmitted as soon as the linear approximation doesn't hold
+in any of the dimensions. For the other norms such as Euclidean norm and
+Manhattan norm, however, the multidimensional and multiple unidimensional
+versions are different: the multiple unidimensional version behaves as the
+infinity norm, but the multidimensional version is more stringent, leading to a
+reduced compression rate and error. 
 
 To choose between the multidimensional implementation and multiple
 unidimensional ones, we recommend to check whether the desired error bound is
@@ -224,6 +227,11 @@ The multidimensional version is more appropriate for multidimensional sensors,
 for instance 3D accelerometers or 3D gyroscopes, and the multiple unidimensional
 version is more suitable for multiple independent sensors, for instance a
 temperature and a pressure sensor.
+
+To compare the impact of norm selection on the compression error and ratio, in
+this thesis, we implement \acrshort{ltc} in n dimensions with the Infinity norm
+and Euclidean norm corresponding to multiple unidimensional and multidimensional
+version respectively. 
 
 %~ For instance, in case of a 3D accelerometer, if the error 
 %~ is expressed simply as 
