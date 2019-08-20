@@ -30,14 +30,15 @@ the corresponding implementation. LTC can work with different norms in dimension
 $n$, but its compression result and costs depend on the norm used. In the
 experiments, we collected 2 biceps curl data-sets of different sizes. By using
 these data sets, we validate the performance of LTC n-dimension for Infinity and
-Euclidean norms in respect of compression ratio, memory and processing time
-
-Then, we implemented the LTC n-dimension algorithm into Neblina, the connected
-device platform developed by our Motsai partner, to measure the compression
-ratio and energy consumption of LTC in dimension $n$, on a dataset of human walk
-and run. Results showed that with our n-dimensional implementation of
-\acrshort{ltc}, Neblina can save at least 10\% of energy when the error bound
-$\epsilon$ is 48.8 mg. Additionally, we compared \acrshort{ltc} in dimension $n$
+Euclidean norms in respect of compression ratio, memory and processing time.
+Then, we implemented the LTC n-dimension algorithm and deployed it on Neblina,
+the connected device platform developed by our Motsai partner. To measure the
+compression ratio and energy consumption of LTC in dimension $n$, we processed a
+experiment on Neblina with a dataset of human walk and run. Results showed that
+our n-dimensional implementation of \acrshort{ltc} works on Neblina. By
+executing our method, Neblina can save at least 10\% of energy when the error
+bound $\epsilon$ is 48.8\ mg. 
+Additionally, we compared \acrshort{ltc} in dimension $n$
 to polynomial regression in different dimensions. We found that LTC in dimension
 $n$ for Infinity and Euclidean norms outperform polynomial regression method in
 terms of compression ratio, regardless of the dimension or degree of regression.
